@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Warpath Guide — Официальный ресурс</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Russo+One&family=Inter:wght@300;400;500;600;700&display=swap');
+:root {
+  --bg:#0c0d0a; --bg2:#111309; --bg3:#181b12;
+  --metal:#252820; --border:rgba(180,145,55,0.22);
+  --gold:#c8941e; --gold2:#e8b840; --orange:#c85218;
+  --text:#e6dfc8; --muted:#7a7460; --card:#161810;
+  --green:#3d6128; --red:#7a1f1f;
+}
+*{margin:0;padding:0;box-sizing:border-box;}
+body{background:var(--bg);color:var(--text);font-family:'Inter',sans-serif;overflow-x:hidden;}
+
+/* NAV */
+nav{position:fixed;top:0;width:100%;z-index:200;background:rgba(12,13,10,0.95);backdrop-filter:blur(10px);border-bottom:1px solid var(--border);height:60px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem;}
+.nav-logo{font-family:'Russo One',sans-serif;font-size:1.15rem;letter-spacing:3px;color:var(--gold2);display:flex;align-items:center;gap:0.5rem;}
+.nav-logo b{color:var(--orange);}
+.nav-links{display:flex;gap:0;list-style:none;}
+.nav-links a{display:block;padding:0 0.95rem;height:60px;line-height:60px;color:var(--muted);font-size:0.78rem;text-decoration:none;font-weight:600;letter-spacing:0.5px;text-transform:uppercase;border-bottom:2px solid transparent;transition:all 0.2s;}
+.nav-links a:hover,.nav-links a.active{color:var(--gold2);border-bottom-color:var(--gold);}
+.nav-search{background:var(--metal);border:1px solid var(--border);color:var(--text);padding:0.32rem 0.85rem;border-radius:3px;font-size:0.8rem;outline:none;width:170px;font-family:'Inter',sans-serif;}
+.nav-search::placeholder{color:var(--muted);}
+
+/* TICKER */
+.ticker{background:linear-gradient(90deg,#5a1010,#7a1f1f,#5a1010);border-top:1px solid rgba(200,80,80,0.2);border-bottom:1px solid rgba(200,80,80,0.2);padding:0.38rem 0;display:flex;align-items:center;overflow:hidden;margin-top:60px;}
+.ticker-badge{background:var(--gold);color:#0c0d0a;font-family:'Russo One',sans-serif;font-size:0.65rem;letter-spacing:2px;padding:0.18rem 0.9rem;white-space:nowrap;flex-shrink:0;}
+.ticker-scroll{flex:1;overflow:hidden;margin-left:1rem;}
+.ticker-inner{display:flex;gap:3rem;width:max-content;animation:tick 45s linear infinite;font-size:0.75rem;color:rgba(240,200,140,0.8);white-space:nowrap;}
+.ticker-inner span::before{content:'◆ ';color:var(--gold);}
+@keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
+/* HERO */
+.hero{position:relative;min-height:90vh;display:flex;align-items:center;padding:4rem 2.5rem;overflow:hidden;}
+.hero-bg{position:absolute;inset:0;background:linear-gradient(135deg,rgba(12,13,10,0.98) 45%,rgba(28,22,8,0.9) 100%),repeating-linear-gradient(45deg,transparent,transparent 50px,rgba(180,145,55,0.02) 50px,rgba(180,145,55,0.02) 51px);}
+.hero-glow{position:absolute;right:0;top:50%;transform:translateY(-50%);width:600px;height:600px;border-radius:50%;background:radial-gradient(ellipse,rgba(200,148,30,0.07) 0%,transparent 65%);pointer-events:none;}
+.hero-corner{position:absolute;top:80px;right:60px;width:180px;height:180px;border:1px solid rgba(180,145,55,0.15);border-radius:3px;transform:rotate(12deg);pointer-events:none;}
+.hero-corner::before{content:'';position:absolute;inset:12px;border:1px solid rgba(180,145,55,0.08);border-radius:2px;}
+.hero-content{position:relative;z-index:1;max-width:650px;}
+.hero-badge{display:inline-flex;align-items:center;gap:0.5rem;background:rgba(200,148,30,0.1);border:1px solid var(--border);color:var(--gold);padding:0.3rem 0.9rem;font-size:0.68rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;margin-bottom:1.5rem;}
+.hero h1{font-family:'Russo One',sans-serif;font-size:clamp(2.6rem,5vw,4.2rem);line-height:1.08;margin-bottom:1.2rem;letter-spacing:0.5px;}
+.hero h1 em{font-style:normal;color:var(--gold2);}
+.hero-desc{color:var(--muted);font-size:1rem;line-height:1.75;max-width:500px;margin-bottom:2rem;}
+.hero-desc strong{color:var(--text);}
+.hero-cta{display:flex;gap:1rem;flex-wrap:wrap;margin-bottom:2.5rem;}
+.btn-gold{background:linear-gradient(135deg,var(--gold),var(--orange));color:#0c0d0a;padding:0.78rem 1.8rem;border:none;font-family:'Russo One',sans-serif;font-size:0.85rem;letter-spacing:1px;cursor:pointer;clip-path:polygon(0 0,calc(100% - 8px) 0,100% 8px,100% 100%,8px 100%,0 calc(100% - 8px));transition:opacity 0.2s,transform 0.15s;box-shadow:0 4px 20px rgba(200,148,30,0.3);}
+.btn-gold:hover{opacity:0.88;transform:translateY(-1px);}
+.btn-ghost{background:none;border:1px solid var(--border);color:var(--text);padding:0.78rem 1.8rem;font-family:'Russo One',sans-serif;font-size:0.85rem;letter-spacing:1px;cursor:pointer;transition:border-color 0.2s,color 0.2s;}
+.btn-ghost:hover{border-color:var(--gold);color:var(--gold2);}
+.hero-stats{display:flex;gap:2.5rem;flex-wrap:wrap;}
+.hstat{border-left:2px solid var(--gold);padding-left:1rem;}
+.hstat-n{font-family:'Russo One',sans-serif;font-size:1.7rem;color:var(--gold2);line-height:1;}
+.hstat-l{font-size:0.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px;margin-top:0.2rem;}
+
+/* BLOGGERS */
+.bloggers-wrap{background:var(--bg2);border-bottom:1px solid var(--border);padding:1.6rem 0;overflow:hidden;}
+.bloggers-title{text-align:center;font-size:0.65rem;text-transform:uppercase;letter-spacing:3px;color:var(--muted);margin-bottom:1.1rem;display:flex;align-items:center;justify-content:center;gap:0.75rem;}
+.bloggers-title::before,.bloggers-title::after{content:'';flex:1;max-width:100px;height:1px;}
+.bloggers-title::before{background:linear-gradient(to right,transparent,var(--border));}
+.bloggers-title::after{background:linear-gradient(to left,transparent,var(--border));}
+.scroll-mask{position:relative;overflow:hidden;}
+.scroll-mask::before,.scroll-mask::after{content:'';position:absolute;top:0;bottom:0;width:80px;z-index:2;pointer-events:none;}
+.scroll-mask::before{left:0;background:linear-gradient(to right,var(--bg2),transparent);}
+.scroll-mask::after{right:0;background:linear-gradient(to left,var(--bg2),transparent);}
+.bloggers-track{display:flex;gap:2rem;width:max-content;animation:scroll 40s linear infinite;padding:0.3rem 1rem;}
+.bloggers-track:hover{animation-play-state:paused;}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.blogger{display:flex;flex-direction:column;align-items:center;gap:0.45rem;cursor:pointer;transition:transform 0.2s;min-width:76px;}
+.blogger:hover{transform:translateY(-5px);}
+.b-ring{width:62px;height:62px;border-radius:50%;padding:2px;background:linear-gradient(135deg,var(--gold),var(--orange));}
+.b-inner{width:100%;height:100%;border-radius:50%;background:var(--card);display:flex;align-items:center;justify-content:center;font-size:1.5rem;}
+.b-name{font-size:0.68rem;color:var(--muted);white-space:nowrap;}
+.b-role{font-size:0.6rem;color:var(--gold);text-transform:uppercase;letter-spacing:0.5px;}
+
+/* SECTION WRAPPER */
+.sec{padding:4.5rem 2rem;max-width:1200px;margin:0 auto;}
+.sec-hd{text-align:center;margin-bottom:2.8rem;}
+.sec-tag{display:inline-block;color:var(--gold);font-size:0.68rem;text-transform:uppercase;letter-spacing:2.5px;margin-bottom:0.6rem;}
+.sec-title{font-family:'Russo One',sans-serif;font-size:clamp(1.5rem,3vw,2rem);margin-bottom:0.8rem;letter-spacing:0.5px;}
+.sec-sub{color:var(--muted);max-width:480px;margin:0 auto;font-size:0.92rem;line-height:1.65;}
+
+/* RESEARCH SECTION */
+.research-bg{background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);}
+.research-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:1.25rem;}
+.res-card{background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s,border-color 0.2s;}
+.res-card:hover{transform:translateY(-3px);box-shadow:0 8px 30px rgba(200,148,30,0.15);border-color:rgba(200,148,30,0.5);}
+.res-header{padding:1.1rem 1.3rem 0.9rem;display:flex;align-items:center;gap:0.85rem;border-bottom:1px solid var(--border);position:relative;}
+.res-header::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:linear-gradient(90deg,var(--gold),transparent);opacity:0;transition:opacity 0.2s;}
+.res-card:hover .res-header::after{opacity:1;}
+.res-icon{width:44px;height:44px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:1.5rem;flex-shrink:0;}
+.res-name{font-family:'Russo One',sans-serif;font-size:0.95rem;letter-spacing:0.5px;margin-bottom:0.2rem;}
+.res-count{font-size:0.72rem;color:var(--muted);}
+.res-body{padding:1.1rem 1.3rem;}
+.res-desc{font-size:0.85rem;color:var(--muted);line-height:1.65;margin-bottom:1rem;}
+/* difficulty pills */
+.pills{display:flex;gap:0.4rem;flex-wrap:wrap;}
+.pill{font-size:0.65rem;padding:0.18rem 0.6rem;border-radius:2px;font-weight:700;letter-spacing:0.5px;text-transform:uppercase;}
+.pill-easy{background:rgba(61,97,40,0.3);color:#7ec850;border:1px solid rgba(61,97,40,0.4);}
+.pill-med{background:rgba(180,120,20,0.25);color:#e8a840;border:1px solid rgba(180,120,20,0.35);}
+.pill-hard{background:rgba(122,31,31,0.3);color:#e05050;border:1px solid rgba(122,31,31,0.4);}
+.pill-type{background:rgba(200,148,30,0.12);color:var(--gold2);border:1px solid var(--border);}
+.res-tip{margin-top:0.9rem;background:rgba(200,148,30,0.06);border-left:2px solid var(--gold);padding:0.55rem 0.8rem;font-size:0.8rem;color:var(--text);line-height:1.5;}
+.res-tip b{color:var(--gold2);}
+
+/* GUIDES */
+.guides-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(300px,1fr));gap:1.4rem;}
+.guide-card{background:var(--card);border:1px solid var(--border);border-radius:4px;overflow:hidden;cursor:pointer;transition:transform 0.2s,box-shadow 0.2s;}
+.guide-card:hover{transform:translateY(-3px);box-shadow:0 10px 35px rgba(200,148,30,0.13);}
+.guide-thumb{height:130px;display:flex;align-items:center;justify-content:center;font-size:3.5rem;position:relative;overflow:hidden;}
+.guide-thumb-bg{position:absolute;inset:0;}
+.guide-thumb-ico{position:relative;z-index:1;}
+.guide-body{padding:1.1rem 1.2rem;}
+.guide-tags{display:flex;gap:0.4rem;margin-bottom:0.65rem;flex-wrap:wrap;}
+.guide-title{font-weight:700;font-size:0.95rem;margin-bottom:0.45rem;line-height:1.4;}
+.guide-desc{color:var(--muted);font-size:0.82rem;line-height:1.6;margin-bottom:0.9rem;}
+.guide-foot{display:flex;align-items:center;justify-content:space-between;padding-top:0.7rem;border-top:1px solid rgba(255,255,255,0.05);}
+.g-author{display:flex;align-items:center;gap:0.45rem;}
+.g-av{width:26px;height:26px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:0.8rem;}
+.g-name{font-size:0.76rem;color:var(--muted);}
+.g-meta{display:flex;gap:0.8rem;}
+.g-meta span{font-size:0.74rem;color:var(--muted);}
+
+/* MECHANICS (для новичков) */
+.mechanics-bg{background:var(--bg);border-top:1px solid var(--border);}
+.mech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:1.25rem;}
+.mech-card{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:1.4rem;}
+.mech-level{display:inline-flex;align-items:center;gap:0.4rem;font-size:0.65rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:0.7rem;padding:0.15rem 0.55rem;border-radius:2px;}
+.lvl-new{background:rgba(61,97,40,0.25);color:#7ec850;border:1px solid rgba(61,97,40,0.35);}
+.lvl-mid{background:rgba(180,120,20,0.2);color:#e8a840;border:1px solid rgba(180,120,20,0.3);}
+.lvl-pro{background:rgba(122,31,31,0.25);color:#e05050;border:1px solid rgba(122,31,31,0.35);}
+.mech-title{font-family:'Russo One',sans-serif;font-size:1rem;margin-bottom:0.5rem;letter-spacing:0.3px;}
+.mech-desc{color:var(--muted);font-size:0.84rem;line-height:1.68;margin-bottom:0.9rem;}
+.mech-example{background:rgba(200,148,30,0.06);border-left:2px solid var(--gold);padding:0.55rem 0.8rem;font-size:0.79rem;line-height:1.55;}
+.mech-example b{color:var(--gold2);}
+
+/* SEARCH BAR */
+.search-band{background:var(--bg3);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:2.5rem 2rem;}
+.search-inner{max-width:580px;margin:0 auto;text-align:center;}
+.search-label{font-family:'Russo One',sans-serif;font-size:1.1rem;margin-bottom:0.3rem;letter-spacing:0.5px;}
+.search-sub{font-size:0.82rem;color:var(--muted);margin-bottom:1.2rem;}
+.search-box{display:flex;gap:0;background:var(--metal);border:1px solid var(--border);border-radius:3px;overflow:hidden;transition:border-color 0.2s;}
+.search-box:focus-within{border-color:var(--gold);}
+.search-box input{flex:1;background:none;border:none;outline:none;color:var(--text);font-size:0.9rem;padding:0.7rem 1rem;font-family:'Inter',sans-serif;}
+.search-box input::placeholder{color:var(--muted);}
+.search-box button{background:linear-gradient(135deg,var(--gold),var(--orange));border:none;color:#0c0d0a;padding:0 1.4rem;font-family:'Russo One',sans-serif;font-size:0.78rem;letter-spacing:1px;cursor:pointer;}
+
+/* FOOTER */
+footer{background:var(--bg2);border-top:1px solid var(--border);padding:2.2rem 2rem;text-align:center;}
+.footer-logo{font-family:'Russo One',sans-serif;font-size:1rem;letter-spacing:3px;color:var(--gold2);margin-bottom:0.4rem;}
+footer p{color:var(--muted);font-size:0.78rem;}
+
+/* DIVIDER */
+.mil-divider{height:3px;background:linear-gradient(90deg,transparent,var(--gold),var(--orange),var(--gold),transparent);opacity:0.35;}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">⚔ WARPATH <b>GUIDE</b></div>
+  <ul class="nav-links">
+    <li><a href="#" class="active">Главная</a></li>
+    <li><a href="#">Гайды</a></li>
+    <li><a href="#">Исследования</a></li>
+    <li><a href="#">Офицеры</a></li>
+    <li><a href="#">Механики</a></li>
+    <li><a href="#">Билды</a></li>
+    <li><a href="#">Блогеры</a></li>
+  </ul>
+  <input class="nav-search" type="text" placeholder="🔍 Поиск по сайту...">
+</nav>
+
+<!-- TICKER -->
+<div class="ticker">
+  <div class="ticker-badge">НОВОСТИ</div>
+  <div class="ticker-scroll">
+    <div class="ticker-inner" id="ticker-inner"></div>
+  </div>
+</div>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-bg"></div>
+  <div class="hero-glow"></div>
+  <div class="hero-corner"></div>
+  <div class="hero-content">
+    <div class="hero-badge">▣ Официальный ресурс блогеров</div>
+    <h1>Всё об<br><em>Warpath</em><br>на русском</h1>
+    <p class="hero-desc">Гайды, механики, исследования — объяснено <strong>понятным языком</strong>. Не трать 3 года на догадки.</p>
+    <div class="hero-cta">
+      <button class="btn-gold">⚔ Смотреть гайды</button>
+      <button class="btn-ghost">▶ Быстрый старт</button>
+    </div>
+    <div class="hero-stats">
+      <div class="hstat"><div class="hstat-n">300+</div><div class="hstat-l">Гайдов</div></div>
+      <div class="hstat"><div class="hstat-n">48</div><div class="hstat-l">Механик</div></div>
+      <div class="hstat"><div class="hstat-n">12</div><div class="hstat-l">Блогеров</div></div>
+      <div class="hstat"><div class="hstat-n">RU</div><div class="hstat-l">Язык</div></div>
+    </div>
+  </div>
+</section>
+
+<div class="mil-divider"></div>
+
+<!-- BLOGGERS STRIP -->
+<div class="bloggers-wrap">
+  <div class="bloggers-title">✦ Официальные блогеры Warpath ✦</div>
+  <div class="scroll-mask">
+    <div class="bloggers-track" id="bloggers-track"></div>
+  </div>
+</div>
+
+<!-- SEARCH -->
+<div class="search-band">
+  <div class="search-inner">
+    <div class="search-label">Найди нужное быстро</div>
+    <div class="search-sub">Гайды, офицеры, механики, исследования, билды</div>
+    <div class="search-box">
+      <input type="text" placeholder="Например: урон, авиация, Мартин, исследовательский центр...">
+      <button>НАЙТИ</button>
+    </div>
+  </div>
+</div>
+
+<!-- RESEARCH -->
+<div class="research-bg">
+  <div class="sec">
+    <div class="sec-hd">
+      <div class="sec-tag">🔬 Исследовательский центр</div>
+      <div class="sec-title">Ветки исследований — что и зачем качать</div>
+      <div class="sec-sub">Многие игроки качают всё подряд и теряют время. Здесь — чёткое объяснение каждой ветки для всех уровней.</div>
+    </div>
+    <div class="research-grid">
+
+      <div class="res-card">
+        <div class="res-header">
+          <div class="res-icon" style="background:rgba(200,50,50,0.15)">⚔️</div>
+          <div>
+            <div class="res-name">Военные технологии</div>
+            <div class="res-count">Урон · Броня · Скорость атаки</div>
+          </div>
+        </div>
+        <div class="res-body">
+          <div class="res-desc">Главная боевая ветка. Увеличивает урон твоих юнитов, их броню и скорость атаки. Без прокачки здесь — твои танки бьют как пушинки.</div>
+          <div class="pills">
+            <span class="pill pill-easy">Новичок</span>
+            <span class="pill pill-type">Приоритет #1</span>
+          </div>
+          <div class="res-tip">💡 <b>Аналогия:</b> Это как апгрейд оружия в шутере. Без него — играешь с рогаткой против пушек.</div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <div class="res-icon" style="background:rgba(61,97,40,0.2)">⛏️</div>
+          <div>
+            <div class="res-name">Экономика</div>
+            <div class="res-count">Добыча · Строительство · Хранилища</div>
+          </div>
+        </div>
+        <div class="res-body">
+          <div class="res-desc">Ускоряет добычу ресурсов, строительство зданий и увеличивает вместимость хранилищ. Без этого — постоянно ждёшь и тормозишь в развитии.</div>
+          <div class="pills">
+            <span class="pill pill-easy">Новичок</span>
+            <span class="pill pill-type">Приоритет #2</span>
+          </div>
+          <div class="res-tip">💡 <b>Аналогия:</b> Как прокачка шахт в Clash of Clans — чем быстрее добываешь, тем быстрее растёшь.</div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <div class="res-icon" style="background:rgba(30,80,140,0.2)">✈️</div>
+          <div>
+            <div class="res-name">Авиация и флот</div>
+            <div class="res-count">Бомбардировщики · Истребители · Корабли</div>
+          </div>
+        </div>
+        <div class="res-body">
+          <div class="res-desc">Открывает и усиливает воздушные и морские юниты. Авиация — мощный инструмент внезапного удара. Флот нужен для контроля водных зон.</div>
+          <div class="pills">
+            <span class="pill pill-med">Средний</span>
+            <span class="pill pill-type">Ситуативно</span>
+          </div>
+          <div class="res-tip">💡 <b>Совет новичку:</b> Не торопись сюда вкладываться — сначала прокачай военку и экономику до 5-го уровня.</div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <div class="res-icon" style="background:rgba(150,80,180,0.15)">🎖️</div>
+          <div>
+            <div class="res-name">Офицеры</div>
+            <div class="res-count">Слоты · Навыки · Снаряжение</div>
+          </div>
+        </div>
+        <div class="res-body">
+          <div class="res-desc">Открывает дополнительные слоты для офицеров, усиливает их пассивные навыки и позволяет надевать снаряжение. Офицер без прокачки — просто картинка.</div>
+          <div class="pills">
+            <span class="pill pill-med">Средний</span>
+            <span class="pill pill-type">Важно для PvP</span>
+          </div>
+          <div class="res-tip">💡 <b>Аналогия:</b> Офицер — как герой в RPG. Сам по себе слабый, но с правильной прокачкой меняет исход боя.</div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <div class="res-icon" style="background:rgba(200,120,20,0.15)">🛡️</div>
+          <div>
+            <div class="res-name">Оборона базы</div>
+            <div class="res-count">Башни · Стены · Щит</div>
+          </div>
+        </div>
+        <div class="res-body">
+          <div class="res-desc">Усиливает защитные сооружения базы. Важно когда ты оффлайн — без прокачки враги разносят базу за минуту пока ты спишь.</div>
+          <div class="pills">
+            <span class="pill pill-easy">Новичок</span>
+            <span class="pill pill-type">Защита</span>
+          </div>
+          <div class="res-tip">💡 <b>Совет:</b> Прокачай хотя бы до 3-го уровня до того как вступишь в активный альянс — иначе станешь мишенью.</div>
+        </div>
+      </div>
+
+      <div class="res-card">
+        <div class="res-header">
+          <div class="res-icon" style="background:rgba(20,120,120,0.15)">⚙️</div>
+          <div>
+            <div class="res-name">Продвинутые технологии</div>
+            <div class="res-count">Крит · Пробитие · Спецудары</div>
+          </div>
+        </div>
+        <div class="res-body">
+          <div class="res-desc">Открывает механику критического урона, пробития брони и специальных атак. Это эндгейм-ветка — меняет правила игры на высоких уровнях.</div>
+          <div class="pills">
+            <span class="pill pill-hard">Хардкор</span>
+            <span class="pill pill-type">Эндгейм</span>
+          </div>
+          <div class="res-tip">💡 <b>Только после:</b> военки, экономики и офицеров на максимуме. Раньше — пустая трата ресурсов.</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="mil-divider"></div>
+
+<!-- MECHANICS -->
+<div class="mechanics-bg">
+  <div class="sec">
+    <div class="sec-hd">
+      <div class="sec-tag">⚙️ Механики игры</div>
+      <div class="sec-title">Как это работает — объяснено просто</div>
+      <div class="sec-sub">Для каждого — своё объяснение. Новичок найдёт аналогию, ветеран — точные цифры.</div>
+    </div>
+    <div class="mech-grid">
+      <div class="mech-card">
+        <div class="mech-level lvl-new">🟢 Новичок</div>
+        <div class="mech-title">Система урона</div>
+        <div class="mech-desc">Урон в Warpath — не просто цифра. На него влияют: тип юнита, бафф офицера, ветка исследований и тип цели. Танк бьёт танк иначе, чем авиацию.</div>
+        <div class="mech-example"><b>Просто:</b> Представь камень-ножницы-бумага. Каждый тип юнита имеет сильного и слабого противника. Учи это — выигрывай бои без превосходства в силе.</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-level lvl-new">🟢 Новичок</div>
+        <div class="mech-title">Очки силы (Power)</div>
+        <div class="mech-desc">Power — общий показатель развития. Но высокий Power ≠ сильный игрок. Можно иметь 50М силы и проигрывать игроку с 20М из-за неправильной прокачки.</div>
+        <div class="mech-example"><b>Аналогия:</b> Как уровень персонажа в RPG — показывает сколько ты играл, но не показывает насколько ты умный.</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-level lvl-mid">🟡 Средний</div>
+        <div class="mech-title">Формирования (Formation)</div>
+        <div class="mech-desc">Порядок юнитов в отряде влияет на бой. Передние ряды принимают удар, задние — наносят урон издали. Неправильная расстановка — потеря 30% эффективности.</div>
+        <div class="mech-example"><b>Совет:</b> Тяжёлые танки — вперёд. Артиллерия — назад. Никогда не ставь артиллерию в первый ряд.</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-level lvl-mid">🟡 Средний</div>
+        <div class="mech-title">Система снабжения</div>
+        <div class="mech-desc">Юниты расходуют припасы во время марша. Чем дальше идут — тем больше едят. Без прокачки логистики большая армия встанет в поле голодная.</div>
+        <div class="mech-example"><b>Аналогия:</b> Как поход в горы — можешь взять много снаряжения, но без еды далеко не уйдёшь.</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-level lvl-pro">🔴 Ветеран</div>
+        <div class="mech-title">Пробитие брони</div>
+        <div class="mech-desc">Когда твой урон превышает броню цели — лишние проценты превращаются в бонусный урон. Это называется пробитие. На высоких уровнях — ключевая механика PvP.</div>
+        <div class="mech-example"><b>Формула:</b> Если у цели 40% брони, а у тебя 60% пробития — 20% сверху дают +15% чистого бонусного урона по финальному пулу.</div>
+      </div>
+      <div class="mech-card">
+        <div class="mech-level lvl-pro">🔴 Ветеран</div>
+        <div class="mech-title">Зоны юрисдикции</div>
+        <div class="mech-desc">Контроль зон даёт бонусы всему альянсу — ускорение маршей, бафф добычи, защитный периметр. Потеря зоны = потеря пассивного дохода всех членов.</div>
+        <div class="mech-example"><b>Стратегия:</b> Оценивай зону не по размеру, а по ресурсам внутри и расстоянию до вражеских баз.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="mil-divider"></div>
+
+<!-- FEATURED GUIDES -->
+<div style="background:var(--bg2);border-top:1px solid var(--border);">
+  <div class="sec">
+    <div class="sec-hd">
+      <div class="sec-tag">🔥 Популярные гайды</div>
+      <div class="sec-title">Топ материалы от блогеров</div>
+    </div>
+    <div class="guides-grid">
+      <div class="guide-card">
+        <div class="guide-thumb">
+          <div class="guide-thumb-bg" style="background:linear-gradient(135deg,#1a0e05,#3d1a05)"></div>
+          <div class="guide-thumb-ico">🏗️</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-tags"><span class="pill pill-easy">Новичок</span><span class="pill pill-type">Гайд</span></div>
+          <div class="guide-title">С чего начать: первые 7 дней в игре</div>
+          <div class="guide-desc">Что строить, что исследовать и чего НЕ делать в первую неделю — чтобы не отстать навсегда</div>
+          <div class="guide-foot">
+            <div class="g-author"><div class="g-av" style="background:#c85218">🦊</div><div class="g-name">WarpathRU</div></div>
+            <div class="g-meta"><span>👁 18k</span><span>⏱ 10 мин</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="guide-card">
+        <div class="guide-thumb">
+          <div class="guide-thumb-bg" style="background:linear-gradient(135deg,#0a1a0a,#1a3a1a)"></div>
+          <div class="guide-thumb-ico">🔬</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-tags"><span class="pill pill-med">Средний</span><span class="pill pill-type">Исследования</span></div>
+          <div class="guide-title">Оптимальный порядок прокачки исследований</div>
+          <div class="guide-desc">Какие ветки качать первыми, какие можно пропустить и почему большинство игроков делают это неправильно</div>
+          <div class="guide-foot">
+            <div class="g-author"><div class="g-av" style="background:#3d6128">⚔️</div><div class="g-name">TankCommander</div></div>
+            <div class="g-meta"><span>👁 24k</span><span>⏱ 15 мин</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="guide-card">
+        <div class="guide-thumb">
+          <div class="guide-thumb-bg" style="background:linear-gradient(135deg,#0a0a1a,#1a1a3a)"></div>
+          <div class="guide-thumb-ico">✈️</div>
+        </div>
+        <div class="guide-body">
+          <div class="guide-tags"><span class="pill pill-hard">Ветеран</span><span class="pill pill-type">Авиация</span></div>
+          <div class="guide-title">Авиация в 2025: лучшие билды бомбардировщиков</div>
+          <div class="guide-desc">Полный разбор авиационных офицеров, формирований и синергий после обновления 13.3</div>
+          <div class="guide-foot">
+            <div class="g-author"><div class="g-av" style="background:#1a1a5a">🛩️</div><div class="g-name">AceFlyer</div></div>
+            <div class="g-meta"><span>👁 31k</span><span>⏱ 22 мин</span></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-logo">⚔ WARPATH GUIDE</div>
+  <p>Официальный ресурс блогеров Warpath: Ace Shooter &nbsp;·&nbsp; Только русский язык &nbsp;·&nbsp; 2025–2026</p>
+</footer>
+
+<script>
+// TICKER
+const news = [
+  "Обновление 13.4 — новые офицеры и ивент Тихого океана",
+  "Добавлен гайд по оптимальной прокачке исследований",
+  "Tier-лист офицеров обновлён под патч 13.3",
+  "Новый калькулятор билдов для бронетанковых формирований",
+  "Видеогайд: авиация против наземных войск — кто выигрывает?",
+  "База данных офсетов обновлена — 200+ значений",
+];
+const ti = document.getElementById('ticker-inner');
+[...news,...news].forEach(n=>{const s=document.createElement('span');s.textContent=n;ti.appendChild(s);});
+
+// BLOGGERS
+const bloggers = [
+  {n:"WarpathRU",r:"Гайды",e:"🦊",c:"#c85218"},
+  {n:"TankCommander",r:"Бронетехника",e:"⚔️",c:"#3d6128"},
+  {n:"AceFlyer",r:"Авиация",e:"✈️",c:"#1a3a6a"},
+  {n:"EcoKing",r:"Экономика",e:"⛏️",c:"#7a5a10"},
+  {n:"OffCoach",r:"Офицеры",e:"🎖️",c:"#6a1a6a"},
+  {n:"NavyWolf",r:"Флот",e:"⚓",c:"#1a4a5a"},
+  {n:"BaseBuilder",r:"Оборона",e:"🛡️",c:"#5a1a1a"},
+  {n:"PvPMaster",r:"PvP",e:"💥",c:"#8a2a1a"},
+  {n:"StealthOps",r:"Тактика",e:"🗡️",c:"#2a3a2a"},
+  {n:"AllianceGod",r:"Альянс",e:"🏆",c:"#8a7a1a"},
+];
+const track = document.getElementById('bloggers-track');
+[...bloggers,...bloggers].forEach(b=>{
+  const d=document.createElement('div');
+  d.className='blogger';
+  d.innerHTML=`<div class="b-ring"><div class="b-inner" style="background:${b.c}22">${b.e}</div></div><div class="b-name">${b.n}</div><div class="b-role">${b.r}</div>`;
+  track.appendChild(d);
+});
+</script>
+</body>
+</html>
