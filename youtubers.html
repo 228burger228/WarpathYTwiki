@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>YouTubers — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-header">
+  <div class="wrap">
+    <div class="tag">▶ Контент-креаторы</div>
+    <div class="title">YouTubers</div>
+    <p class="sub">Официальные русскоязычные блогеры Warpath. Поддержи любимого блогера донатом через нашего бота.</p>
+  </div>
+</div>
+
+<section class="section" style="background:var(--bg)">
+  <div class="wrap">
+
+    <!-- Filters -->
+    <div class="tier-filters fade-up" id="yt-filters"></div>
+
+    <!-- Grid -->
+    <div class="yt-page-grid fade-up" id="yt-grid"></div>
+
+    <!-- Community CTA -->
+    <div class="fade-up" style="margin-top:3rem">
+      <div style="background:var(--panel);border:var(--line);padding:2rem;text-align:center;position:relative;overflow:hidden">
+        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(41,182,246,.04),transparent);pointer-events:none"></div>
+        <div class="tag">💬 Сообщество</div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.4rem,2.5vw,2rem);letter-spacing:2px;margin:.4rem 0 .8rem">Стань частью WarpathHub</div>
+        <p style="color:var(--dim);font-size:.88rem;max-width:460px;margin:0 auto 1.4rem;line-height:1.7">Объединяй знания с лучшими игроками России. Обсуждения, события, турниры — всё в одном Telegram-чате.</p>
+        <a href="https://t.me/WarpathHub" target="_blank" class="btn-tg" style="display:inline-flex">✈ Вступить в WarpathHub</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script src="nav.js"></script>
+<script src="data.js"></script>
+<script>
+const SPECS = ['Все',...new Set(YOUTUBERS.map(y=>y.spec))];
+let activeSpec = 'Все';
+
+function buildFilters() {
+  const wrap=document.getElementById('yt-filters');
+  SPECS.forEach(s=>{
+    const b=document.createElement('button');
+    b.className='tf-btn'+(s===activeSpec?' active':'');
+    b.textContent=s;
+    b.onclick=()=>{
+      activeSpec=s;
+      document.querySelectorAll('#yt-filters .tf-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      buildGrid();
+    };
+    wrap.appendChild(b);
+  });
+}
+
+function buildGrid() {
+  const grid=document.getElementById('yt-grid');
+  grid.innerHTML='';
+  const list = activeSpec==='Все' ? YOUTUBERS : YOUTUBERS.filter(y=>y.spec===activeSpec);
+  list.forEach(y=>{
+    const d=document.createElement('div');
+    d.className='yt-page-card';
+    d.innerHTML=`
+      <div class="ypc-top">
+        <div class="ypc-avatar">${y.emoji}</div>
+        <div>
+          <div class="ypc-name">${y.name}</div>
+          <div class="ypc-spec">${y.spec}</div>
+          <div class="ypc-ver">● Официальный блогер</div>
+        </div>
+      </div>
+      <div class="ypc-body">
+        <div class="ypc-desc">${y.desc}</div>
+        <div class="ypc-stats">
+          <div class="ypc-stat"><div class="ypc-stat-n">${y.subs}</div><div class="ypc-stat-l">Подписч.</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-n">${y.videos}</div><div class="ypc-stat-l">Видео</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-n">${y.guides}</div><div class="ypc-stat-l">Гайдов</div></div>
+        </div>
+        <div class="ypc-links">
+          <a href="${y.yt}" target="_blank" class="ypc-lnk lnk-yt">▶ YouTube</a>
+          <a href="${y.tg}" target="_blank" class="ypc-lnk lnk-tg">✈ Telegram</a>
+          <a href="${y.donate}" target="_blank" class="ypc-lnk lnk-don">⭐ Донат</a>
+        </div>
+      </div>`;
+    grid.appendChild(d);
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  initShared();
+  buildFilters();
+  buildGrid();
+});
+</script>
+</body>
+</html>
