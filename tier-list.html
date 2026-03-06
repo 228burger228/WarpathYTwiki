@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Тир-лист — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-header">
+  <div class="wrap">
+    <div class="tag">🎖 Рейтинг</div>
+    <div class="title">Тир-лист юнитов и офицеров</div>
+    <p class="sub">Актуально для патча 13.4. Фильтруй по типу. Перетаскивай карточки между тирами — изменения сохраняются в браузере.</p>
+  </div>
+</div>
+
+<section class="section" style="background:var(--bg)">
+  <div class="wrap">
+
+    <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:.8rem;margin-bottom:1.4rem">
+      <div class="tier-filters" id="tier-filters" style="margin-bottom:0"></div>
+      <div style="display:flex;gap:.5rem">
+        <button class="btn btn-outline" onclick="resetTiers()">↺ Сброс</button>
+        <button class="btn btn-primary" onclick="saveTiers()">💾 Сохранить</button>
+      </div>
+    </div>
+
+    <div id="tier-table"></div>
+    <div id="save-msg" style="font-size:.74rem;color:var(--muted);text-align:right;margin-top:.5rem;height:1rem"></div>
+
+    <!-- Card grid -->
+    <div style="margin-top:3rem" class="fade-up">
+      <div class="sec-hd">
+        <div class="tag">📋 Обзор</div>
+        <div class="title">Все карточки</div>
+      </div>
+      <div class="tier-card-grid" id="card-grid" style="margin-top:1rem"></div>
+    </div>
+  </div>
+</section>
+
+<!-- Detail modal -->
+<div class="modal-bg" id="detail-modal">
+  <div class="modal-box" style="max-width:480px">
+    <button class="modal-close" onclick="closeModal('detail-modal')">✕</button>
+    <div id="detail-content" style="padding:1.8rem"></div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script src="data.js"></script>
+<script>
+const TIERS = ['S','A','B','C','D'];
+const FILTERS = ['Все','Юниты','Офицеры'];
+const TIER_COLORS = {S:'#ffd040',A:'#80cc60',B:'#60a8f0',C:'#d090d0',D:'#c08080'};
+let state = {};
+let activeFilter = 'Все';
+let dragging = null;
+
+function defaultState() {
+  const s = {};
+  TIERS.forEach(t => { s[t] = TIER_ITEMS.filter(x => x.tier===t).map(x => x.id); });
+  return s;
+}
+
+function loadState() {
+  try { const s=JSON.parse(localStorage.getItem('warpathTier3')||'null'); if(s)return s; } catch(e){}
+  return defaultState();
+}
+
+function saveTiers() {
+  localStorage.setItem('warpathTier3', JSON.stringify(state));
+  const m=document.getElementById('save-msg');
+  m.innerHTML=`<b style="color:var(--gold)">✓ Сохранено</b> · ${new Date().toLocaleTimeString('ru')}`;
+  setTimeout(()=>m.textContent='',3000);
+}
+
+function resetTiers() { state=defaultState(); localStorage.removeItem('warpathTier3'); buildTable(); buildCardGrid(); }
+
+function visibleIds() {
+  if(activeFilter==='Юниты')   return TIER_ITEMS.filter(x=>x.type==='unit').map(x=>x.id);
+  if(activeFilter==='Офицеры') return TIER_ITEMS.filter(x=>x.type==='officer').map(x=>x.id);
+  return TIER_ITEMS.map(x=>x.id);
+}
+
+function buildFilters() {
+  const wrap=document.getElementById('tier-filters');
+  FILTERS.forEach(f=>{
+    const b=document.createElement('button');
+    b.className='tf-btn'+(f===activeFilter?' active':'');
+    b.textContent=f;
+    b.onclick=()=>{
+      activeFilter=f;
+      document.querySelectorAll('.tf-btn').forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      buildTable(); buildCardGrid();
+    };
+    wrap.appendChild(b);
+  });
+}
+
+function buildTable() {
+  const tbl=document.getElementById('tier-table');
+  tbl.innerHTML='';
+  const vis=visibleIds();
+  TIERS.forEach(tier=>{
+    const ids=(state[tier]||[]).filter(id=>vis.includes(id));
+    const wrap=document.createElement('div');
+    wrap.className=`tier-row-wrap tier-${tier.toLowerCase()}`;
+    wrap.dataset.tier=tier;
+
+    const letter=document.createElement('div');
+    letter.className='tier-letter';
+    letter.textContent=tier;
+
+    const row=document.createElement('div');
+    row.className='tier-cards-row';
+    row.dataset.tier=tier;
+
+    row.addEventListener('dragover',e=>{ e.preventDefault(); wrap.classList.add('drag-over'); });
+    row.addEventListener('dragleave',()=>wrap.classList.remove('drag-over'));
+    row.addEventListener('drop',e=>{
+      e.preventDefault();
+      wrap.classList.remove('drag-over');
+      if(!dragging)return;
+      const id=dragging.dataset.id, from=dragging.dataset.tier;
+      if(from===tier)return;
+      state[from]=(state[from]||[]).filter(x=>x!==id);
+      if(!state[tier])state[tier]=[];
+      if(!state[tier].includes(id))state[tier].push(id);
+      buildTable();
+    });
+
+    ids.forEach(id=>{
+      const item=TIER_ITEMS.find(x=>x.id===id);
+      if(!item)return;
+      const card=document.createElement('div');
+      card.className='t-card';
+      card.draggable=true;
+      card.dataset.id=id; card.dataset.tier=tier;
+      card.innerHTML=`<span class="t-card-icon">${item.emoji}</span><div><div class="t-card-name">${item.name}</div><div class="t-card-sub">${item.role}</div></div>`;
+      card.addEventListener('dragstart',()=>{ dragging=card; card.classList.add('dragging'); });
+      card.addEventListener('dragend',()=>{ dragging=null; card.classList.remove('dragging'); document.querySelectorAll('.tier-row-wrap').forEach(w=>w.classList.remove('drag-over')); });
+      card.onclick=()=>openDetail(item);
+      row.appendChild(card);
+    });
+
+    if(!ids.length){
+      const empty=document.createElement('div');
+      empty.style.cssText='color:var(--muted);font-size:.74rem;padding:.3rem .5rem;font-style:italic';
+      empty.textContent='Пусто — перетащи карточку сюда';
+      row.appendChild(empty);
+    }
+
+    wrap.appendChild(letter); wrap.appendChild(row);
+    tbl.appendChild(wrap);
+  });
+}
+
+function buildCardGrid() {
+  const grid=document.getElementById('card-grid');
+  grid.innerHTML='';
+  const vis=TIER_ITEMS.filter(x=>{
+    if(activeFilter==='Юниты')   return x.type==='unit';
+    if(activeFilter==='Офицеры') return x.type==='officer';
+    return true;
+  });
+  vis.forEach(item=>{
+    const d=document.createElement('div');
+    d.className='tg-card';
+    d.innerHTML=`<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:.55rem">
+      <span style="font-size:1.7rem">${item.emoji}</span>
+      <span style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;color:${TIER_COLORS[item.tier]||'var(--text)'}">${item.tier}</span>
+    </div>
+    <div style="font-weight:700;font-size:.86rem;margin-bottom:.18rem">${item.name}</div>
+    <div style="font-size:.68rem;color:var(--muted);margin-bottom:.55rem">${item.role}</div>
+    <div style="font-size:.76rem;color:var(--dim);line-height:1.58">${item.note}</div>`;
+    d.onclick=()=>openDetail(item);
+    grid.appendChild(d);
+  });
+}
+
+function openDetail(item) {
+  const offData = OFFICERS.find(o=>o.id===item.id);
+  const unitData = UNIT_TYPES.find(u=>u.id===item.id);
+  let statsHtml = '';
+  if(item.type==='unit' && unitData) {
+    const s=calcUnit(unitData.id,1,'none','none');
+    statsHtml=`<div style="font-size:.8rem;margin-bottom:.9rem">
+      <div class="tot-row"><span>Атака (Ур.1)</span><span style="color:var(--gold2);font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.atk)}</span></div>
+      <div class="tot-row"><span>Защита</span><span style="color:#60a8f0;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.def)}</span></div>
+      <div class="tot-row"><span>HP</span><span style="color:#7ec850;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.hp)}</span></div>
+      <div class="tot-row"><span>Скорость</span><span style="color:#d090d0;font-family:'Barlow Condensed',sans-serif;font-weight:700">${s.mov}</span></div>
+    </div>`;
+  }
+  if(item.type==='officer' && offData && offData.id!=='none') {
+    statsHtml=`<div style="font-size:.8rem;margin-bottom:.9rem">
+      <div class="tot-row"><span>Бонус атаки</span><span style="color:#7ec850;font-family:'Barlow Condensed',sans-serif;font-weight:700">+${offData.atkB}%</span></div>
+      <div class="tot-row"><span>Бонус защиты</span><span style="color:#60a8f0;font-family:'Barlow Condensed',sans-serif;font-weight:700">+${offData.defB}%</span></div>
+      <div class="tot-row"><span>Бонус HP</span><span style="color:#7ec850;font-family:'Barlow Condensed',sans-serif;font-weight:700">+${offData.hpB}%</span></div>
+    </div>`;
+  }
+  document.getElementById('detail-content').innerHTML=`
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:var(--line)">
+      <div style="font-size:2.8rem">${item.emoji}</div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px">${item.name}</div>
+        <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">${item.role} · ${item.type==='unit'?'Юнит':'Офицер'}</div>
+      </div>
+      <div style="margin-left:auto;font-family:'Bebas Neue',sans-serif;font-size:2.8rem;color:${TIER_COLORS[item.tier]}">${item.tier}</div>
+    </div>
+    <div style="background:var(--bg);border:var(--line);padding:.85rem;font-size:.84rem;color:var(--dim);line-height:1.65;margin-bottom:.85rem">${item.note}</div>
+    ${statsHtml}
+    <a href="${item.type==='unit'?'unit-builder.html':'wiki.html'}" class="btn btn-primary">Открыть в ${item.type==='unit'?'Unit Builder':'Wiki'} →</a>`;
+  openModal('detail-modal');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  initShared();
+  state=loadState();
+  buildFilters();
+  buildTable();
+  buildCardGrid();
+});
+</script>
+</body>
+</html>
