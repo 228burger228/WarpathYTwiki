@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Wiki — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-header">
+  <div class="wrap">
+    <div class="tag">📖 База знаний</div>
+    <div class="title">Wiki</div>
+    <p class="sub">Юниты, офицеры, снаряжение и механики игры. Подробные описания и советы.</p>
+  </div>
+</div>
+
+<section class="section" style="background:var(--bg)">
+  <div class="wrap">
+    <div class="wiki-layout">
+
+      <!-- Sidebar -->
+      <div class="wiki-sidebar">
+        <div class="wiki-sidebar-title">Разделы Wiki</div>
+        <div id="wiki-nav"></div>
+      </div>
+
+      <!-- Content area -->
+      <div>
+        <!-- Units -->
+        <div class="wiki-page active" id="wp-units">
+          <div class="sec-hd fade-up" style="margin-bottom:1.3rem">
+            <div class="tag">🛡 Справочник</div>
+            <div class="title">Юниты</div>
+            <div class="sub">Все типы боевых единиц: характеристики, сильные стороны, советы.</div>
+          </div>
+          <div class="wiki-cards" id="wc-units"></div>
+        </div>
+
+        <!-- Officers -->
+        <div class="wiki-page" id="wp-officers">
+          <div class="sec-hd fade-up" style="margin-bottom:1.3rem">
+            <div class="tag">🎖 Справочник</div>
+            <div class="title">Офицеры</div>
+            <div class="sub">Все офицеры: бонусы, синергии, для каких юнитов подходят лучше всего.</div>
+          </div>
+          <div class="wiki-cards" id="wc-officers"></div>
+        </div>
+
+        <!-- Mechanics -->
+        <div class="wiki-page" id="wp-mechanics">
+          <div class="sec-hd fade-up" style="margin-bottom:1.3rem">
+            <div class="tag">⚙ Обучение</div>
+            <div class="title">Механики игры</div>
+            <div class="sub">Урон, броня, снабжение, зоны контроля и стратегия.</div>
+          </div>
+          <div class="wiki-cards" id="wc-mechanics"></div>
+        </div>
+
+        <!-- Equipment -->
+        <div class="wiki-page" id="wp-equipment">
+          <div class="sec-hd fade-up" style="margin-bottom:1.3rem">
+            <div class="tag">🔧 Снаряжение</div>
+            <div class="title">Снаряжение юнитов</div>
+            <div class="sub">Все варианты снаряжения: бонусы и рекомендации к применению.</div>
+          </div>
+          <div class="wiki-cards" id="wc-equipment"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Unit detail modal -->
+<div class="modal-bg" id="wiki-modal">
+  <div class="modal-box" style="max-width:540px">
+    <button class="modal-close" onclick="closeModal('wiki-modal')">✕</button>
+    <div id="wiki-modal-content" style="padding:1.8rem"></div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script src="data.js"></script>
+<script>
+const WIKI_SECTIONS = [
+  {id:'wp-units',     icon:'🛡', label:'Юниты'},
+  {id:'wp-officers',  icon:'🎖', label:'Офицеры'},
+  {id:'wp-mechanics', icon:'⚙', label:'Механики'},
+  {id:'wp-equipment', icon:'🔧', label:'Снаряжение'},
+];
+
+function buildWikiNav() {
+  const nav=document.getElementById('wiki-nav');
+  WIKI_SECTIONS.forEach((s,i)=>{
+    const d=document.createElement('div');
+    d.className='wiki-nav-item'+(i===0?' active':'');
+    d.dataset.target=s.id;
+    d.innerHTML=`<span>${s.icon}</span> ${s.label}`;
+    d.onclick=()=>{
+      document.querySelectorAll('.wiki-nav-item').forEach(x=>x.classList.remove('active'));
+      document.querySelectorAll('.wiki-page').forEach(x=>x.classList.remove('active'));
+      d.classList.add('active');
+      document.getElementById(s.id).classList.add('active');
+    };
+    nav.appendChild(d);
+  });
+}
+
+function buildUnits() {
+  const grid=document.getElementById('wc-units');
+  UNIT_WIKI.forEach(u=>{
+    const s=calcUnit(u.id,1,'none','none');
+    const d=document.createElement('div');
+    d.className='wiki-card';
+    d.innerHTML=`
+      <div class="wc-top"><div class="wc-icon">${u.emoji}</div>
+        <div><div class="wc-title">${u.label}</div><div class="wc-sub">Базовая атака: ${fmt(s.atk)} · HP: ${fmt(s.hp)}</div></div>
+      </div>
+      <div class="wc-desc">${u.desc}</div>
+      <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.65rem">
+        <span class="pill pill-tag">Атк ${fmt(s.atk)}</span>
+        <span class="pill pill-tag">Защ ${fmt(s.def)}</span>
+        <span class="pill pill-tag">Скор ${s.mov}</span>
+      </div>`;
+    d.onclick=()=>openUnitDetail(u,s);
+    grid.appendChild(d);
+  });
+}
+
+function openUnitDetail(u, s) {
+  const s10=calcUnit(u.id,10,'martin','railgun');
+  document.getElementById('wiki-modal-content').innerHTML=`
+    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:var(--line)">
+      <div style="font-size:3rem">${u.emoji}</div>
+      <div>
+        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px">${u.label}</div>
+        <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Боевая единица · Базовые характеристики Ур.1</div>
+      </div>
+    </div>
+    <p style="font-size:.84rem;color:var(--dim);line-height:1.7;margin-bottom:1rem">${u.desc}</p>
+    <div style="font-size:.8rem;margin-bottom:.9rem">
+      <div class="tot-row"><span>Атака (Ур.1)</span><span style="color:var(--gold2);font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.atk)}</span></div>
+      <div class="tot-row"><span>Защита</span><span style="color:#60a8f0;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.def)}</span></div>
+      <div class="tot-row"><span>HP</span><span style="color:#7ec850;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.hp)}</span></div>
+      <div class="tot-row"><span>Скорость</span><span style="color:#d090d0;font-family:'Barlow Condensed',sans-serif;font-weight:700">${s.mov}</span></div>
+      <div class="tot-row"><span>Атака Ур.10 + Мартин + Рейлган</span><span style="color:#ffd040;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s10.atk)}</span></div>
+    </div>
+    <div class="tip-box"><b style="color:var(--gold2)">💡 Совет:</b> ${u.tip}</div>
+    <div style="margin-top:1.1rem"><a href="unit-builder.html" class="btn btn-primary">Открыть в Unit Builder →</a></div>`;
+  openModal('wiki-modal');
+}
+
+function buildOfficers() {
+  const grid=document.getElementById('wc-officers');
+  OFFICERS.filter(o=>o.id!=='none').forEach(o=>{
+    const tier=TIER_ITEMS.find(t=>t.id===o.id);
+    const TIER_COLORS={S:'#ffd040',A:'#80cc60',B:'#60a8f0',C:'#d090d0',D:'#c08080'};
+    const tc=tier?TIER_COLORS[tier.tier]:'var(--muted)';
+    const d=document.createElement('div');
+    d.className='wiki-card';
+    d.innerHTML=`
+      <div class="wc-top">
+        <div class="wc-icon">${tier?.emoji||'🎖'}</div>
+        <div>
+          <div class="wc-title">${o.name}</div>
+          <div class="wc-sub">Тир: <span style="color:${tc};font-weight:700">${tier?.tier||'?'}</span> · ${tier?.role||'Офицер'}</div>
+        </div>
+      </div>
+      <div class="wc-desc">${tier?.note||''}</div>
+      <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.65rem">
+        <span class="pill pill-tag">Атк +${o.atkB}%</span>
+        <span class="pill pill-tag">Защ +${o.defB}%</span>
+        <span class="pill pill-tag">HP +${o.hpB}%</span>
+      </div>`;
+    grid.appendChild(d);
+  });
+}
+
+function buildMechanics() {
+  const grid=document.getElementById('wc-mechanics');
+  MECHANICS_WIKI.forEach(m=>{
+    const d=document.createElement('div');
+    d.className='wiki-card';
+    d.innerHTML=`
+      <div class="wc-top"><div class="wc-icon">${m.icon}</div>
+        <div><div class="wc-title">${m.title}</div><div class="wc-sub">${m.sub}</div></div>
+      </div>
+      <div class="wc-desc">${m.desc}</div>
+      <div class="tip-box">💡 ${m.tip}</div>`;
+    grid.appendChild(d);
+  });
+}
+
+function buildEquipment() {
+  const grid=document.getElementById('wc-equipment');
+  EQUIPMENT.filter(e=>e.id!=='none').forEach(e=>{
+    const d=document.createElement('div');
+    d.className='wiki-card';
+    d.innerHTML=`
+      <div class="wc-top">
+        <div class="wc-icon">🔧</div>
+        <div><div class="wc-title">${e.name}</div><div class="wc-sub">Снаряжение юнита</div></div>
+      </div>
+      <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.4rem">
+        ${e.atkB?`<span class="pill ${e.atkB>0?'pill-tag':'pill-hard'}">Атк ${e.atkB>0?'+':''}${e.atkB}%</span>`:''}
+        ${e.defB?`<span class="pill ${e.defB>0?'pill-tag':'pill-hard'}">Защ ${e.defB>0?'+':''}${e.defB}%</span>`:''}
+        ${e.hpB?`<span class="pill pill-tag">HP +${e.hpB}%</span>`:''}
+      </div>`;
+    grid.appendChild(d);
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  initShared();
+  buildWikiNav();
+  buildUnits();
+  buildOfficers();
+  buildMechanics();
+  buildEquipment();
+});
+</script>
+</body>
+</html>
