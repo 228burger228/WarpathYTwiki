@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Army Builder — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<div class="page-header">
+  <div class="wrap">
+    <div class="tag">🏗 Инструмент</div>
+    <div class="title">Army Builder</div>
+    <p class="sub">Добавь юниты в слоты — суммарные характеристики пересчитываются автоматически. Макс. 10 юнитов.</p>
+  </div>
+</div>
+
+<section class="section" style="background:var(--bg)">
+  <div class="wrap">
+    <div class="army-layout">
+
+      <!-- LEFT: grid + controls -->
+      <div>
+        <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1rem;flex-wrap:wrap;gap:.6rem">
+          <div style="font-family:'Bebas Neue',sans-serif;font-size:.82rem;letter-spacing:3px;color:var(--muted)">СЛОТЫ АРМИИ (макс. 10)</div>
+          <div style="display:flex;gap:.5rem;flex-wrap:wrap">
+            <button class="btn btn-outline" onclick="openAddModal()">+ Добавить юнит</button>
+            <button class="btn btn-outline" onclick="clearArmy()">✕ Очистить</button>
+            <button class="btn btn-primary" onclick="saveArmy()">💾 Сохранить</button>
+          </div>
+        </div>
+
+        <div class="army-grid" id="army-grid"></div>
+        <div id="army-empty" style="text-align:center;padding:3rem;color:var(--muted);border:var(--line);border-style:dashed;margin-top:.5rem">
+          <div style="font-size:3rem;margin-bottom:.7rem">🪖</div>
+          Армия пуста. Нажми «Добавить юнит» чтобы начать.
+        </div>
+
+        <!-- Presets -->
+        <div class="bp" style="margin-top:1.4rem">
+          <div class="bp-title">Готовые составы</div>
+          <div id="presets-list"></div>
+        </div>
+      </div>
+
+      <!-- RIGHT: totals -->
+      <div>
+        <div class="army-totals">
+          <div class="bp-title">Суммарная сила</div>
+          <div class="army-power">
+            <div class="army-power-n" id="tot-power">0</div>
+            <div class="army-power-l">Общая боевая мощь</div>
+          </div>
+          <div class="tot-row"><span>Юнитов</span><span class="tot-val" id="tot-count">0</span></div>
+          <div class="tot-row"><span style="color:var(--gold2)">⚔ Атака</span><span class="tot-val" id="tot-atk">0</span></div>
+          <div class="tot-row"><span style="color:#60a8f0">🛡 Защита</span><span class="tot-val" id="tot-def">0</span></div>
+          <div class="tot-row"><span style="color:#7ec850">❤ HP</span><span class="tot-val" id="tot-hp">0</span></div>
+          <div class="tot-row"><span style="color:#d090d0">⚡ Ср. скорость</span><span class="tot-val" id="tot-mov">—</span></div>
+          <div class="tot-row"><span>💰 Стоимость</span><span class="tot-val" id="tot-cost">0</span></div>
+          <div style="margin-top:1rem;border-top:var(--line);padding-top:.9rem">
+            <div style="font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:2px;color:var(--muted);margin-bottom:.6rem">СОСТАВ</div>
+            <div id="composition"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Add unit modal -->
+<div class="modal-bg" id="add-modal">
+  <div class="modal-box" style="max-width:480px">
+    <button class="modal-close" onclick="closeModal('add-modal')">✕</button>
+    <div style="padding:1.5rem">
+      <div style="font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;margin-bottom:1.1rem">Добавить юнит</div>
+      <div class="field"><div class="field-label">Тип юнита</div><select class="field-select" id="m-type" onchange="updateMPreview()"></select></div>
+      <div class="field"><div class="field-label">Уровень <em id="m-lv">1</em></div><input class="field-range" type="range" id="m-level" min="1" max="10" value="1" oninput="updateMPreview()"></div>
+      <div class="field"><div class="field-label">Офицер</div><select class="field-select" id="m-off" onchange="updateMPreview()"></select></div>
+      <div class="field"><div class="field-label">Снаряжение</div><select class="field-select" id="m-eq" onchange="updateMPreview()"></select></div>
+      <div id="m-preview" style="background:var(--bg3);border:var(--line);padding:.85rem;margin:.85rem 0;display:flex;gap:.9rem;align-items:center">
+        <div id="m-ico" style="font-size:2rem"></div>
+        <div id="m-stats" style="font-size:.8rem;color:var(--dim)"></div>
+      </div>
+      <div style="display:flex;gap:.55rem">
+        <button class="btn btn-primary" onclick="confirmAdd()" style="flex:1">Добавить в армию</button>
+        <button class="btn btn-outline" onclick="closeModal('add-modal')">Отмена</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script src="nav.js"></script>
+<script src="data.js"></script>
+<script>
+let army = [];
+
+const PRESETS = [
+  {name:'Штурмовая колонна', desc:'4 юнита · атакующий состав', units:[
+    {type:'heavy',level:8,off:'martin',eq:'railgun'},
+    {type:'heavy',level:8,off:'takeda',eq:'ammo'},
+    {type:'medium',level:7,off:'slater',eq:'ammo'},
+    {type:'howitzer',level:7,off:'none',eq:'none'},
+  ]},
+  {name:'Оборонительный рубеж', desc:'3 юнита · максимальная живучесть', units:[
+    {type:'superheavy',level:9,off:'curtis',eq:'shield'},
+    {type:'antitank',level:8,off:'victor',eq:'shield'},
+    {type:'infantry',level:6,off:'houghton',eq:'mkII'},
+  ]},
+  {name:'Мобильный рейд', desc:'3 юнита · высокая скорость', units:[
+    {type:'light',level:7,off:'isabel',eq:'railgun'},
+    {type:'light',level:7,off:'farida',eq:'engine'},
+    {type:'tankhunter',level:7,off:'martin',eq:'ammo'},
+  ]},
+];
+
+function populateModalSelects() {
+  const mt = document.getElementById('m-type');
+  UNIT_TYPES.forEach(u => { const o=document.createElement('option'); o.value=u.id; o.textContent=`${u.emoji} ${u.label}`; mt.appendChild(o); });
+  const mo = document.getElementById('m-off');
+  OFFICERS.forEach(o => { const op=document.createElement('option'); op.value=o.id; op.textContent=o.name; mo.appendChild(op); });
+  const me = document.getElementById('m-eq');
+  EQUIPMENT.forEach(e => { const op=document.createElement('option'); op.value=e.id; op.textContent=e.name; me.appendChild(op); });
+}
+
+function updateMPreview() {
+  const typeId=document.getElementById('m-type').value;
+  const level =parseInt(document.getElementById('m-level').value);
+  const offId =document.getElementById('m-off').value;
+  const eqId  =document.getElementById('m-eq').value;
+  const unit  =UNIT_TYPES.find(u=>u.id===typeId);
+  const s     =calcUnit(typeId,level,offId,eqId);
+  document.getElementById('m-lv').textContent=level;
+  document.getElementById('m-ico').textContent=unit.emoji;
+  document.getElementById('m-stats').innerHTML=`<b>${unit.label}</b> · Ур.${level}<br>ATK ${fmt(s.atk)} · DEF ${fmt(s.def)} · HP ${fmt(s.hp)} · Сила ${fmt(s.power)}`;
+}
+
+function openAddModal() {
+  if(army.length>=10){alert('Максимум 10 юнитов в армии');return;}
+  updateMPreview();
+  openModal('add-modal');
+}
+
+function confirmAdd() {
+  const typeId=document.getElementById('m-type').value;
+  const level =parseInt(document.getElementById('m-level').value);
+  const offId =document.getElementById('m-off').value;
+  const eqId  =document.getElementById('m-eq').value;
+  const unit  =UNIT_TYPES.find(u=>u.id===typeId);
+  const stats =calcUnit(typeId,level,offId,eqId);
+  army.push({typeId,level,offId,eqId,unit,stats});
+  closeModal('add-modal');
+  renderArmy();
+}
+
+function removeUnit(i) { army.splice(i,1); renderArmy(); }
+function clearArmy()   { army=[]; renderArmy(); }
+
+function renderArmy() {
+  const grid=document.getElementById('army-grid');
+  const empty=document.getElementById('army-empty');
+  grid.innerHTML='';
+  if(!army.length){empty.style.display='block';updateTotals();return;}
+  empty.style.display='none';
+  army.forEach((u,i)=>{
+    const off=OFFICERS.find(o=>o.id===u.offId);
+    const d=document.createElement('div');
+    d.className='army-slot';
+    d.innerHTML=`<button class="rm-btn" onclick="removeUnit(${i})">✕</button>
+      <div class="army-slot-icon">${u.unit.emoji}</div>
+      <div class="army-slot-name">${u.unit.label}</div>
+      <div class="army-slot-sub">Ур.${u.level} · ${off.name!=='— Без офицера —'?off.name:'Без офицера'}</div>
+      <div style="font-size:.66rem;color:var(--gold);margin-top:.18rem">⚔${fmt(u.stats.atk)} 🛡${fmt(u.stats.def)}</div>`;
+    grid.appendChild(d);
+  });
+  updateTotals();
+}
+
+function updateTotals() {
+  const totAtk =army.reduce((s,u)=>s+u.stats.atk,0);
+  const totDef =army.reduce((s,u)=>s+u.stats.def,0);
+  const totHP  =army.reduce((s,u)=>s+u.stats.hp,0);
+  const totMov =army.length?Math.round(army.reduce((s,u)=>s+u.stats.mov,0)/army.length):0;
+  const totCost=army.reduce((s,u)=>s+u.stats.cost,0);
+  const totPow =army.reduce((s,u)=>s+u.stats.power,0);
+  document.getElementById('tot-count').textContent=army.length;
+  document.getElementById('tot-atk').textContent=fmt(totAtk);
+  document.getElementById('tot-def').textContent=fmt(totDef);
+  document.getElementById('tot-hp').textContent=fmt(totHP);
+  document.getElementById('tot-mov').textContent=army.length?totMov:'—';
+  document.getElementById('tot-cost').textContent=fmt(totCost);
+  document.getElementById('tot-power').textContent=fmt(totPow);
+  // Composition
+  const comp={};
+  army.forEach(u=>{comp[u.unit.label]=(comp[u.unit.label]||0)+1;});
+  document.getElementById('composition').innerHTML=Object.entries(comp).map(([k,v])=>{
+    const u=UNIT_TYPES.find(ut=>ut.label===k);
+    return `<div style="display:flex;justify-content:space-between;font-size:.78rem;padding:.2rem 0;border-bottom:var(--line)"><span>${u?.emoji||''} ${k}</span><span style="color:var(--gold2);font-family:'Barlow Condensed',sans-serif;font-weight:700">×${v}</span></div>`;
+  }).join('')||'<div style="font-size:.76rem;color:var(--muted)">Армия пуста</div>';
+}
+
+function saveArmy() {
+  if(!army.length){alert('Добавь юниты в армию');return;}
+  localStorage.setItem('warpathArmy2',JSON.stringify(army.map(u=>({typeId:u.typeId,level:u.level,offId:u.offId,eqId:u.eqId}))));
+  const btn=event.target;btn.textContent='✓ Сохранено!';setTimeout(()=>btn.textContent='💾 Сохранить',2000);
+}
+
+function loadSavedArmy() {
+  try{
+    const raw=JSON.parse(localStorage.getItem('warpathArmy2')||'null');
+    if(!raw)return;
+    army=raw.map(r=>{
+      const unit=UNIT_TYPES.find(u=>u.id===r.typeId)||UNIT_TYPES[0];
+      return{...r,unit,stats:calcUnit(r.typeId,r.level,r.offId,r.eqId)};
+    });
+    renderArmy();
+  }catch(e){}
+}
+
+function buildPresets() {
+  const list=document.getElementById('presets-list');
+  PRESETS.forEach(p=>{
+    const b=document.createElement('button');
+    b.className='btn btn-outline';
+    b.style.cssText='width:100%;text-align:left;margin-bottom:.4rem;font-family:Barlow,sans-serif;font-size:.8rem;text-transform:none;letter-spacing:0;padding:.45rem .8rem';
+    b.innerHTML=`▶ <b>${p.name}</b> <span style="color:var(--muted);font-size:.72rem">· ${p.desc}</span>`;
+    b.onclick=()=>{
+      army=p.units.map(r=>{
+        const unit=UNIT_TYPES.find(u=>u.id===r.type)||UNIT_TYPES[0];
+        return{typeId:r.type,level:r.level,offId:r.off,eqId:r.eq,unit,stats:calcUnit(r.type,r.level,r.off,r.eq)};
+      });
+      renderArmy();
+    };
+    list.appendChild(b);
+  });
+}
+
+document.addEventListener('DOMContentLoaded',()=>{
+  initShared();
+  populateModalSelects();
+  buildPresets();
+  loadSavedArmy();
+  if(!army.length)renderArmy();
+});
+</script>
+</body>
+</html>
