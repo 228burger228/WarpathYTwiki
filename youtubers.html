@@ -17,117 +17,49 @@
 
     .yt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
 
-    .ypc {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      display: flex;
-      flex-direction: column;
-      transition: border-color 0.2s, transform 0.2s;
-    }
+    .ypc { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; display: flex; flex-direction: column; transition: border-color 0.2s, transform 0.2s; }
     .ypc:hover { border-color: var(--gold); transform: translateY(-2px); }
     .ypc.official { border-color: rgba(232,255,71,0.35); }
 
-    /* Header */
     .ypc-head { padding: 1rem 1.1rem 0.75rem; border-bottom: 1px solid var(--border); }
     .ypc-top  { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
-    .ypc-avatar {
-      width: 48px; height: 48px; border-radius: 50%;
-      background: rgba(232,255,71,0.1);
-      display: flex; align-items: center; justify-content: center;
-      font-size: 22px; flex-shrink: 0;
-    }
+    .ypc-avatar { width: 48px; height: 48px; border-radius: 50%; background: rgba(232,255,71,0.1); display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
     .ypc.official .ypc-avatar { background: rgba(232,255,71,0.18); }
     .ypc-info { flex: 1; min-width: 0; }
-    .ypc-name { font-weight: 700; font-size: 1rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 0.4rem; }
+    .ypc-name { font-weight: 700; font-size: 1rem; color: var(--text); display: flex; align-items: center; gap: 0.4rem; flex-wrap: wrap; }
     .ypc-spec { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
     .ypc-quote { font-size: 0.78rem; color: var(--orange); font-style: italic; line-height: 1.4; }
 
-    /* Tags */
     .ypc-tags { padding: 0.6rem 1.1rem; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 5px; }
     .ypc-tag { font-size: 0.7rem; padding: 2px 9px; border-radius: 99px; background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid rgba(255,255,255,0.1); }
 
-    /* Videos */
     .ypc-videos { padding: 0.6rem 1.1rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
     .ypc-videos-label { font-size: 0.65rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-    .ypc-video-link {
-      display: flex; align-items: center; gap: 8px;
-      text-decoration: none;
-      padding: 5px 7px;
-      border-radius: 6px;
-      background: rgba(255,255,255,0.04);
-      border: 1px solid rgba(255,255,255,0.07);
-      transition: background 0.15s;
-    }
+    .ypc-video-link { display: flex; align-items: center; gap: 8px; text-decoration: none; padding: 5px 7px; border-radius: 6px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.07); transition: background 0.15s; }
     .ypc-video-link:hover { background: rgba(232,255,71,0.07); border-color: rgba(232,255,71,0.2); }
-    .ypc-play {
-      width: 30px; height: 20px; border-radius: 3px;
-      background: #c00; flex-shrink: 0;
-      display: flex; align-items: center; justify-content: center;
-    }
-    .ypc-play svg { display: block; }
+    .ypc-play { width: 30px; height: 20px; border-radius: 3px; background: #c00; flex-shrink: 0; display: flex; align-items: center; justify-content: center; }
     .ypc-video-title { font-size: 0.73rem; color: var(--text); line-height: 1.3; }
 
-    /* Stats + buttons */
     .ypc-foot { padding: 0.75rem 1.1rem; margin-top: auto; }
     .ypc-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 0.6rem; }
     .ypc-stat { text-align: center; padding: 5px 4px; border-radius: 6px; background: rgba(255,255,255,0.04); }
     .ypc-stat-val { font-size: 0.88rem; font-weight: 700; color: var(--text); }
     .ypc-stat-lbl { font-size: 0.62rem; color: var(--muted); margin-top: 1px; }
     .ypc-btns { display: flex; gap: 6px; }
-    .ypc-btn {
-      flex: 1; font-size: 0.7rem; padding: 5px 4px; text-align: center; text-decoration: none;
-      border-radius: 6px; border: 1px solid var(--border);
-      color: var(--muted); background: transparent; cursor: pointer;
-      transition: background 0.15s, color 0.15s, border-color 0.15s;
-      font-family: inherit;
-    }
+    .ypc-btn { flex: 1; font-size: 0.7rem; padding: 5px 4px; text-align: center; text-decoration: none; border-radius: 6px; border: 1px solid var(--border); color: var(--muted); background: transparent; transition: background 0.15s, color 0.15s, border-color 0.15s; }
     .ypc-btn:hover { background: rgba(232,255,71,0.1); color: var(--gold); border-color: rgba(232,255,71,0.3); }
     .ypc-btn.yt:hover  { background: rgba(200,0,0,0.15); color: #f55; border-color: rgba(200,0,0,0.4); }
     .ypc-btn.tg:hover  { background: rgba(41,182,246,0.1); color: #29b6f6; border-color: rgba(41,182,246,0.3); }
-    .ypc-btn.don:hover { background: rgba(232,255,71,0.12); color: var(--gold); border-color: rgba(232,255,71,0.35); }
 
     .star-note { font-size: 0.8rem; color: var(--muted); margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
     .star-note span { color: var(--orange); }
-
-    /* ── Skeleton loader ── */
-    @keyframes shimmer {
-      0%   { background-position: -600px 0; }
-      100% { background-position:  600px 0; }
-    }
-    .skel {
-      background: var(--panel);
-      border: 1px solid var(--border);
-      border-radius: 12px;
-      overflow: hidden;
-      padding: 1rem 1.1rem;
-    }
-    .skel-line {
-      border-radius: 6px;
-      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 75%);
-      background-size: 600px 100%;
-      animation: shimmer 1.4s infinite linear;
-    }
-    .skel-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.85rem; }
-    .skel-avatar { width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; }
-    .skel-name  { height: 14px; width: 55%; margin-bottom: 6px; }
-    .skel-spec  { height: 10px; width: 38%; }
-    .skel-quote { height: 10px; width: 80%; margin-bottom: 0.75rem; }
-    .skel-tags  { display: flex; gap: 6px; margin-bottom: 0.85rem; }
-    .skel-tag   { height: 20px; border-radius: 99px; }
-    .skel-v1    { height: 32px; margin-bottom: 6px; }
-    .skel-v2    { height: 32px; margin-bottom: 0.85rem; }
-    .skel-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-bottom: 0.6rem; }
-    .skel-stat  { height: 44px; border-radius: 6px; }
-    .skel-btns  { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
-    .skel-btn   { height: 28px; border-radius: 6px; }
   </style>
 </head>
 <body>
 <script src="nav.js"></script>
+<script src="data.js"></script>
 
-<main class="yt-page fade-up">
+<main class="yt-page">
   <div class="yt-page-title">Блогеры сообщества</div>
   <div class="yt-page-sub">Русскоязычные авторы, которые делают контент по Warpath: Ace Shooter</div>
 
@@ -136,103 +68,188 @@
     <div class="legend-item"><span class="badge-pending">✦ Скоро</span> — ожидает подтверждения</div>
   </div>
 
-  <div class="yt-grid" id="yt-grid">
-    <!-- skeleton cards — заменяются JS после загрузки data.js -->
-    <div class="skel" aria-hidden="true">
-      <div class="skel-head"><div class="skel-line skel-avatar"></div><div style="flex:1"><div class="skel-line skel-name"></div><div class="skel-line skel-spec"></div></div></div>
-      <div class="skel-line skel-quote"></div>
-      <div class="skel-tags"><div class="skel-line skel-tag" style="width:64px"></div><div class="skel-line skel-tag" style="width:80px"></div><div class="skel-line skel-tag" style="width:54px"></div></div>
-      <div class="skel-line skel-v1"></div><div class="skel-line skel-v2"></div>
-      <div class="skel-stats"><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div></div>
-      <div class="skel-btns"><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div></div>
+  <div class="yt-grid">
+
+    <!-- ═══════════════════════════════ CARD: Бургер ═══ -->
+    <div class="ypc">
+      <div class="ypc-head">
+        <div class="ypc-top">
+          <div class="ypc-avatar">🍔</div>
+          <div class="ypc-info">
+            <div class="ypc-name">Бургер <span class="badge-pending">✦ Скоро</span></div>
+            <div class="ypc-spec">Гайды и нарезки</div>
+          </div>
+        </div>
+        <div class="ypc-quote">"Показываю игру такой, какая она есть"</div>
+      </div>
+      <div class="ypc-tags">
+        <span class="ypc-tag">Гайды</span>
+        <span class="ypc-tag">Нарезки боёв</span>
+        <span class="ypc-tag">Другие игры</span>
+        <span class="ypc-tag">О жизни</span>
+      </div>
+      <div class="ypc-videos">
+        <div class="ypc-videos-label">Последние видео</div>
+        <a class="ypc-video-link" href="https://youtu.be/Xy1UkZrxkrY?si=A943_6GeXwMOc591" target="_blank" rel="noopener">
+          <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
+          <span class="ypc-video-title">Epic1 battle от лица r4 ч1 — Warpath 13.4</span>
+        </a>
+        <a class="ypc-video-link" href="https://youtu.be/sJJxi8jqE1A?si=d7XrNMt-PKBo0MnA" target="_blank" rel="noopener">
+          <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
+          <span class="ypc-video-title">Обзор аккаунта лидера .MU. Эпик II — итог трат</span>
+        </a>
+      </div>
+      <div class="ypc-foot">
+        <div class="ypc-stats">
+          <div class="ypc-stat"><div class="ypc-stat-val">352</div><div class="ypc-stat-lbl">подписчиков</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">95</div><div class="ypc-stat-lbl">видео</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">12</div><div class="ypc-stat-lbl">гайдов</div></div>
+        </div>
+        <div class="ypc-btns">
+          <a class="ypc-btn yt"  href="https://www.youtube.com/@burgerdom6/videos" target="_blank" rel="noopener">▶ YouTube</a>
+          <a class="ypc-btn tg"  href="https://t.me/WarpathHub" target="_blank" rel="noopener">✈ Telegram</a>
+          <a class="ypc-btn"     href="https://t.me/donatebar_bot?start=burger" target="_blank" rel="noopener">★ Донат</a>
+        </div>
+      </div>
     </div>
-    <div class="skel" aria-hidden="true">
-      <div class="skel-head"><div class="skel-line skel-avatar"></div><div style="flex:1"><div class="skel-line skel-name"></div><div class="skel-line skel-spec"></div></div></div>
-      <div class="skel-line skel-quote"></div>
-      <div class="skel-tags"><div class="skel-line skel-tag" style="width:72px"></div><div class="skel-line skel-tag" style="width:60px"></div><div class="skel-line skel-tag" style="width:88px"></div></div>
-      <div class="skel-line skel-v1"></div><div class="skel-line skel-v2"></div>
-      <div class="skel-stats"><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div></div>
-      <div class="skel-btns"><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div></div>
+
+    <!-- ═══════════════════════════════ CARD: е6ака ═══ -->
+    <div class="ypc">
+      <div class="ypc-head">
+        <div class="ypc-top">
+          <div class="ypc-avatar">🔥</div>
+          <div class="ypc-info">
+            <div class="ypc-name">е6ака <span class="badge-pending">✦ Скоро</span></div>
+            <div class="ypc-spec">Тесты и сборки</div>
+          </div>
+        </div>
+        <div class="ypc-quote">"Надо удалить игру... надо удалить..."</div>
+      </div>
+      <div class="ypc-tags">
+        <span class="ypc-tag">F2P сборки</span>
+        <span class="ypc-tag">Тесты механик</span>
+        <span class="ypc-tag">Авиация</span>
+        <span class="ypc-tag">Обзоры патчей</span>
+      </div>
+      <div class="ypc-videos">
+        <div class="ypc-videos-label">Последние видео</div>
+        <a class="ypc-video-link" href="https://www.youtube.com/@e6aka56" target="_blank" rel="noopener">
+          <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
+          <span class="ypc-video-title">День рождения Warpath — раздача скинов и подарков</span>
+        </a>
+        <a class="ypc-video-link" href="https://www.youtube.com/@e6aka56" target="_blank" rel="noopener">
+          <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
+          <span class="ypc-video-title">Лучшие F2P сборки на истребитель 2026</span>
+        </a>
+      </div>
+      <div class="ypc-foot">
+        <div class="ypc-stats">
+          <div class="ypc-stat"><div class="ypc-stat-val">673</div><div class="ypc-stat-lbl">подписчиков</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">71</div><div class="ypc-stat-lbl">видео</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">18</div><div class="ypc-stat-lbl">гайдов</div></div>
+        </div>
+        <div class="ypc-btns">
+          <a class="ypc-btn yt"  href="https://www.youtube.com/@e6aka56" target="_blank" rel="noopener">▶ YouTube</a>
+          <a class="ypc-btn tg"  href="https://t.me/WarpathHub" target="_blank" rel="noopener">✈ Telegram</a>
+          <a class="ypc-btn"     href="https://t.me/donatebar_bot?start=ebaka" target="_blank" rel="noopener">★ Донат</a>
+        </div>
+      </div>
     </div>
-    <div class="skel" aria-hidden="true">
-      <div class="skel-head"><div class="skel-line skel-avatar"></div><div style="flex:1"><div class="skel-line skel-name"></div><div class="skel-line skel-spec"></div></div></div>
-      <div class="skel-line skel-quote"></div>
-      <div class="skel-tags"><div class="skel-line skel-tag" style="width:56px"></div><div class="skel-line skel-tag" style="width:90px"></div><div class="skel-line skel-tag" style="width:68px"></div></div>
-      <div class="skel-line skel-v1"></div><div class="skel-line skel-v2"></div>
-      <div class="skel-stats"><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div></div>
-      <div class="skel-btns"><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div></div>
+
+    <!-- ═══════════════════════════════ CARD: Ehson ═══ -->
+    <div class="ypc">
+      <div class="ypc-head">
+        <div class="ypc-top">
+          <div class="ypc-avatar">🎯</div>
+          <div class="ypc-info">
+            <div class="ypc-name">Ehson <span class="badge-pending">✦ Скоро</span></div>
+            <div class="ypc-spec">Аналитика и детали</div>
+          </div>
+        </div>
+        <div class="ypc-quote">"Warpath глазами игрока, который любит разбираться в деталях"</div>
+      </div>
+      <div class="ypc-tags">
+        <span class="ypc-tag">Тактика</span>
+        <span class="ypc-tag">F2P методы</span>
+        <span class="ypc-tag">Снос баз</span>
+        <span class="ypc-tag">Новичкам</span>
+      </div>
+      <div class="ypc-videos">
+        <div class="ypc-videos-label">Последние видео</div>
+        <a class="ypc-video-link" href="https://www.youtube.com/@ItsEhson" target="_blank" rel="noopener">
+          <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
+          <span class="ypc-video-title">Какой МБТ самый лучший? | Warpath: Ace Shooter</span>
+        </a>
+        <a class="ypc-video-link" href="https://www.youtube.com/@ItsEhson" target="_blank" rel="noopener">
+          <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
+          <span class="ypc-video-title">Лучшая F2P сборка для сноса баз!</span>
+        </a>
+      </div>
+      <div class="ypc-foot">
+        <div class="ypc-stats">
+          <div class="ypc-stat"><div class="ypc-stat-val">85</div><div class="ypc-stat-lbl">подписчиков</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">6</div><div class="ypc-stat-lbl">видео</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">5</div><div class="ypc-stat-lbl">гайдов</div></div>
+        </div>
+        <div class="ypc-btns">
+          <a class="ypc-btn yt"  href="https://www.youtube.com/@ItsEhson" target="_blank" rel="noopener">▶ YouTube</a>
+          <a class="ypc-btn tg"  href="https://t.me/WarpathHub" target="_blank" rel="noopener">✈ Telegram</a>
+          <a class="ypc-btn"     href="https://t.me/donatebar_bot?start=ehson" target="_blank" rel="noopener">★ Донат</a>
+        </div>
+      </div>
     </div>
-    <div class="skel" aria-hidden="true">
-      <div class="skel-head"><div class="skel-line skel-avatar"></div><div style="flex:1"><div class="skel-line skel-name"></div><div class="skel-line skel-spec"></div></div></div>
-      <div class="skel-line skel-quote"></div>
-      <div class="skel-tags"><div class="skel-line skel-tag" style="width:80px"></div><div class="skel-line skel-tag" style="width:64px"></div><div class="skel-line skel-tag" style="width:76px"></div></div>
-      <div class="skel-line skel-v1"></div><div class="skel-line skel-v2"></div>
-      <div class="skel-stats"><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div></div>
-      <div class="skel-btns"><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div></div>
+
+    <!-- ═══════════════════════════════ CARD: ClanGothic ═══ -->
+    <div class="ypc official">
+      <div class="ypc-head">
+        <div class="ypc-top">
+          <div class="ypc-avatar">🏰</div>
+          <div class="ypc-info">
+            <div class="ypc-name">ClanGothic <span class="badge-official">✓ Партнёр</span></div>
+            <div class="ypc-spec">Гайды и обзоры патчей</div>
+          </div>
+        </div>
+        <div class="ypc-quote">"Клан Gothic — 15 лет в игре, и мы всё ещё здесь"</div>
+      </div>
+      <div class="ypc-tags">
+        <span class="ypc-tag">Обзоры патчей</span>
+        <span class="ypc-tag">Офицеры</span>
+        <span class="ypc-tag">Стратегия</span>
+        <span class="ypc-tag">Экспедиции</span>
+      </div>
+      <div class="ypc-videos">
+        <div class="ypc-videos-label">Последние видео</div>
+        <a class="ypc-video-link" href="https://www.youtube.com/@ClanGothic" target="_blank" rel="noopener">
+          <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
+          <span class="ypc-video-title">Обзор патча 13.5 — наконец-то это добавляют в игру</span>
+        </a>
+        <a class="ypc-video-link" href="https://www.youtube.com/@ClanGothic" target="_blank" rel="noopener">
+          <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
+          <span class="ypc-video-title">Фулл офицеры или нет — ошибки. Часть 16</span>
+        </a>
+      </div>
+      <div class="ypc-foot">
+        <div class="ypc-stats">
+          <div class="ypc-stat"><div class="ypc-stat-val">27.5K</div><div class="ypc-stat-lbl">подписчиков</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">890</div><div class="ypc-stat-lbl">видео</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">120</div><div class="ypc-stat-lbl">гайдов</div></div>
+        </div>
+        <div class="ypc-btns">
+          <a class="ypc-btn yt"  href="https://www.youtube.com/@ClanGothic" target="_blank" rel="noopener">▶ YouTube</a>
+          <a class="ypc-btn tg"  href="https://t.me/WarpathHub" target="_blank" rel="noopener">✈ Telegram</a>
+          <a class="ypc-btn"     href="https://t.me/donatebar_bot?start=clangothic" target="_blank" rel="noopener">★ Донат</a>
+        </div>
+      </div>
     </div>
-  </div>
+
+  </div><!-- /yt-grid -->
 
   <div class="star-note"><span>✦</span> — блогер ещё не получил официальный статус партнёра, но уже является частью нашего сообщества.</div>
 </main>
 
-<script src="data.js"></script>
 <script>
 document.addEventListener('DOMContentLoaded', () => {
-  initShared();
-
-  const grid = document.getElementById('yt-grid');
-  grid.innerHTML = ''; // убираем скелетоны
-
-  YOUTUBERS.forEach(y => {
-    const card = document.createElement('div');
-    card.className = 'ypc fade-up' + (y.approved ? ' official' : '');
-
-    const badge = y.approved
-      ? `<span class="badge-official">✓ Партнёр</span>`
-      : `<span class="badge-pending">✦ Скоро</span>`;
-
-    const tags = (y.tags || []).map(t =>
-      `<span class="ypc-tag">${t}</span>`
-    ).join('');
-
-    const videos = (y.latestVideos || []).map(v =>
-      `<a class="ypc-video-link" href="${v.url}" target="_blank" rel="noopener">
-        <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
-        <span class="ypc-video-title">${v.title}</span>
-      </a>`
-    ).join('');
-
-    card.innerHTML = `
-      <div class="ypc-head">
-        <div class="ypc-top">
-          <div class="ypc-avatar">${y.emoji}</div>
-          <div class="ypc-info">
-            <div class="ypc-name">${y.name} ${badge}</div>
-            <div class="ypc-spec">${y.spec}</div>
-          </div>
-        </div>
-        <div class="ypc-quote">"${y.quote}"</div>
-      </div>
-      <div class="ypc-tags">${tags}</div>
-      <div class="ypc-videos">
-        <div class="ypc-videos-label">Последние видео</div>
-        ${videos}
-      </div>
-      <div class="ypc-foot">
-        <div class="ypc-stats">
-          <div class="ypc-stat"><div class="ypc-stat-val">${y.subs}</div><div class="ypc-stat-lbl">подписчиков</div></div>
-          <div class="ypc-stat"><div class="ypc-stat-val">${y.videos}</div><div class="ypc-stat-lbl">видео</div></div>
-          <div class="ypc-stat"><div class="ypc-stat-val">${y.guides}</div><div class="ypc-stat-lbl">гайдов</div></div>
-        </div>
-        <div class="ypc-btns">
-          <a class="ypc-btn yt"  href="${y.yt}"     target="_blank" rel="noopener">▶ YouTube</a>
-          <a class="ypc-btn tg"  href="${y.tg}"     target="_blank" rel="noopener">✈ Telegram</a>
-          <a class="ypc-btn don" href="${y.donate}" target="_blank" rel="noopener">★ Донат</a>
-        </div>
-      </div>
-    `;
-    grid.appendChild(card);
-  });
+  if (typeof initShared === 'function') initShared();
 });
 </script>
 </body>
