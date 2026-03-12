@@ -68,7 +68,39 @@
   .bl-spec  { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
   .bl-subs  { font-size: 0.68rem; color: var(--gold); margin-top: 2px; }
 
-  /* ── Community rooms ── */
+  /* ── Donate bar block ── */
+  .donate-wrap { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:center; }
+  @media(max-width:640px){ .donate-wrap{grid-template-columns:1fr;} }
+  .donate-left h2 { margin:.4rem 0 .6rem; font-size:1.8rem; }
+  .donate-left p  { font-size:.88rem; color:var(--muted); line-height:1.65; }
+
+  .donate-calc { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:1.3rem 1.4rem; }
+  .dc-row   { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:.9rem; }
+  .dc-label { font-size:.85rem; color:var(--muted); white-space:nowrap; }
+  .dc-counter { display:flex; align-items:center; }
+  .dc-btn {
+    width:34px; height:36px; background:rgba(255,255,255,0.06); border:1px solid var(--border);
+    color:var(--text); font-size:1.1rem; cursor:pointer; transition:background .15s;
+    display:flex; align-items:center; justify-content:center;
+  }
+  .dc-btn:first-child { border-radius:7px 0 0 7px; border-right:none; }
+  .dc-btn:last-child  { border-radius:0 7px 7px 0; border-left:none; }
+  .dc-btn:hover { background:rgba(232,255,71,0.12); color:var(--gold); }
+  .dc-val {
+    width:58px; text-align:center; background:rgba(255,255,255,0.05);
+    border:1px solid var(--border); color:var(--text); font-size:1rem;
+    font-family:inherit; padding:.5rem 0; outline:none;
+    -moz-appearance:textfield;
+  }
+  .dc-val::-webkit-inner-spin-button { -webkit-appearance:none; }
+  .dc-val:focus { border-color:var(--gold); }
+
+  .dc-result { border-top:1px solid var(--border); padding-top:.9rem; margin-top:.3rem; display:flex; align-items:center; gap:.85rem; }
+  .dc-result-num { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:2px; color:var(--muted); transition:color .3s; }
+  .dc-result-num.free { color:var(--muted); }
+  .dc-result-num.mid  { color:var(--orange); }
+  .dc-result-num.max  { color:var(--gold); }
+  .dc-result-lbl { font-size:.78rem; color:var(--muted); line-height:1.5; }
   .tg-rooms { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.85rem; }
   .tg-room  { font-size: 0.72rem; padding: 3px 10px; border-radius: 99px; background: rgba(41,182,246,0.08); color: #29b6f6; border: 1px solid rgba(41,182,246,0.2); }
 </style>
@@ -177,6 +209,55 @@
 
 <div class="divider"></div>
 
+<!-- DONATE BAR -->
+<section class="section-sm" style="background:var(--bg2)">
+  <div class="wrap">
+    <div class="donate-wrap fade-up">
+
+      <!-- левая часть — описание + кнопки -->
+      <div class="donate-left">
+        <div class="tag">🍺 Инструмент</div>
+        <h2>Донатный <em style="color:var(--gold);font-style:normal">Бар</em></h2>
+        <p>Узнай, сколько напитков открывать в этом месяце. Введи кружки и бокалы — калькулятор сразу покажет результат. Или используй нашего Telegram-бота.</p>
+        <div style="display:flex;gap:.75rem;flex-wrap:wrap;margin-top:1.2rem">
+          <a href="https://t.me/donatebar_bot" target="_blank" rel="noopener"
+             style="display:inline-flex;align-items:center;gap:.5rem;background:#229ED9;color:#fff;border:none;border-radius:8px;padding:.65rem 1.2rem;font-size:.88rem;font-weight:600;text-decoration:none;">
+            ✈ Открыть бота
+          </a>
+          <a href="donate-bar.html" class="btn btn-outline" style="font-size:.88rem">🧮 Полный калькулятор</a>
+        </div>
+      </div>
+
+      <!-- правая часть — мини-калькулятор -->
+      <div class="donate-calc">
+        <div class="dc-row">
+          <label class="dc-label">🍺 Кружки</label>
+          <div class="dc-counter">
+            <button class="dc-btn" onclick="dcAdj('cups',-1)">−</button>
+            <input class="dc-val" id="dc-cups" type="number" min="0" value="0" oninput="dcCalc()">
+            <button class="dc-btn" onclick="dcAdj('cups',1)">+</button>
+          </div>
+        </div>
+        <div class="dc-row">
+          <label class="dc-label">🥂 Бокалы</label>
+          <div class="dc-counter">
+            <button class="dc-btn" onclick="dcAdj('glasses',-1)">−</button>
+            <input class="dc-val" id="dc-glasses" type="number" min="0" value="0" oninput="dcCalc()">
+            <button class="dc-btn" onclick="dcAdj('glasses',1)">+</button>
+          </div>
+        </div>
+        <div class="dc-result" id="dc-result">
+          <div class="dc-result-num" id="dc-num">—</div>
+          <div class="dc-result-lbl" id="dc-lbl">введи данные выше</div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 <!-- TOOLS PREVIEW -->
 <section class="section grid-bg" style="background:var(--bg)">
   <div class="wrap">
@@ -192,7 +273,6 @@
     </div>
   </div>
 </section>
-
   
 <script src="nav.js"></script>
 <script src="data.js"></script>
@@ -260,6 +340,32 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 });
+
+/* ── Mini donate-bar calc (глобальные функции для onclick) ── */
+function dcAdj(f, d) {
+  const el = document.getElementById(f === 'cups' ? 'dc-cups' : 'dc-glasses');
+  el.value = Math.max(0, (parseInt(el.value) || 0) + d);
+  dcCalc();
+}
+function dcCalc() {
+  const cups    = Math.min(Math.max(0, parseInt(document.getElementById('dc-cups').value)    || 0), 120);
+  const glasses = Math.max(0, parseInt(document.getElementById('dc-glasses').value) || 0);
+  const total   = glasses + Math.floor(cups / 3);
+  const num = document.getElementById('dc-num');
+  const lbl = document.getElementById('dc-lbl');
+  if (!num) return;
+  num.className = 'dc-result-num';
+  if (total >= 52) {
+    num.textContent = '70 🍻'; num.classList.add('max');
+    lbl.textContent = 'Открывай 65 + 5 напитков';
+  } else if (total < 15) {
+    num.textContent = '5 🍺'; num.classList.add('free');
+    lbl.textContent = `Только бесплатные. Ещё ${15 - total} бокалов до 20`;
+  } else {
+    num.textContent = '20 🍻'; num.classList.add('mid');
+    lbl.textContent = `Открывай 15 + 5. Ещё ${52 - total} до 70`;
+  }
+}
 </script>
 </body>
 </html>
