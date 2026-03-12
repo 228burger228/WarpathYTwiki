@@ -4,14 +4,108 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Warpath Guide — Главная</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  /* ── Skeleton для nav-cards и tools ── */
+  @keyframes shimmer {
+    0%   { background-position: -600px 0; }
+    100% { background-position:  600px 0; }
+  }
+  .skel-line {
+    border-radius: 6px;
+    background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 75%);
+    background-size: 600px 100%;
+    animation: shimmer 1.4s infinite linear;
+  }
+  .skel-nav-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 1.1rem 1rem;
+    display: flex; align-items: center; gap: 0.85rem;
+  }
+  .skel-nav-icon { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; }
+  .skel-nav-t1   { height: 13px; width: 70%; margin-bottom: 6px; }
+  .skel-nav-t2   { height: 10px; width: 50%; }
+
+  .skel-tool-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.5rem;
+  }
+  .skel-tool-icon { width: 44px; height: 44px; border-radius: 10px; margin-bottom: 0.7rem; }
+  .skel-tool-t1   { height: 14px; width: 55%; margin-bottom: 8px; }
+  .skel-tool-t2   { height: 10px; width: 90%; margin-bottom: 5px; }
+  .skel-tool-t3   { height: 10px; width: 75%; margin-bottom: 1.1rem; }
+  .skel-tool-btn  { height: 34px; width: 120px; border-radius: 6px; }
+
+  /* ── Блок патча ── */
+  .patch-banner {
+    background: linear-gradient(135deg, rgba(232,255,71,0.07) 0%, rgba(232,130,0,0.07) 100%);
+    border: 1px solid rgba(232,255,71,0.2);
+    border-radius: 12px;
+    padding: 1.1rem 1.4rem;
+    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
+    margin-top: 1.5rem;
+  }
+  .patch-badge {
+    font-family: 'Bebas Neue', sans-serif;
+    font-size: 1.1rem; letter-spacing: 2px;
+    background: var(--gold); color: #000;
+    padding: 3px 12px; border-radius: 6px;
+    white-space: nowrap; flex-shrink: 0;
+  }
+  .patch-text { font-size: 0.85rem; color: var(--muted); line-height: 1.5; flex: 1; min-width: 180px; }
+  .patch-soon {
+    font-size: 0.75rem; padding: 3px 10px; border-radius: 99px;
+    border: 1px solid rgba(255,160,0,0.4); color: var(--orange);
+    white-space: nowrap; flex-shrink: 0;
+  }
+
+  /* ── Блогеры стрип с реальными карточками ── */
+  .yt-mini-track {
+    display: flex; gap: 1rem;
+    padding: 0.25rem 1rem 0.5rem;
+    overflow-x: auto;
+    scrollbar-width: none;
+  }
+  .yt-mini-track::-webkit-scrollbar { display: none; }
+  .yt-mini-card {
+    background: var(--panel);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 0.85rem 1rem;
+    display: flex; align-items: center; gap: 0.75rem;
+    text-decoration: none; flex-shrink: 0;
+    min-width: 200px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .yt-mini-card:hover { border-color: var(--gold); transform: translateY(-2px); }
+  .yt-mini-card.official { border-color: rgba(232,255,71,0.3); }
+  .yt-mini-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(232,255,71,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .yt-mini-name { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+  .yt-mini-spec { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .yt-mini-subs { font-size: 0.7rem; color: var(--gold); margin-top: 1px; }
+
+  /* ── Community разделы ── */
+  .tg-rooms {
+    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.85rem;
+  }
+  .tg-room {
+    font-size: 0.72rem; padding: 3px 10px; border-radius: 99px;
+    background: rgba(41,182,246,0.08); color: #29b6f6;
+    border: 1px solid rgba(41,182,246,0.2);
+  }
+</style>
 </head>
 <body>
+<script src="nav.js"></script>
 
 <!-- HERO -->
 <section style="background:var(--bg);padding-top:0">
   <div class="hero-wrap">
     <div>
-      <div class="hero-badge">Официальный ресурс · RU · 2025–2026</div>
+      <div class="hero-badge">Официальный ресурс · RU · Патч 13.4</div>
       <h1>ВСЁ ОБ<br><em>WARPATH</em><br><strong>НА РУССКОМ</strong></h1>
       <p class="hero-desc">Гайды, механики, исследования — объяснено <b>понятным языком</b>. Unit Builder, Army Builder, тир-листы, вики — всё в одном месте.</p>
       <div class="hero-btns">
@@ -20,9 +114,15 @@
       </div>
       <div class="hero-stats">
         <div class="hstat"><div class="hstat-n">9</div><div class="hstat-l">Типов юнитов</div></div>
-        <div class="hstat"><div class="hstat-n">300+</div><div class="hstat-l">Гайдов</div></div>
-        <div class="hstat"><div class="hstat-n">7</div><div class="hstat-l">Блогеров</div></div>
+        <div class="hstat"><div class="hstat-n">13.4</div><div class="hstat-l">Актуальный патч</div></div>
+        <div class="hstat"><div class="hstat-n">4</div><div class="hstat-l">Блогера</div></div>
         <div class="hstat"><div class="hstat-n">RU</div><div class="hstat-l">Язык</div></div>
+      </div>
+
+      <div class="patch-banner">
+        <div class="patch-badge">ПАТЧ 13.4</div>
+        <div class="patch-text">Новые офицеры, обновление экспедиций и ребаланс авиации. Все гайды обновлены под актуальную версию.</div>
+        <div class="patch-soon">⚡ 13.5 на носу</div>
       </div>
     </div>
   </div>
@@ -37,7 +137,15 @@
       <div class="tag">🗺 Разделы</div>
       <div class="title">Быстрый доступ</div>
     </div>
-    <div class="nav-cards fade-up" id="nav-cards"></div>
+    <div class="nav-cards fade-up" id="nav-cards">
+      <!-- skeleton -->
+      <div class="skel-nav-card" aria-hidden="true"><div class="skel-line skel-nav-icon"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+      <div class="skel-nav-card" aria-hidden="true"><div class="skel-line skel-nav-icon"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+      <div class="skel-nav-card" aria-hidden="true"><div class="skel-line skel-nav-icon"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+      <div class="skel-nav-card" aria-hidden="true"><div class="skel-line skel-nav-icon"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+      <div class="skel-nav-card" aria-hidden="true"><div class="skel-line skel-nav-icon"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+      <div class="skel-nav-card" aria-hidden="true"><div class="skel-line skel-nav-icon"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+    </div>
   </div>
 </section>
 
@@ -45,17 +153,23 @@
 
 <!-- YOUTUBER STRIP -->
 <section class="section-sm" style="background:var(--bg)">
-  <div class="wrap" style="margin-bottom:1.3rem">
+  <div class="wrap" style="margin-bottom:1rem">
     <div class="sec-hd fade-up" style="margin-bottom:0">
       <div class="tag">▶ YouTube</div>
-      <div class="title">Официальные блогеры</div>
-      <div class="sub">Наведи — карточки замирают. Нажми — перейдёшь на канал</div>
+      <div class="title">Блогеры сообщества</div>
+      <div class="sub">Русскоязычные авторы по Warpath — гайды, обзоры, нарезки</div>
     </div>
   </div>
-  <div class="yt-strip fade-up">
-    <div class="yt-track" id="yt-strip"></div>
+  <div class="fade-up">
+    <div class="yt-mini-track" id="yt-mini-track">
+      <!-- skeleton пока грузится JS -->
+      <div class="skel-nav-card" style="min-width:200px" aria-hidden="true"><div class="skel-line skel-nav-icon" style="border-radius:50%"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+      <div class="skel-nav-card" style="min-width:200px" aria-hidden="true"><div class="skel-line skel-nav-icon" style="border-radius:50%"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+      <div class="skel-nav-card" style="min-width:200px" aria-hidden="true"><div class="skel-line skel-nav-icon" style="border-radius:50%"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+      <div class="skel-nav-card" style="min-width:200px" aria-hidden="true"><div class="skel-line skel-nav-icon" style="border-radius:50%"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+    </div>
   </div>
-  <div class="wrap" style="margin-top:1.1rem">
+  <div class="wrap" style="margin-top:1rem">
     <a href="youtubers.html" class="btn btn-outline">Все блогеры →</a>
   </div>
 </section>
@@ -69,15 +183,22 @@
       <div>
         <div class="tag">💬 Сообщество</div>
         <h2>Присоединяйся к <em style="color:var(--gold2);font-style:normal">WarpathHub</em></h2>
-        <p>Русскоязычное сообщество игроков Warpath. Стратегии, обсуждения, помощь новичкам, турниры и актуальные новости обновлений.</p>
-        <div class="community-btns">
+        <p>Русскоязычный Telegram-чат игроков Warpath. Обсуждения стратегий, помощь новичкам, актуальные новости и гифт-коды.</p>
+        <div class="tg-rooms">
+          <span class="tg-room"># Global Chat</span>
+          <span class="tg-room">⚠ INFO</span>
+          <span class="tg-room">🎁 Giftcode</span>
+          <span class="tg-room">📖 Guides</span>
+          <span class="tg-room">❓ Архив Вопросов</span>
+        </div>
+        <div class="community-btns" style="margin-top:1.2rem">
           <a href="https://t.me/WarpathHub" target="_blank" class="btn-tg">✈ Вступить в Telegram</a>
           <a href="youtubers.html" class="btn btn-outline">👥 Блогеры</a>
         </div>
       </div>
       <div class="community-stats">
-        <div><div class="cstat-n">5.2K+</div><div class="cstat-l">Участников</div></div>
-        <div><div class="cstat-n">24/7</div><div class="cstat-l">Активный чат</div></div>
+        <div><div class="cstat-n">155</div><div class="cstat-l">Участников</div></div>
+        <div><div class="cstat-n">5</div><div class="cstat-l">Разделов чата</div></div>
         <div><div class="cstat-n">RU</div><div class="cstat-l">Только русский</div></div>
       </div>
     </div>
@@ -94,11 +215,15 @@
       <div class="title">Интерактивные калькуляторы</div>
       <div class="sub">Всё считает прямо в браузере — без регистрации и установки</div>
     </div>
-    <div id="tools-grid" class="fade-up" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:2rem"></div>
+    <div id="tools-grid" class="fade-up" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:2rem">
+      <!-- skeleton -->
+      <div class="skel-tool-card" aria-hidden="true"><div class="skel-line skel-tool-icon"></div><div class="skel-line skel-tool-t1"></div><div class="skel-line skel-tool-t2"></div><div class="skel-line skel-tool-t3"></div><div class="skel-line skel-tool-btn"></div></div>
+      <div class="skel-tool-card" aria-hidden="true"><div class="skel-line skel-tool-icon"></div><div class="skel-line skel-tool-t1"></div><div class="skel-line skel-tool-t2"></div><div class="skel-line skel-tool-t3"></div><div class="skel-line skel-tool-btn"></div></div>
+      <div class="skel-tool-card" aria-hidden="true"><div class="skel-line skel-tool-icon"></div><div class="skel-line skel-tool-t1"></div><div class="skel-line skel-tool-t2"></div><div class="skel-line skel-tool-t3"></div><div class="skel-line skel-tool-btn"></div></div>
+    </div>
   </div>
 </section>
 
-<script src="nav.js"></script>
 <script src="data.js"></script>
 <script>
 const NAV_SECTIONS = [
@@ -106,19 +231,21 @@ const NAV_SECTIONS = [
   {icon:'🏗️', label:'Army Builder',  sub:'Сборка армии',             href:'army-builder.html'},
   {icon:'🎖️', label:'Тир-лист',      sub:'Рейтинг юнитов/офицеров',  href:'tier-list.html'},
   {icon:'📖', label:'Wiki',          sub:'База знаний об игре',       href:'wiki.html'},
-  {icon:'▶',  label:'YouTubers',     sub:'Контент-креаторы',          href:'youtubers.html'},
-  {icon:'💬', label:'Сообщество',    sub:'Telegram WarpathHub',       href:'https://t.me/WarpathHub', ext:true},
+  {icon:'▶',  label:'YouTubers',     sub:'4 блогера сообщества',      href:'youtubers.html'},
+  {icon:'💬', label:'WarpathHub',    sub:'Telegram-чат · 155 чел.',   href:'https://t.me/WarpathHub', ext:true},
 ];
 const TOOLS = [
   {icon:'⚔️',title:'Unit Builder',tag:'Интерактивный',desc:'Выбери тип юнита, уровень, офицера и снаряжение. Статы пересчитываются мгновенно.',href:'unit-builder.html'},
   {icon:'🏗️',title:'Army Builder',tag:'Калькулятор',desc:'Собери армию из нескольких юнитов и получи суммарную боевую мощь, атаку, защиту, HP.',href:'army-builder.html'},
   {icon:'🎖️',title:'Тир-лист',    tag:'Рейтинг',   desc:'Drag-and-drop тир-лист юнитов и офицеров с фильтрами и сохранением в браузере.',href:'tier-list.html'},
 ];
+
 document.addEventListener('DOMContentLoaded', () => {
   initShared();
-  buildYtStrip('yt-strip');
+
   // nav cards
   const nc = document.getElementById('nav-cards');
+  nc.innerHTML = '';
   NAV_SECTIONS.forEach(s => {
     const d = document.createElement('div');
     d.className = 'nav-card';
@@ -126,8 +253,27 @@ document.addEventListener('DOMContentLoaded', () => {
     d.onclick = () => s.ext ? window.open(s.href,'_blank') : location.href = s.href;
     nc.appendChild(d);
   });
-  // tools preview
+
+  // yt mini strip
+  const track = document.getElementById('yt-mini-track');
+  track.innerHTML = '';
+  YOUTUBERS.forEach(y => {
+    const a = document.createElement('a');
+    a.className = 'yt-mini-card' + (y.approved ? ' official' : '');
+    a.href = y.yt; a.target = '_blank'; a.rel = 'noopener';
+    a.innerHTML = `
+      <div class="yt-mini-avatar">${y.emoji}</div>
+      <div>
+        <div class="yt-mini-name">${y.name}${y.approved ? ' ✓' : ' ✦'}</div>
+        <div class="yt-mini-spec">${y.spec}</div>
+        <div class="yt-mini-subs">${y.subs} подп.</div>
+      </div>`;
+    track.appendChild(a);
+  });
+
+  // tools
   const tg = document.getElementById('tools-grid');
+  tg.innerHTML = '';
   TOOLS.forEach(t => {
     const d = document.createElement('div');
     d.className = 'card card-hover';
@@ -138,4 +284,5 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 });
 </script>
-</body></html>
+</body>
+</html>
