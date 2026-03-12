@@ -464,7 +464,7 @@ function renderOfficers(){
     c.innerHTML=`
       <div class="ocard-head">
         <div class="ocard-row1">
-          <div class="oavatar">${o.emoji}</div>
+          <div class="oavatar">${o.img ? `<img src="officers/${o.img}" style="width:42px;height:42px;border-radius:50%;object-fit:cover">` : o.emoji}</div>
           <div><div class="oname">${o.name}</div><div class="ometa">${domLabel(o.domain)}</div></div>
           <div class="otier ${o.tier}">${o.tier}</div>
         </div>
