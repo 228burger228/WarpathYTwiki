@@ -90,6 +90,38 @@
 
     .star-note { font-size: 0.8rem; color: var(--muted); margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
     .star-note span { color: var(--orange); }
+
+    /* ── Skeleton loader ── */
+    @keyframes shimmer {
+      0%   { background-position: -600px 0; }
+      100% { background-position:  600px 0; }
+    }
+    .skel {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      padding: 1rem 1.1rem;
+    }
+    .skel-line {
+      border-radius: 6px;
+      background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 75%);
+      background-size: 600px 100%;
+      animation: shimmer 1.4s infinite linear;
+    }
+    .skel-head { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.85rem; }
+    .skel-avatar { width: 48px; height: 48px; border-radius: 50%; flex-shrink: 0; }
+    .skel-name  { height: 14px; width: 55%; margin-bottom: 6px; }
+    .skel-spec  { height: 10px; width: 38%; }
+    .skel-quote { height: 10px; width: 80%; margin-bottom: 0.75rem; }
+    .skel-tags  { display: flex; gap: 6px; margin-bottom: 0.85rem; }
+    .skel-tag   { height: 20px; border-radius: 99px; }
+    .skel-v1    { height: 32px; margin-bottom: 6px; }
+    .skel-v2    { height: 32px; margin-bottom: 0.85rem; }
+    .skel-stats { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; margin-bottom: 0.6rem; }
+    .skel-stat  { height: 44px; border-radius: 6px; }
+    .skel-btns  { display: grid; grid-template-columns: repeat(3,1fr); gap: 6px; }
+    .skel-btn   { height: 28px; border-radius: 6px; }
   </style>
 </head>
 <body>
@@ -104,7 +136,41 @@
     <div class="legend-item"><span class="badge-pending">✦ Скоро</span> — ожидает подтверждения</div>
   </div>
 
-  <div class="yt-grid" id="yt-grid"></div>
+  <div class="yt-grid" id="yt-grid">
+    <!-- skeleton cards — заменяются JS после загрузки data.js -->
+    <div class="skel" aria-hidden="true">
+      <div class="skel-head"><div class="skel-line skel-avatar"></div><div style="flex:1"><div class="skel-line skel-name"></div><div class="skel-line skel-spec"></div></div></div>
+      <div class="skel-line skel-quote"></div>
+      <div class="skel-tags"><div class="skel-line skel-tag" style="width:64px"></div><div class="skel-line skel-tag" style="width:80px"></div><div class="skel-line skel-tag" style="width:54px"></div></div>
+      <div class="skel-line skel-v1"></div><div class="skel-line skel-v2"></div>
+      <div class="skel-stats"><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div></div>
+      <div class="skel-btns"><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div></div>
+    </div>
+    <div class="skel" aria-hidden="true">
+      <div class="skel-head"><div class="skel-line skel-avatar"></div><div style="flex:1"><div class="skel-line skel-name"></div><div class="skel-line skel-spec"></div></div></div>
+      <div class="skel-line skel-quote"></div>
+      <div class="skel-tags"><div class="skel-line skel-tag" style="width:72px"></div><div class="skel-line skel-tag" style="width:60px"></div><div class="skel-line skel-tag" style="width:88px"></div></div>
+      <div class="skel-line skel-v1"></div><div class="skel-line skel-v2"></div>
+      <div class="skel-stats"><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div></div>
+      <div class="skel-btns"><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div></div>
+    </div>
+    <div class="skel" aria-hidden="true">
+      <div class="skel-head"><div class="skel-line skel-avatar"></div><div style="flex:1"><div class="skel-line skel-name"></div><div class="skel-line skel-spec"></div></div></div>
+      <div class="skel-line skel-quote"></div>
+      <div class="skel-tags"><div class="skel-line skel-tag" style="width:56px"></div><div class="skel-line skel-tag" style="width:90px"></div><div class="skel-line skel-tag" style="width:68px"></div></div>
+      <div class="skel-line skel-v1"></div><div class="skel-line skel-v2"></div>
+      <div class="skel-stats"><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div></div>
+      <div class="skel-btns"><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div></div>
+    </div>
+    <div class="skel" aria-hidden="true">
+      <div class="skel-head"><div class="skel-line skel-avatar"></div><div style="flex:1"><div class="skel-line skel-name"></div><div class="skel-line skel-spec"></div></div></div>
+      <div class="skel-line skel-quote"></div>
+      <div class="skel-tags"><div class="skel-line skel-tag" style="width:80px"></div><div class="skel-line skel-tag" style="width:64px"></div><div class="skel-line skel-tag" style="width:76px"></div></div>
+      <div class="skel-line skel-v1"></div><div class="skel-line skel-v2"></div>
+      <div class="skel-stats"><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div><div class="skel-line skel-stat"></div></div>
+      <div class="skel-btns"><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div><div class="skel-line skel-btn"></div></div>
+    </div>
+  </div>
 
   <div class="star-note"><span>✦</span> — блогер ещё не получил официальный статус партнёра, но уже является частью нашего сообщества.</div>
 </main>
@@ -115,6 +181,7 @@ document.addEventListener('DOMContentLoaded', () => {
   initShared();
 
   const grid = document.getElementById('yt-grid');
+  grid.innerHTML = ''; // убираем скелетоны
 
   YOUTUBERS.forEach(y => {
     const card = document.createElement('div');
