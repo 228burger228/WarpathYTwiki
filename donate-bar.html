@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Донатный Бар — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+<style>
+  .db-page { max-width: 700px; margin: 0 auto; padding: 2.5rem 1rem 5rem; }
+  .db-title { font-family:'Bebas Neue',sans-serif; font-size:2.4rem; color:var(--gold); letter-spacing:2px; margin-bottom:.25rem; }
+  .db-sub   { color:var(--muted); font-size:.95rem; margin-bottom:2.5rem; line-height:1.6; }
+
+  /* ── calculator card ── */
+  .db-card {
+    background:var(--panel); border:1px solid var(--border); border-radius:14px;
+    overflow:hidden; margin-bottom:1.5rem;
+  }
+  .db-card-head {
+    padding:1.1rem 1.4rem; border-bottom:1px solid var(--border);
+    display:flex; align-items:center; gap:.75rem;
+  }
+  .db-card-icon { font-size:1.6rem; }
+  .db-card-label { font-family:'Bebas Neue',sans-serif; font-size:1.2rem; letter-spacing:1.5px; color:var(--text); }
+  .db-card-body { padding:1.4rem; }
+
+  /* ── inputs ── */
+  .db-field { margin-bottom:1.25rem; }
+  .db-field label { display:block; font-size:.82rem; color:var(--muted); margin-bottom:.4rem; letter-spacing:.3px; }
+  .db-input-row { display:flex; align-items:center; gap:.75rem; }
+  .db-input {
+    flex:1; background:rgba(255,255,255,0.05); border:1px solid var(--border);
+    border-radius:8px; color:var(--text); font-size:1.1rem; font-family:inherit;
+    padding:.6rem 1rem; outline:none; transition:border-color .2s;
+    -moz-appearance:textfield;
+  }
+  .db-input::-webkit-inner-spin-button { -webkit-appearance:none; }
+  .db-input:focus { border-color:var(--gold); }
+  .db-hint { font-size:.75rem; color:var(--muted); margin-top:.35rem; }
+
+  .db-counter { display:flex; align-items:center; gap:0; }
+  .db-cnt-btn {
+    width:36px; height:40px; background:rgba(255,255,255,0.06); border:1px solid var(--border);
+    color:var(--text); font-size:1.2rem; cursor:pointer; transition:background .15s;
+    display:flex; align-items:center; justify-content:center; flex-shrink:0;
+  }
+  .db-cnt-btn:first-child { border-radius:8px 0 0 8px; border-right:none; }
+  .db-cnt-btn:last-child  { border-radius:0 8px 8px 0; border-left:none; }
+  .db-cnt-btn:hover { background:rgba(232,255,71,0.12); color:var(--gold); }
+  .db-cnt-val {
+    width:72px; text-align:center; background:rgba(255,255,255,0.05);
+    border:1px solid var(--border); color:var(--text); font-size:1.1rem;
+    font-family:inherit; padding:.55rem 0; outline:none;
+    -moz-appearance:textfield;
+  }
+  .db-cnt-val::-webkit-inner-spin-button { -webkit-appearance:none; }
+  .db-cnt-val:focus { border-color:var(--gold); }
+
+  /* ── progress bar ── */
+  .db-progress-wrap { margin:1rem 0 .3rem; }
+  .db-progress-labels { display:flex; justify-content:space-between; font-size:.72rem; color:var(--muted); margin-bottom:.4rem; }
+  .db-bar-bg { height:8px; background:rgba(255,255,255,0.07); border-radius:99px; overflow:hidden; }
+  .db-bar-fill { height:100%; border-radius:99px; background:var(--gold); transition:width .4s ease; }
+
+  /* ── result ── */
+  .db-result {
+    margin-top:1.4rem; padding:1.2rem 1.4rem; border-radius:10px;
+    border:1px solid rgba(232,255,71,0.25); background:rgba(232,255,71,0.05);
+    display:none;
+  }
+  .db-result.show { display:block; }
+  .db-result.tier-free   { border-color:rgba(255,255,255,0.2); background:rgba(255,255,255,0.04); }
+  .db-result.tier-mid    { border-color:rgba(255,160,0,0.35);  background:rgba(255,160,0,0.06); }
+  .db-result.tier-max    { border-color:rgba(232,255,71,0.35); background:rgba(232,255,71,0.07); }
+
+  .db-result-num   { font-family:'Bebas Neue',sans-serif; font-size:2.8rem; letter-spacing:2px; line-height:1; margin-bottom:.3rem; }
+  .db-result.tier-free .db-result-num { color:var(--muted); }
+  .db-result.tier-mid  .db-result-num { color:var(--orange); }
+  .db-result.tier-max  .db-result-num { color:var(--gold); }
+  .db-result-desc { font-size:.85rem; color:var(--muted); line-height:1.5; }
+  .db-result-tip  { font-size:.78rem; color:var(--muted); margin-top:.6rem; padding-top:.6rem; border-top:1px solid rgba(255,255,255,0.08); }
+
+  /* ── tg button ── */
+  .db-tg-row { display:flex; gap:.75rem; flex-wrap:wrap; margin-top:1.3rem; }
+  .db-tg-btn {
+    display:inline-flex; align-items:center; gap:.5rem;
+    background:#229ED9; color:#fff; border:none; border-radius:8px;
+    padding:.65rem 1.2rem; font-size:.88rem; font-weight:600;
+    text-decoration:none; cursor:pointer; transition:opacity .2s;
+  }
+  .db-tg-btn:hover { opacity:.85; }
+
+  /* ── thresholds table ── */
+  .db-tiers { display:grid; grid-template-columns:repeat(3,1fr); gap:.75rem; margin-top:1.5rem; }
+  .db-tier {
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:.85rem 1rem; text-align:center;
+  }
+  .db-tier-val { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:1px; }
+  .db-tier-lbl { font-size:.7rem; color:var(--muted); margin-top:2px; line-height:1.4; }
+  .db-tier.t1 .db-tier-val { color:var(--muted); }
+  .db-tier.t2 .db-tier-val { color:var(--orange); }
+  .db-tier.t3 .db-tier-val { color:var(--gold); }
+
+  @media(max-width:500px){ .db-tiers{grid-template-columns:1fr;} }
+</style>
+</head>
+<body>
+
+
+<main class="db-page">
+  <div class="db-title">🍺 Донатный Бар</div>
+  <div class="db-sub">
+    Калькулятор открытия донатного бара Warpath. Введи количество пивных кружек и бокалов — 
+    и узнай, сколько напитков открывать в этом месяце.
+  </div>
+
+  <!-- Калькулятор -->
+  <div class="db-card">
+    <div class="db-card-head">
+      <div class="db-card-icon">🧮</div>
+      <div class="db-card-label">Расчёт на месяц</div>
+    </div>
+    <div class="db-card-body">
+
+      <div class="db-field">
+        <label>Пивных кружек (макс. учитывается 120)</label>
+        <div class="db-counter">
+          <button class="db-cnt-btn" onclick="adjust('cups',-1)">−</button>
+          <input class="db-cnt-val" id="inp-cups" type="number" min="0" max="999" value="0" oninput="calc()">
+          <button class="db-cnt-btn" onclick="adjust('cups',1)">+</button>
+        </div>
+        <div class="db-hint">3 кружки = 1 бокал при расчёте</div>
+      </div>
+
+      <div class="db-field">
+        <label>Бокалов</label>
+        <div class="db-counter">
+          <button class="db-cnt-btn" onclick="adjust('glasses',-1)">−</button>
+          <input class="db-cnt-val" id="inp-glasses" type="number" min="0" max="999" value="0" oninput="calc()">
+          <button class="db-cnt-btn" onclick="adjust('glasses',1)">+</button>
+        </div>
+      </div>
+
+      <!-- прогресс-бар -->
+      <div class="db-progress-wrap">
+        <div class="db-progress-labels">
+          <span>0 бокалов</span>
+          <span id="prog-cur">0 / 52</span>
+          <span>52+ → макс</span>
+        </div>
+        <div class="db-bar-bg"><div class="db-bar-fill" id="prog-bar" style="width:0%"></div></div>
+      </div>
+
+      <!-- результат -->
+      <div class="db-result" id="db-result">
+        <div class="db-result-num" id="res-num">—</div>
+        <div class="db-result-desc" id="res-desc"></div>
+        <div class="db-result-tip" id="res-tip"></div>
+      </div>
+
+      <div class="db-tg-row">
+        <a class="db-tg-btn" href="https://t.me/donatebar_bot" target="_blank" rel="noopener">
+          ✈ Открыть бота в Telegram
+        </a>
+        <button class="btn btn-outline" onclick="reset()" style="font-size:.85rem;padding:.6rem 1.1rem">↺ Сбросить</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Пороги -->
+  <div style="font-size:.8rem;color:var(--muted);margin-bottom:.75rem;text-transform:uppercase;letter-spacing:.5px">Пороги открытия</div>
+  <div class="db-tiers">
+    <div class="db-tier t1">
+      <div class="db-tier-val">5</div>
+      <div class="db-tier-lbl">бесплатных<br>&lt; 15 бокалов — копи кружки</div>
+    </div>
+    <div class="db-tier t2">
+      <div class="db-tier-val">20</div>
+      <div class="db-tier-lbl">напитков<br>15–51 бокал (15 + 5)</div>
+    </div>
+    <div class="db-tier t3">
+      <div class="db-tier-val">70</div>
+      <div class="db-tier-lbl">напитков<br>52+ бокала (65 + 5)</div>
+    </div>
+  </div>
+
+</main>
+
+  
+<script src="nav.js"></script>
+<script src="data.js"></script>
+
+  
+<script>
+function adjust(field, delta) {
+  const id = field === 'cups' ? 'inp-cups' : 'inp-glasses';
+  const el = document.getElementById(id);
+  el.value = Math.max(0, (parseInt(el.value) || 0) + delta);
+  calc();
+}
+
+function calc() {
+  let cups    = Math.max(0, parseInt(document.getElementById('inp-cups').value)    || 0);
+  let glasses = Math.max(0, parseInt(document.getElementById('inp-glasses').value) || 0);
+
+  const cappedCups   = Math.min(cups, 120);
+  const fromCups     = Math.floor(cappedCups / 3);
+  const total        = glasses + fromCups;
+
+  // прогресс-бар
+  const pct = Math.min(100, Math.round((total / 52) * 100));
+  document.getElementById('prog-bar').style.width = pct + '%';
+  document.getElementById('prog-cur').textContent = total + ' / 52';
+
+  // результат
+  const el = document.getElementById('db-result');
+  el.classList.add('show');
+  el.classList.remove('tier-free','tier-mid','tier-max');
+
+  const num  = document.getElementById('res-num');
+  const desc = document.getElementById('res-desc');
+  const tip  = document.getElementById('res-tip');
+
+  if (total >= 52) {
+    el.classList.add('tier-max');
+    num.textContent  = '70 🍻';
+    desc.textContent = 'Открывай 65 + 5 = 70 напитков в этом месяце.';
+    tip.textContent  = `Итого бокалов: ${total} (${glasses} своих + ${fromCups} из ${cappedCups} кружек)`;
+  } else if (total < 15) {
+    el.classList.add('tier-free');
+    num.textContent  = '5 🍺';
+    desc.textContent = 'Открывай только 5 бесплатных. Копи кружки до следующего месяца.';
+    tip.textContent  = `Итого бокалов: ${total} — нужно ещё ${15 - total} чтобы выйти на 20`;
+  } else {
+    el.classList.add('tier-mid');
+    num.textContent  = '20 🍻';
+    desc.textContent = 'Открывай 15 + 5 = 20 напитков в этом месяце.';
+    tip.textContent  = `Итого бокалов: ${total} — нужно ещё ${52 - total} чтобы выйти на 70`;
+  }
+}
+
+function reset() {
+  document.getElementById('inp-cups').value    = 0;
+  document.getElementById('inp-glasses').value = 0;
+  document.getElementById('db-result').classList.remove('show');
+  document.getElementById('prog-bar').style.width = '0%';
+  document.getElementById('prog-cur').textContent = '0 / 52';
+}
+
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof initShared === 'function') initShared();
+});
+</script>
+</body>
+</html>
