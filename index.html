@@ -5,7 +5,7 @@
 <title>Warpath Guide — Главная</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  /* ── Skeleton для nav-cards и tools ── */
+  /* ── Skeleton shimmer ── */
   @keyframes shimmer {
     0%   { background-position: -600px 0; }
     100% { background-position:  600px 0; }
@@ -15,91 +15,68 @@
     background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 75%);
     background-size: 600px 100%;
     animation: shimmer 1.4s infinite linear;
+    display: block;
   }
-  .skel-nav-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 1.1rem 1rem;
-    display: flex; align-items: center; gap: 0.85rem;
-  }
+  .skel-nav-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1rem; display: flex; align-items: center; gap: 0.85rem; }
   .skel-nav-icon { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; }
   .skel-nav-t1   { height: 13px; width: 70%; margin-bottom: 6px; }
   .skel-nav-t2   { height: 10px; width: 50%; }
-
-  .skel-tool-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    padding: 1.5rem;
-  }
+  .skel-tool-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
   .skel-tool-icon { width: 44px; height: 44px; border-radius: 10px; margin-bottom: 0.7rem; }
   .skel-tool-t1   { height: 14px; width: 55%; margin-bottom: 8px; }
   .skel-tool-t2   { height: 10px; width: 90%; margin-bottom: 5px; }
   .skel-tool-t3   { height: 10px; width: 75%; margin-bottom: 1.1rem; }
   .skel-tool-btn  { height: 34px; width: 120px; border-radius: 6px; }
 
-  /* ── Блок патча ── */
-  .patch-banner {
-    background: linear-gradient(135deg, rgba(232,255,71,0.07) 0%, rgba(232,130,0,0.07) 100%);
-    border: 1px solid rgba(232,255,71,0.2);
-    border-radius: 12px;
-    padding: 1.1rem 1.4rem;
-    display: flex; align-items: center; gap: 1rem; flex-wrap: wrap;
-    margin-top: 1.5rem;
-  }
-  .patch-badge {
-    font-family: 'Bebas Neue', sans-serif;
-    font-size: 1.1rem; letter-spacing: 2px;
-    background: var(--gold); color: #000;
-    padding: 3px 12px; border-radius: 6px;
-    white-space: nowrap; flex-shrink: 0;
-  }
-  .patch-text { font-size: 0.85rem; color: var(--muted); line-height: 1.5; flex: 1; min-width: 180px; }
-  .patch-soon {
-    font-size: 0.75rem; padding: 3px 10px; border-radius: 99px;
-    border: 1px solid rgba(255,160,0,0.4); color: var(--orange);
-    white-space: nowrap; flex-shrink: 0;
-  }
+  /* ── Patch banner ── */
+  .patch-banner { background: rgba(232,255,71,0.05); border: 1px solid rgba(232,255,71,0.2); border-radius: 12px; padding: 1rem 1.4rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
+  .patch-badge  { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; background: var(--gold); color: #000; padding: 3px 12px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
+  .patch-text   { font-size: 0.85rem; color: var(--muted); line-height: 1.5; flex: 1; min-width: 180px; }
+  .patch-soon   { font-size: 0.75rem; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(255,160,0,0.4); color: var(--orange); white-space: nowrap; flex-shrink: 0; }
 
-  /* ── Блогеры стрип с реальными карточками ── */
-  .yt-mini-track {
+  /* ── Blogger strip (CSS scroll animation) ── */
+  .blogger-strip-wrap { overflow: hidden; position: relative; }
+  .blogger-strip-wrap::before,
+  .blogger-strip-wrap::after {
+    content: ''; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2; pointer-events: none;
+  }
+  .blogger-strip-wrap::before { left: 0;  background: linear-gradient(to right,  var(--bg), transparent); }
+  .blogger-strip-wrap::after  { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+
+  @keyframes scrollLeft {
+    0%   { transform: translateX(0); }
+    100% { transform: translateX(-50%); }
+  }
+  .blogger-strip-track {
     display: flex; gap: 1rem;
-    padding: 0.25rem 1rem 0.5rem;
-    overflow-x: auto;
-    scrollbar-width: none;
+    width: max-content;
+    animation: scrollLeft 28s linear infinite;
+    padding: 0.5rem 0;
   }
-  .yt-mini-track::-webkit-scrollbar { display: none; }
-  .yt-mini-card {
-    background: var(--panel);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    padding: 0.85rem 1rem;
-    display: flex; align-items: center; gap: 0.75rem;
-    text-decoration: none; flex-shrink: 0;
-    min-width: 200px;
-    transition: border-color 0.2s, transform 0.2s;
-  }
-  .yt-mini-card:hover { border-color: var(--gold); transform: translateY(-2px); }
-  .yt-mini-card.official { border-color: rgba(232,255,71,0.3); }
-  .yt-mini-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(232,255,71,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .yt-mini-name { font-size: 0.88rem; font-weight: 700; color: var(--text); }
-  .yt-mini-spec { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
-  .yt-mini-subs { font-size: 0.7rem; color: var(--gold); margin-top: 1px; }
+  .blogger-strip-wrap:hover .blogger-strip-track { animation-play-state: paused; }
 
-  /* ── Community разделы ── */
-  .tg-rooms {
-    display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.85rem;
+  .bl-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+    padding: 0.85rem 1.1rem; display: flex; align-items: center; gap: 0.75rem;
+    text-decoration: none; flex-shrink: 0; width: 210px;
+    transition: border-color 0.2s;
   }
-  .tg-room {
-    font-size: 0.72rem; padding: 3px 10px; border-radius: 99px;
-    background: rgba(41,182,246,0.08); color: #29b6f6;
-    border: 1px solid rgba(41,182,246,0.2);
-  }
+  .bl-card:hover  { border-color: var(--gold); }
+  .bl-card.offl   { border-color: rgba(232,255,71,0.3); }
+  .bl-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(232,255,71,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .bl-name  { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+  .bl-spec  { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
+  .bl-subs  { font-size: 0.68rem; color: var(--gold); margin-top: 2px; }
+
+  /* ── Community rooms ── */
+  .tg-rooms { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.85rem; }
+  .tg-room  { font-size: 0.72rem; padding: 3px 10px; border-radius: 99px; background: rgba(41,182,246,0.08); color: #29b6f6; border: 1px solid rgba(41,182,246,0.2); }
 </style>
 </head>
 <body>
+<!-- nav.js ПЕРВЫМ — вставляет nav в afterbegin -->
 <script src="nav.js"></script>
+<script src="data.js"></script>
 
 <!-- HERO -->
 <section style="background:var(--bg);padding-top:0">
@@ -118,7 +95,6 @@
         <div class="hstat"><div class="hstat-n">4</div><div class="hstat-l">Блогера</div></div>
         <div class="hstat"><div class="hstat-n">RU</div><div class="hstat-l">Язык</div></div>
       </div>
-
       <div class="patch-banner">
         <div class="patch-badge">ПАТЧ 13.4</div>
         <div class="patch-text">Новые офицеры, обновление экспедиций и ребаланс авиации. Все гайды обновлены под актуальную версию.</div>
@@ -138,7 +114,6 @@
       <div class="title">Быстрый доступ</div>
     </div>
     <div class="nav-cards fade-up" id="nav-cards">
-      <!-- skeleton -->
       <div class="skel-nav-card" aria-hidden="true"><div class="skel-line skel-nav-icon"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
       <div class="skel-nav-card" aria-hidden="true"><div class="skel-line skel-nav-icon"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
       <div class="skel-nav-card" aria-hidden="true"><div class="skel-line skel-nav-icon"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
@@ -151,22 +126,18 @@
 
 <div class="divider"></div>
 
-<!-- YOUTUBER STRIP -->
+<!-- BLOGGER STRIP -->
 <section class="section-sm" style="background:var(--bg)">
   <div class="wrap" style="margin-bottom:1rem">
     <div class="sec-hd fade-up" style="margin-bottom:0">
       <div class="tag">▶ YouTube</div>
       <div class="title">Блогеры сообщества</div>
-      <div class="sub">Русскоязычные авторы по Warpath — гайды, обзоры, нарезки</div>
+      <div class="sub">Наведи — лента замирает. Нажми — перейдёшь на канал.</div>
     </div>
   </div>
-  <div class="fade-up">
-    <div class="yt-mini-track" id="yt-mini-track">
-      <!-- skeleton пока грузится JS -->
-      <div class="skel-nav-card" style="min-width:200px" aria-hidden="true"><div class="skel-line skel-nav-icon" style="border-radius:50%"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
-      <div class="skel-nav-card" style="min-width:200px" aria-hidden="true"><div class="skel-line skel-nav-icon" style="border-radius:50%"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
-      <div class="skel-nav-card" style="min-width:200px" aria-hidden="true"><div class="skel-line skel-nav-icon" style="border-radius:50%"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
-      <div class="skel-nav-card" style="min-width:200px" aria-hidden="true"><div class="skel-line skel-nav-icon" style="border-radius:50%"></div><div style="flex:1"><div class="skel-line skel-nav-t1"></div><div class="skel-line skel-nav-t2"></div></div></div>
+  <div class="blogger-strip-wrap fade-up">
+    <div class="blogger-strip-track" id="blogger-strip">
+      <!-- карточки дублируются JS для бесконечной прокрутки -->
     </div>
   </div>
   <div class="wrap" style="margin-top:1rem">
@@ -216,7 +187,6 @@
       <div class="sub">Всё считает прямо в браузере — без регистрации и установки</div>
     </div>
     <div id="tools-grid" class="fade-up" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:1rem;margin-top:2rem">
-      <!-- skeleton -->
       <div class="skel-tool-card" aria-hidden="true"><div class="skel-line skel-tool-icon"></div><div class="skel-line skel-tool-t1"></div><div class="skel-line skel-tool-t2"></div><div class="skel-line skel-tool-t3"></div><div class="skel-line skel-tool-btn"></div></div>
       <div class="skel-tool-card" aria-hidden="true"><div class="skel-line skel-tool-icon"></div><div class="skel-line skel-tool-t1"></div><div class="skel-line skel-tool-t2"></div><div class="skel-line skel-tool-t3"></div><div class="skel-line skel-tool-btn"></div></div>
       <div class="skel-tool-card" aria-hidden="true"><div class="skel-line skel-tool-icon"></div><div class="skel-line skel-tool-t1"></div><div class="skel-line skel-tool-t2"></div><div class="skel-line skel-tool-t3"></div><div class="skel-line skel-tool-btn"></div></div>
@@ -224,64 +194,69 @@
   </div>
 </section>
 
-<script src="data.js"></script>
 <script>
 const NAV_SECTIONS = [
-  {icon:'⚔️', label:'Unit Builder',  sub:'Калькулятор юнитов',      href:'unit-builder.html'},
-  {icon:'🏗️', label:'Army Builder',  sub:'Сборка армии',             href:'army-builder.html'},
-  {icon:'🎖️', label:'Тир-лист',      sub:'Рейтинг юнитов/офицеров',  href:'tier-list.html'},
-  {icon:'📖', label:'Wiki',          sub:'База знаний об игре',       href:'wiki.html'},
-  {icon:'▶',  label:'YouTubers',     sub:'4 блогера сообщества',      href:'youtubers.html'},
-  {icon:'💬', label:'WarpathHub',    sub:'Telegram-чат · 155 чел.',   href:'https://t.me/WarpathHub', ext:true},
+  {icon:'⚔️', label:'Unit Builder',  sub:'Калькулятор юнитов',     href:'unit-builder.html'},
+  {icon:'🏗️', label:'Army Builder',  sub:'Сборка армии',            href:'army-builder.html'},
+  {icon:'🎖️', label:'Тир-лист',      sub:'Рейтинг юнитов/офицеров', href:'tier-list.html'},
+  {icon:'📖', label:'Wiki',          sub:'База знаний об игре',      href:'wiki.html'},
+  {icon:'▶',  label:'YouTubers',     sub:'4 блогера сообщества',     href:'youtubers.html'},
+  {icon:'💬', label:'WarpathHub',    sub:'Telegram-чат · 155 чел.',  href:'https://t.me/WarpathHub', ext:true},
 ];
 const TOOLS = [
-  {icon:'⚔️',title:'Unit Builder',tag:'Интерактивный',desc:'Выбери тип юнита, уровень, офицера и снаряжение. Статы пересчитываются мгновенно.',href:'unit-builder.html'},
-  {icon:'🏗️',title:'Army Builder',tag:'Калькулятор',desc:'Собери армию из нескольких юнитов и получи суммарную боевую мощь, атаку, защиту, HP.',href:'army-builder.html'},
-  {icon:'🎖️',title:'Тир-лист',    tag:'Рейтинг',   desc:'Drag-and-drop тир-лист юнитов и офицеров с фильтрами и сохранением в браузере.',href:'tier-list.html'},
+  {icon:'⚔️', title:'Unit Builder', tag:'Интерактивный', desc:'Выбери тип юнита, уровень, офицера и снаряжение. Статы пересчитываются мгновенно.', href:'unit-builder.html'},
+  {icon:'🏗️', title:'Army Builder', tag:'Калькулятор',   desc:'Собери армию из нескольких юнитов и получи суммарную боевую мощь, атаку, защиту, HP.', href:'army-builder.html'},
+  {icon:'🎖️', title:'Тир-лист',     tag:'Рейтинг',       desc:'Drag-and-drop тир-лист юнитов и офицеров с фильтрами и сохранением в браузере.', href:'tier-list.html'},
 ];
 
 document.addEventListener('DOMContentLoaded', () => {
-  initShared();
+  if (typeof initShared === 'function') initShared();
 
-  // nav cards
+  /* ── Nav cards ── */
   const nc = document.getElementById('nav-cards');
-  nc.innerHTML = '';
-  NAV_SECTIONS.forEach(s => {
-    const d = document.createElement('div');
-    d.className = 'nav-card';
-    d.innerHTML = `<div class="nav-card-icon">${s.icon}</div><div><div class="nav-card-label">${s.label}</div><div class="nav-card-sub">${s.sub}</div></div>`;
-    d.onclick = () => s.ext ? window.open(s.href,'_blank') : location.href = s.href;
-    nc.appendChild(d);
-  });
+  if (nc) {
+    nc.innerHTML = '';
+    NAV_SECTIONS.forEach(s => {
+      const d = document.createElement('div');
+      d.className = 'nav-card';
+      d.innerHTML = `<div class="nav-card-icon">${s.icon}</div><div><div class="nav-card-label">${s.label}</div><div class="nav-card-sub">${s.sub}</div></div>`;
+      d.onclick = () => s.ext ? window.open(s.href,'_blank') : location.href = s.href;
+      nc.appendChild(d);
+    });
+  }
 
-  // yt mini strip
-  const track = document.getElementById('yt-mini-track');
-  track.innerHTML = '';
-  YOUTUBERS.forEach(y => {
-    const a = document.createElement('a');
-    a.className = 'yt-mini-card' + (y.approved ? ' official' : '');
-    a.href = y.yt; a.target = '_blank'; a.rel = 'noopener';
-    a.innerHTML = `
-      <div class="yt-mini-avatar">${y.emoji}</div>
-      <div>
-        <div class="yt-mini-name">${y.name}${y.approved ? ' ✓' : ' ✦'}</div>
-        <div class="yt-mini-spec">${y.spec}</div>
-        <div class="yt-mini-subs">${y.subs} подп.</div>
-      </div>`;
-    track.appendChild(a);
-  });
+  /* ── Blogger strip — дублируем массив для бесконечной прокрутки ── */
+  const strip = document.getElementById('blogger-strip');
+  if (strip && typeof YOUTUBERS !== 'undefined') {
+    // вставляем дважды для seamless loop
+    [...YOUTUBERS, ...YOUTUBERS].forEach(y => {
+      const a = document.createElement('a');
+      a.className = 'bl-card' + (y.approved ? ' offl' : '');
+      a.href = y.yt; a.target = '_blank'; a.rel = 'noopener';
+      a.innerHTML = `
+        <div class="bl-avatar">${y.emoji}</div>
+        <div>
+          <div class="bl-name">${y.name}${y.approved ? ' ✓' : ''}</div>
+          <div class="bl-spec">${y.spec}</div>
+          <div class="bl-subs">${y.subs} подп.</div>
+        </div>`;
+      strip.appendChild(a);
+    });
+  }
 
-  // tools
+  /* ── Tools grid ── */
   const tg = document.getElementById('tools-grid');
-  tg.innerHTML = '';
-  TOOLS.forEach(t => {
-    const d = document.createElement('div');
-    d.className = 'card card-hover';
-    d.style.padding = '1.5rem';
-    d.innerHTML = `<div style="font-size:2.2rem;margin-bottom:.7rem">${t.icon}</div><span class="pill pill-tag">${t.tag}</span><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin:.5rem 0">${t.title}</div><p style="font-size:.82rem;color:var(--dim);line-height:1.65">${t.desc}</p><div style="margin-top:1.1rem"><span class="btn btn-primary">Открыть →</span></div>`;
-    d.onclick = () => location.href = t.href;
-    tg.appendChild(d);
-  });
+  if (tg) {
+    tg.innerHTML = '';
+    TOOLS.forEach(t => {
+      const d = document.createElement('div');
+      d.className = 'card card-hover';
+      d.style.padding = '1.5rem';
+      d.innerHTML = `<div style="font-size:2.2rem;margin-bottom:.7rem">${t.icon}</div><span class="pill pill-tag">${t.tag}</span><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin:.5rem 0">${t.title}</div><p style="font-size:.82rem;color:var(--dim);line-height:1.65">${t.desc}</p><div style="margin-top:1.1rem"><span class="btn btn-primary">Открыть →</span></div>`;
+      d.onclick = () => location.href = t.href;
+      tg.appendChild(d);
+    });
+  }
 });
 </script>
 </body>
