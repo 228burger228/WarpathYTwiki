@@ -4,219 +4,506 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Wiki — Warpath Guide</title>
 <link rel="stylesheet" href="style.css">
+<style>
+  /* ── Layout ── */
+  .wiki-wrap   { max-width:1100px; margin:0 auto; padding:2rem 1rem 5rem; display:grid; grid-template-columns:220px 1fr; gap:2rem; align-items:start; }
+  @media(max-width:700px){ .wiki-wrap{grid-template-columns:1fr;} }
+
+  /* ── Sidebar ── */
+  .wiki-sidebar { position:sticky; top:72px; background:var(--panel); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .wiki-sidebar-head { padding:.75rem 1rem; border-bottom:1px solid var(--border); font-size:.72rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; }
+  .wiki-nav-item { display:flex; align-items:center; gap:.6rem; padding:.65rem 1rem; font-size:.88rem; color:var(--muted); cursor:pointer; border-left:3px solid transparent; transition:all .15s; }
+  .wiki-nav-item:hover { background:rgba(255,255,255,0.04); color:var(--text); }
+  .wiki-nav-item.active { border-left-color:var(--gold); color:var(--gold); background:rgba(232,255,71,0.05); }
+  .wiki-nav-sep { height:1px; background:var(--border); margin:.25rem 0; }
+
+  /* ── Content panels ── */
+  .wiki-panel { display:none; }
+  .wiki-panel.active { display:block; }
+  .wiki-panel-title { font-family:'Bebas Neue',sans-serif; font-size:2rem; color:var(--gold); letter-spacing:2px; margin-bottom:.3rem; }
+  .wiki-panel-sub   { color:var(--muted); font-size:.9rem; margin-bottom:2rem; line-height:1.6; }
+
+  /* ── Unit type grid ── */
+  .unit-type-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:1rem; }
+  .unit-type-card {
+    background:var(--panel); border:1px solid var(--border); border-radius:10px;
+    padding:1rem; cursor:pointer; transition:border-color .2s, transform .15s;
+  }
+  .unit-type-card:hover { border-color:var(--gold); transform:translateY(-2px); }
+  .unit-type-card.selected { border-color:var(--gold); background:rgba(232,255,71,0.05); }
+  .utc-icon  { font-size:1.5rem; margin-bottom:.5rem; }
+  .utc-name  { font-weight:700; font-size:.95rem; color:var(--text); margin-bottom:.2rem; }
+  .utc-class { font-size:.72rem; color:var(--muted); }
+  .utc-badge { display:inline-block; font-size:.65rem; padding:1px 6px; border-radius:4px; margin-top:.4rem; }
+  .utc-badge.land { background:rgba(232,255,71,0.12); color:var(--gold); border:1px solid rgba(232,255,71,0.25); }
+  .utc-badge.air  { background:rgba(41,182,246,0.12); color:#29b6f6; border:1px solid rgba(41,182,246,0.25); }
+  .utc-badge.sea  { background:rgba(29,158,117,0.12); color:#1d9e75; border:1px solid rgba(29,158,117,0.25); }
+
+  /* ── Unit detail panel ── */
+  .unit-detail { display:none; margin-top:1.5rem; background:var(--panel); border:1px solid var(--border); border-radius:12px; overflow:hidden; }
+  .unit-detail.open { display:block; }
+  .ud-head { padding:1.1rem 1.4rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:1rem; }
+  .ud-icon { font-size:2rem; }
+  .ud-name { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:2px; color:var(--gold); }
+  .ud-class{ font-size:.8rem; color:var(--muted); }
+  .ud-body { padding:1.2rem 1.4rem; display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; }
+  @media(max-width:500px){ .ud-body{grid-template-columns:1fr;} }
+  .ud-section-title { font-size:.72rem; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; margin-bottom:.65rem; }
+
+  .ud-stats { display:flex; flex-direction:column; gap:6px; }
+  .ud-stat-row { display:flex; justify-content:space-between; align-items:center; font-size:.83rem; padding:5px 8px; border-radius:6px; background:rgba(255,255,255,0.03); }
+  .ud-stat-row .lbl { color:var(--muted); }
+  .ud-stat-row .val { font-weight:700; color:var(--text); }
+  .ud-stat-row .val.atk { color:#e57373; }
+  .ud-stat-row .val.spd { color:#29b6f6; }
+
+  .ud-tips { display:flex; flex-direction:column; gap:7px; }
+  .ud-tip  { display:flex; gap:.6rem; align-items:flex-start; font-size:.83rem; color:var(--muted); line-height:1.5; }
+  .ud-tip-dot { width:6px; height:6px; border-radius:50%; background:var(--gold); flex-shrink:0; margin-top:6px; }
+
+  .ud-factions { display:flex; gap:.4rem; flex-wrap:wrap; margin-top:.3rem; }
+  .ud-faction  { font-size:.72rem; padding:2px 8px; border-radius:99px; border:1px solid var(--border); color:var(--muted); }
+
+  /* ── Stars display ── */
+  .star-bar { display:flex; align-items:center; gap:3px; margin-top:.3rem; }
+  .star { font-size:10px; }
+  .star.gold { color:#f5a623; }
+  .star.blue { color:#29b6f6; }
+  .star-sep  { font-size:.7rem; color:var(--muted); margin:0 3px; }
+
+  /* ── Officers ── */
+  .officer-filters { display:flex; gap:.5rem; flex-wrap:wrap; margin-bottom:1.5rem; }
+  .ofilter { font-size:.78rem; padding:4px 12px; border-radius:99px; border:1px solid var(--border); color:var(--muted); background:transparent; cursor:pointer; transition:all .15s; }
+  .ofilter:hover, .ofilter.active { border-color:var(--gold); color:var(--gold); background:rgba(232,255,71,0.07); }
+
+  .officer-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(300px,1fr)); gap:1rem; }
+  .ocard {
+    background:var(--panel); border:1px solid var(--border); border-radius:12px;
+    overflow:hidden; transition:border-color .2s;
+  }
+  .ocard:hover { border-color:rgba(232,255,71,0.4); }
+  .ocard-head  { padding:.9rem 1.1rem .7rem; border-bottom:1px solid var(--border); }
+  .ocard-top   { display:flex; align-items:center; gap:.7rem; margin-bottom:.45rem; }
+  .ocard-avatar{ width:44px; height:44px; border-radius:50%; background:rgba(232,255,71,0.1); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+  .ocard-name  { font-weight:700; font-size:.95rem; color:var(--text); }
+  .ocard-meta  { font-size:.72rem; color:var(--muted); margin-top:2px; }
+  .ocard-tier  { margin-left:auto; font-family:'Bebas Neue',sans-serif; font-size:1.5rem; flex-shrink:0; }
+  .ocard-tier.S { color:var(--gold); }
+  .ocard-tier.A { color:#ff9800; }
+  .ocard-tier.B { color:#29b6f6; }
+  .ocard-tier.C { color:var(--muted); }
+  .ocard-badges{ display:flex; gap:.4rem; flex-wrap:wrap; }
+  .obadge { font-size:.65rem; padding:1px 7px; border-radius:4px; }
+  .obadge.gen  { background:rgba(255,160,0,0.12); color:#ff9800; border:1px solid rgba(255,160,0,0.3); }
+  .obadge.type { background:rgba(232,255,71,0.1); color:var(--gold); border:1px solid rgba(232,255,71,0.2); }
+  .obadge.atk  { background:rgba(229,115,115,0.12); color:#e57373; border:1px solid rgba(229,115,115,0.3); }
+  .obadge.def  { background:rgba(41,182,246,0.12); color:#29b6f6; border:1px solid rgba(41,182,246,0.3); }
+  .obadge.bal  { background:rgba(29,158,117,0.12); color:#1d9e75; border:1px solid rgba(29,158,117,0.25); }
+  .obadge.spc  { background:rgba(171,71,188,0.12); color:#ab47bc; border:1px solid rgba(171,71,188,0.3); }
+
+  .ocard-stats { display:grid; grid-template-columns:1fr 1fr; border-bottom:1px solid var(--border); }
+  .ostat { padding:.55rem 1.1rem; }
+  .ostat:first-child { border-right:1px solid var(--border); }
+  .ostat-lbl { font-size:.68rem; color:var(--muted); }
+  .ostat-val { font-size:1.1rem; font-weight:700; margin-top:1px; }
+  .ostat-val.atk { color:#e57373; }
+  .ostat-val.def { color:#29b6f6; }
+
+  .ocard-skills { padding:.65rem 1.1rem; border-bottom:1px solid var(--border); display:flex; flex-direction:column; gap:5px; }
+  .oskill { display:flex; align-items:flex-start; gap:.5rem; font-size:.78rem; }
+  .oskill-type { flex-shrink:0; font-size:.63rem; padding:1px 5px; border-radius:3px; margin-top:1px; }
+  .oskill-name { font-weight:700; color:var(--text); }
+  .oskill-desc { color:var(--muted); margin-top:1px; font-size:.73rem; line-height:1.35; }
+  .oskill-awaken{ display:flex; align-items:center; gap:.4rem; margin-top:3px; padding:4px 7px; border-radius:6px; background:rgba(232,255,71,0.04); border:1px solid rgba(232,255,71,0.15); }
+  .oskill-awaken-lbl { font-size:.7rem; color:var(--gold); }
+
+  .ocard-foot  { padding:.65rem 1.1rem; }
+  .ocard-units { display:flex; gap:4px; flex-wrap:wrap; margin-bottom:.5rem; }
+  .ounit-tag   { font-size:.68rem; padding:2px 7px; border-radius:99px; background:rgba(255,255,255,0.05); color:var(--muted); border:1px solid var(--border); }
+  .ocard-rec   { font-size:.75rem; color:var(--muted); line-height:1.5; }
+
+  /* ── Coming soon placeholder ── */
+  .coming-soon { text-align:center; padding:3rem 1rem; color:var(--muted); }
+  .coming-soon-icon { font-size:3rem; margin-bottom:.75rem; }
+  .coming-soon-title{ font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:2px; color:var(--text); margin-bottom:.5rem; }
+
+  /* ── Page header ── */
+  .page-header { background:var(--bg2); border-bottom:var(--line); padding:2rem 1rem 1.5rem; }
+  .page-header .wrap { max-width:1100px; margin:0 auto; }
+</style>
 </head>
 <body>
 
 <div class="page-header">
   <div class="wrap">
     <div class="tag">📖 База знаний</div>
-    <div class="title">Wiki</div>
-    <p class="sub">Юниты, офицеры, снаряжение и механики игры. Подробные описания и советы.</p>
+    <div style="font-family:'Bebas Neue',sans-serif;font-size:2.4rem;color:var(--gold);letter-spacing:2px;margin:.25rem 0">WIKI</div>
+    <p style="color:var(--muted);font-size:.9rem;margin:0">Юниты, офицеры, механики. Разрабатывается сообществом блогеров.</p>
   </div>
 </div>
 
-<section class="section" style="background:var(--bg)">
-  <div class="wrap">
-    <div class="wiki-layout">
+<div class="wiki-wrap">
 
-      <!-- Sidebar -->
-      <div class="wiki-sidebar">
-        <div class="wiki-sidebar-title">Разделы Wiki</div>
-        <div id="wiki-nav"></div>
+  <!-- ═══ SIDEBAR ═══ -->
+  <div class="wiki-sidebar">
+    <div class="wiki-sidebar-head">Разделы</div>
+    <div class="wiki-nav-item active" data-panel="units">🛡 Юниты</div>
+    <div class="wiki-nav-sep"></div>
+    <div class="wiki-nav-item" data-panel="officers">🎖 Офицеры</div>
+    <div class="wiki-nav-sep"></div>
+    <div class="wiki-nav-item" data-panel="mechanics">⚙ Механики</div>
+    <div class="wiki-nav-sep"></div>
+    <div class="wiki-nav-item" data-panel="economy">💰 Экономика</div>
+  </div>
+
+  <!-- ═══ PANELS ═══ -->
+  <div>
+
+    <!-- ─── UNITS ─── -->
+    <div class="wiki-panel active" id="panel-units">
+      <div class="wiki-panel-title">Юниты</div>
+      <div class="wiki-panel-sub">10 классов боевых единиц. Три лагеря: Советы, Либерти, Авангард. Звёздность до 7.2 (жёлтые) и 9.2 (синие). Нажми на класс чтобы узнать подробнее.</div>
+
+      <div style="margin-bottom:1rem;">
+        <span style="font-size:.75rem;color:var(--muted);">Фильтр:</span>
+        <span class="ofilter active" style="margin-left:.4rem" onclick="filterUnits('all',this)">Все</span>
+        <span class="ofilter" onclick="filterUnits('land',this)">🛡 Наземные</span>
+        <span class="ofilter" onclick="filterUnits('air',this)">✈ Воздушные</span>
+        <span class="ofilter" onclick="filterUnits('sea',this)">⚓ Морские</span>
       </div>
 
-      <!-- Content area -->
-      <div>
-        <!-- Units -->
-        <div class="wiki-page active" id="wp-units">
-          <div class="sec-hd fade-up" style="margin-bottom:1.3rem">
-            <div class="tag">🛡 Справочник</div>
-            <div class="title">Юниты</div>
-            <div class="sub">Все типы боевых единиц: характеристики, сильные стороны, советы.</div>
-          </div>
-          <div class="wiki-cards" id="wc-units"></div>
-        </div>
+      <div class="unit-type-grid" id="unit-type-grid"></div>
+      <div class="unit-detail" id="unit-detail"></div>
+    </div>
 
-        <!-- Officers -->
-        <div class="wiki-page" id="wp-officers">
-          <div class="sec-hd fade-up" style="margin-bottom:1.3rem">
-            <div class="tag">🎖 Справочник</div>
-            <div class="title">Офицеры</div>
-            <div class="sub">Все офицеры: бонусы, синергии, для каких юнитов подходят лучше всего.</div>
-          </div>
-          <div class="wiki-cards" id="wc-officers"></div>
-        </div>
+    <!-- ─── OFFICERS ─── -->
+    <div class="wiki-panel" id="panel-officers">
+      <div class="wiki-panel-title">Офицеры</div>
+      <div class="wiki-panel-sub">87 офицеров: 56 наземных, 23 авиация, 8 морских. 5 поколений. 4 прокачиваемых навыка — открывают пробуждение при 720 фрагментах.</div>
 
-        <!-- Mechanics -->
-        <div class="wiki-page" id="wp-mechanics">
-          <div class="sec-hd fade-up" style="margin-bottom:1.3rem">
-            <div class="tag">⚙ Обучение</div>
-            <div class="title">Механики игры</div>
-            <div class="sub">Урон, броня, снабжение, зоны контроля и стратегия.</div>
-          </div>
-          <div class="wiki-cards" id="wc-mechanics"></div>
-        </div>
+      <div class="officer-filters" id="officer-filters">
+        <span class="ofilter active" onclick="filterOfficers('all',this)">Все</span>
+        <span class="ofilter" onclick="filterOfficers('land',this)">🛡 Наземные</span>
+        <span class="ofilter" onclick="filterOfficers('air',this)">✈ Авиация</span>
+        <span class="ofilter" onclick="filterOfficers('sea',this)">⚓ Морские</span>
+        <span class="ofilter" onclick="filterOfficers('gen5',this)">5 поколение</span>
+        <span class="ofilter" onclick="filterOfficers('gen4',this)">4 поколение</span>
+        <span class="ofilter" onclick="filterOfficers('S',this)">Тир S</span>
+        <span class="ofilter" onclick="filterOfficers('A',this)">Тир A</span>
+      </div>
 
-        <!-- Equipment -->
-        <div class="wiki-page" id="wp-equipment">
-          <div class="sec-hd fade-up" style="margin-bottom:1.3rem">
-            <div class="tag">🔧 Снаряжение</div>
-            <div class="title">Снаряжение юнитов</div>
-            <div class="sub">Все варианты снаряжения: бонусы и рекомендации к применению.</div>
-          </div>
-          <div class="wiki-cards" id="wc-equipment"></div>
-        </div>
+      <div class="officer-grid" id="officer-grid"></div>
+    </div>
+
+    <!-- ─── MECHANICS ─── -->
+    <div class="wiki-panel" id="panel-mechanics">
+      <div class="wiki-panel-title">Механики</div>
+      <div class="coming-soon">
+        <div class="coming-soon-icon">⚙</div>
+        <div class="coming-soon-title">Скоро</div>
+        <div>Боевые механики, снаряжение, система навыков — в разработке.</div>
       </div>
     </div>
-  </div>
-</section>
 
-<!-- Unit detail modal -->
-<div class="modal-bg" id="wiki-modal">
-  <div class="modal-box" style="max-width:540px">
-    <button class="modal-close" onclick="closeModal('wiki-modal')">✕</button>
-    <div id="wiki-modal-content" style="padding:1.8rem"></div>
-  </div>
-</div>
+    <!-- ─── ECONOMY ─── -->
+    <div class="wiki-panel" id="panel-economy">
+      <div class="wiki-panel-title">Экономика</div>
+      <div class="coming-soon">
+        <div class="coming-soon-icon">💰</div>
+        <div class="coming-soon-title">Скоро</div>
+        <div>Ресурсы, донатный бар, эффективные траты — в разработке.</div>
+      </div>
+    </div>
+
+  </div><!-- /panels -->
+</div><!-- /wiki-wrap -->
 
 <script src="nav.js"></script>
 <script src="data.js"></script>
 <script>
-const WIKI_SECTIONS = [
-  {id:'wp-units',     icon:'🛡', label:'Юниты'},
-  {id:'wp-officers',  icon:'🎖', label:'Офицеры'},
-  {id:'wp-mechanics', icon:'⚙', label:'Механики'},
-  {id:'wp-equipment', icon:'🔧', label:'Снаряжение'},
+
+/* ══════════════════════════════════
+   DATA — юниты
+   ══════════════════════════════════ */
+const UNIT_TYPES_WIKI = [
+  { id:'infantry',  name:'Пехота',               icon:'🪖', domain:'land', desc:'Быстрые и дешёвые. Хороши для занятия зон и защиты укреплений. Слабы против бронетехники.',
+    stats:{fp:'низкая',hp:'низкий',acc:75,spd:'65 km/h',crew:4},
+    tips:['Используй массово — сила в количестве','Хороши как поддержка для замедления врага','Не ставь против тяжёлых танков — уничтожат мгновенно'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'medium',    name:'Средние танки',         icon:'🚙', domain:'land', desc:'Баланс атаки и защиты. Универсальный выбор для большинства ситуаций.',
+    stats:{fp:'средняя',hp:'средний',acc:80,spd:'52 km/h',crew:4},
+    tips:['Хорошая база для любого состава','Комбинируй с гаубицами для зачистки площадей','Эффективны в наступлении и обороне'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'heavy',     name:'Тяжёлые танки',         icon:'🛡️', domain:'land', desc:'Высокий HP и атака. Медленные, но крайне живучие. Основа ударного кулака.',
+    stats:{fp:'высокая',hp:'высокий',acc:72,spd:'36 km/h',crew:4},
+    tips:['Ставь в первую линию — принимают урон','Хорошо работают с офицерами на HP','Слабы против быстрых фланговых атак'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'tankHunter',name:'Истребители танков',    icon:'🎯', domain:'land', desc:'Специализируются на уничтожении бронетехники. Низкий HP — прячь за передовой.',
+    stats:{fp:'очень высокая',hp:'низкий',acc:90,spd:'46 km/h',crew:3},
+    tips:['Ставь за тяжёлыми танками','Идеально против средних и тяжёлых','Берегись авиации и пехоты — уязвимы'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'rocket',    name:'Ракетные установки',    icon:'🚀', domain:'land', desc:'Дальнобойное оружие поддержки. Наносит урон по площади. Уязвимы вблизи.',
+    stats:{fp:'1.19M',hp:'146k',acc:87,spd:'48 km/h',crew:4},
+    tips:['Держи позади основных сил','Урон по площади — хорош против скоплений','Требует защиты пехотой или танками'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'howitzer',  name:'Гаубицы',               icon:'💥', domain:'land', desc:'Тяжёлая артиллерия с уроном по площади. Низкая скорость, высокий урон.',
+    stats:{fp:'высокая',hp:'средний',acc:78,spd:'30 km/h',crew:4},
+    tips:['Эффективны для штурма укреплений','Медленные — планируй позицию заранее','Комбинируй со средними танками для прикрытия'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'mbt',       name:'Основные боевые танки', icon:'🦣', domain:'land', desc:'Самые мощные наземные юниты. MB — элита бронетехники. Требуют лучших офицеров.',
+    stats:{fp:'максимальная',hp:'максимальный',acc:82,spd:'40 km/h',crew:4},
+    tips:['Вкладывай лучших офицеров','Лидер в любом ударном составе','Очень дорогие — используй обдуманно'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'helicopter',name:'Вертолёты',             icon:'🚁', domain:'air',  desc:'Мобильная авиация. Атакуют наземные цели, избегают истребителей.',
+    stats:{fp:'высокая',hp:'средний',acc:85,spd:'высокая',crew:2},
+    tips:['Быстро перебрасываются на любой фланг','Уязвимы против истребителей','Отличный выбор для зачистки пехоты'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'fighter',   name:'Истребители',           icon:'✈️', domain:'air',  desc:'Господство в воздухе. Уничтожают вертолёты и бомбардировщики.',
+    stats:{fp:'высокая',hp:'средний',acc:92,spd:'максимальная',crew:1},
+    tips:['Основа воздушного превосходства','Прикрывай бомбардировщики от вражеских истребителей','Слабы против наземного ПВО'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'bomber',    name:'Бомбардировщики',        icon:'💣', domain:'air',  desc:'Наносят мощный урон по наземным целям. Нуждаются в прикрытии истребителями.',
+    stats:{fp:'очень высокая',hp:'средний',acc:80,spd:'средняя',crew:2},
+    tips:['Всегда прикрывай истребителями','Урон по площади — эффективны против скоплений','Приоритетная цель для вражеских истребителей'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'9.2'
+  },
+  { id:'destroyer', name:'Бронированный эсминец', icon:'🚢', domain:'sea',  desc:'Тяжёлый надводный корабль. Высокий HP и огневая мощь против наземных и морских целей.',
+    stats:{fp:'высокая',hp:'очень высокий',acc:78,spd:'низкая',crew:8},
+    tips:['Отличная поддержка для береговых операций','Уязвим против подводных лодок','Комбинируй с авиацией для полного контроля'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'7.2'
+  },
+  { id:'submarine', name:'Подводная лодка',        icon:'🌊', domain:'sea',  desc:'Скрытная атака из-под воды. Контрпик против эсминцев.',
+    stats:{fp:'средняя',hp:'средний',acc:88,spd:'средняя',crew:6},
+    tips:['Атакуй эсминцев из засады','Сложно обнаружить — используй для разведки','Уязвима против противолодочных сил'],
+    factions:['Советы','Либерти','Авангард'], maxStar:'7.2'
+  },
 ];
 
-function buildWikiNav() {
-  const nav=document.getElementById('wiki-nav');
-  WIKI_SECTIONS.forEach((s,i)=>{
-    const d=document.createElement('div');
-    d.className='wiki-nav-item'+(i===0?' active':'');
-    d.dataset.target=s.id;
-    d.innerHTML=`<span>${s.icon}</span> ${s.label}`;
-    d.onclick=()=>{
-      document.querySelectorAll('.wiki-nav-item').forEach(x=>x.classList.remove('active'));
-      document.querySelectorAll('.wiki-page').forEach(x=>x.classList.remove('active'));
-      d.classList.add('active');
-      document.getElementById(s.id).classList.add('active');
-    };
-    nav.appendChild(d);
-  });
-}
+/* ══════════════════════════════════
+   DATA — офицеры (5 примеров, остальные добавим)
+   ══════════════════════════════════ */
+const OFFICERS_WIKI = [
+  {
+    id:'jackson', name:'Джексон Хейз', emoji:'⚔️', domain:'land', gen:5, tier:'S',
+    atkBonus:30, defBonus:30,
+    focus:'Атака',
+    skills:[
+      {type:'atk', name:'Пространственный удар', desc:'Урон коэф. 1800. В танковом/вертолётном подразделении повышает интенсивность урона на 15% на 8 сек.'},
+      {type:'spc', name:'...', desc:'Данные уточняются'},
+      {type:'spc', name:'...', desc:'Данные уточняются'},
+      {type:'spc', name:'...', desc:'Данные уточняются'},
+    ],
+    awaken:'Пробуждение — 720 фрагментов',
+    units:['Лёгкий танк','Средний танк','Тяжёлый танк','SH','MB','Вертолёт'],
+    rec:'Лучший атакующий офицер 5 поколения. Комбинируй с навыком снаряжения на усиление урона.',
+    synergy:'Хейз + Артиллерийская поддержка',
+  },
+  {
+    id:'placeholder1', name:'[Офицер 2]', emoji:'🎖️', domain:'land', gen:4, tier:'A',
+    atkBonus:22, defBonus:18,
+    focus:'Защита',
+    skills:[
+      {type:'def', name:'Данные уточняются', desc:'Будет добавлено'},
+      {type:'bal', name:'Данные уточняются', desc:'Будет добавлено'},
+    ],
+    awaken:'Пробуждение — 720 фрагментов',
+    units:['Тяжёлый танк','MB'],
+    rec:'Данные уточняются. Добавь информацию об офицере.',
+    synergy:'—',
+  },
+  {
+    id:'placeholder2', name:'[Авиа-офицер]', emoji:'✈️', domain:'air', gen:4, tier:'A',
+    atkBonus:25, defBonus:15,
+    focus:'Атака',
+    skills:[
+      {type:'atk', name:'Данные уточняются', desc:'Будет добавлено'},
+    ],
+    awaken:'Пробуждение — 720 фрагментов',
+    units:['Истребитель','Бомбардировщик'],
+    rec:'Данные уточняются.',
+    synergy:'—',
+  },
+];
 
-function buildUnits() {
-  const grid=document.getElementById('wc-units');
-  UNIT_WIKI.forEach(u=>{
-    const s=calcUnit(u.id,1,'none','none');
-    const d=document.createElement('div');
-    d.className='wiki-card';
-    d.innerHTML=`
-      <div class="wc-top"><div class="wc-icon">${u.emoji}</div>
-        <div><div class="wc-title">${u.label}</div><div class="wc-sub">Базовая атака: ${fmt(s.atk)} · HP: ${fmt(s.hp)}</div></div>
-      </div>
-      <div class="wc-desc">${u.desc}</div>
-      <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.65rem">
-        <span class="pill pill-tag">Атк ${fmt(s.atk)}</span>
-        <span class="pill pill-tag">Защ ${fmt(s.def)}</span>
-        <span class="pill pill-tag">Скор ${s.mov}</span>
-      </div>`;
-    d.onclick=()=>openUnitDetail(u,s);
+/* ══════════════════════════════════
+   RENDER — юниты
+   ══════════════════════════════════ */
+let activeUnitFilter = 'all';
+let selectedUnitId = null;
+
+function renderUnitGrid(){
+  const grid = document.getElementById('unit-type-grid');
+  grid.innerHTML = '';
+  UNIT_TYPES_WIKI.filter(u => activeUnitFilter === 'all' || u.domain === activeUnitFilter).forEach(u => {
+    const d = document.createElement('div');
+    d.className = 'unit-type-card' + (selectedUnitId === u.id ? ' selected' : '');
+    d.innerHTML = `
+      <div class="utc-icon">${u.icon}</div>
+      <div class="utc-name">${u.name}</div>
+      <div class="utc-class">${u.desc.slice(0,45)}...</div>
+      <div><span class="utc-badge ${u.domain}">${u.domain==='land'?'Наземный':u.domain==='air'?'Воздушный':'Морской'}</span></div>
+      <div style="font-size:.68rem;color:var(--gold);margin-top:.3rem">★ макс ${u.maxStar}</div>`;
+    d.onclick = () => openUnitDetail(u);
     grid.appendChild(d);
   });
 }
 
-function openUnitDetail(u, s) {
-  const s10=calcUnit(u.id,10,'martin','railgun');
-  document.getElementById('wiki-modal-content').innerHTML=`
-    <div style="display:flex;align-items:center;gap:1rem;margin-bottom:1.1rem;padding-bottom:1rem;border-bottom:var(--line)">
-      <div style="font-size:3rem">${u.emoji}</div>
-      <div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.5rem;letter-spacing:2px">${u.label}</div>
-        <div style="font-size:.7rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Боевая единица · Базовые характеристики Ур.1</div>
-      </div>
-    </div>
-    <p style="font-size:.84rem;color:var(--dim);line-height:1.7;margin-bottom:1rem">${u.desc}</p>
-    <div style="font-size:.8rem;margin-bottom:.9rem">
-      <div class="tot-row"><span>Атака (Ур.1)</span><span style="color:var(--gold2);font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.atk)}</span></div>
-      <div class="tot-row"><span>Защита</span><span style="color:#60a8f0;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.def)}</span></div>
-      <div class="tot-row"><span>HP</span><span style="color:#7ec850;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.hp)}</span></div>
-      <div class="tot-row"><span>Скорость</span><span style="color:#d090d0;font-family:'Barlow Condensed',sans-serif;font-weight:700">${s.mov}</span></div>
-      <div class="tot-row"><span>Атака Ур.10 + Мартин + Рейлган</span><span style="color:#ffd040;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s10.atk)}</span></div>
-    </div>
-    <div class="tip-box"><b style="color:var(--gold2)">💡 Совет:</b> ${u.tip}</div>
-    <div style="margin-top:1.1rem"><a href="unit-builder.html" class="btn btn-primary">Открыть в Unit Builder →</a></div>`;
-  openModal('wiki-modal');
+function filterUnits(f, el){
+  activeUnitFilter = f;
+  document.querySelectorAll('#panel-units .ofilter').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  selectedUnitId = null;
+  document.getElementById('unit-detail').classList.remove('open');
+  renderUnitGrid();
 }
 
-function buildOfficers() {
-  const grid=document.getElementById('wc-officers');
-  OFFICERS.filter(o=>o.id!=='none').forEach(o=>{
-    const tier=TIER_ITEMS.find(t=>t.id===o.id);
-    const TIER_COLORS={S:'#ffd040',A:'#80cc60',B:'#60a8f0',C:'#d090d0',D:'#c08080'};
-    const tc=tier?TIER_COLORS[tier.tier]:'var(--muted)';
-    const d=document.createElement('div');
-    d.className='wiki-card';
-    d.innerHTML=`
-      <div class="wc-top">
-        <div class="wc-icon">${tier?.emoji||'🎖'}</div>
-        <div>
-          <div class="wc-title">${o.name}</div>
-          <div class="wc-sub">Тир: <span style="color:${tc};font-weight:700">${tier?.tier||'?'}</span> · ${tier?.role||'Офицер'}</div>
+function openUnitDetail(u){
+  selectedUnitId = u.id;
+  renderUnitGrid();
+  const det = document.getElementById('unit-detail');
+  const tipHtml = u.tips.map(t => `<div class="ud-tip"><div class="ud-tip-dot"></div><span>${t}</span></div>`).join('');
+  const facHtml = u.factions.map(f => `<span class="ud-faction">${f}</span>`).join('');
+  det.innerHTML = `
+    <div class="ud-head">
+      <div class="ud-icon">${u.icon}</div>
+      <div><div class="ud-name">${u.name}</div><div class="ud-class">${u.domain==='land'?'Наземный':u.domain==='air'?'Воздушный':'Морской'} · макс ★${u.maxStar}</div></div>
+      <button onclick="document.getElementById('unit-detail').classList.remove('open');selectedUnitId=null;renderUnitGrid()"
+        style="margin-left:auto;background:none;border:none;color:var(--muted);font-size:1.2rem;cursor:pointer">✕</button>
+    </div>
+    <div class="ud-body">
+      <div>
+        <div class="ud-section-title">Статы (макс. уровень)</div>
+        <div class="ud-stats">
+          <div class="ud-stat-row"><span class="lbl">Огневая мощь</span><span class="val atk">${u.stats.fp}</span></div>
+          <div class="ud-stat-row"><span class="lbl">ОЗ</span><span class="val">${u.stats.hp}</span></div>
+          <div class="ud-stat-row"><span class="lbl">Точность огня</span><span class="val">${u.stats.acc}</span></div>
+          <div class="ud-stat-row"><span class="lbl">Скорость</span><span class="val spd">${u.stats.spd}</span></div>
+          <div class="ud-stat-row"><span class="lbl">Экипаж</span><span class="val">${u.stats.crew}</span></div>
+        </div>
+        <div style="margin-top:.85rem">
+          <div class="ud-section-title">Лагери</div>
+          <div class="ud-factions">${facHtml}</div>
         </div>
       </div>
-      <div class="wc-desc">${tier?.note||''}</div>
-      <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.65rem">
-        <span class="pill pill-tag">Атк +${o.atkB}%</span>
-        <span class="pill pill-tag">Защ +${o.defB}%</span>
-        <span class="pill pill-tag">HP +${o.hpB}%</span>
-      </div>`;
-    grid.appendChild(d);
-  });
-}
-
-function buildMechanics() {
-  const grid=document.getElementById('wc-mechanics');
-  MECHANICS_WIKI.forEach(m=>{
-    const d=document.createElement('div');
-    d.className='wiki-card';
-    d.innerHTML=`
-      <div class="wc-top"><div class="wc-icon">${m.icon}</div>
-        <div><div class="wc-title">${m.title}</div><div class="wc-sub">${m.sub}</div></div>
+      <div>
+        <div class="ud-section-title">Советы по использованию</div>
+        <div class="ud-tips">${tipHtml}</div>
+        <div style="margin-top:.85rem;padding:.75rem;background:rgba(232,255,71,0.04);border:1px solid rgba(232,255,71,0.15);border-radius:8px;font-size:.78rem;color:var(--muted)">${u.desc}</div>
       </div>
-      <div class="wc-desc">${m.desc}</div>
-      <div class="tip-box">💡 ${m.tip}</div>`;
-    grid.appendChild(d);
-  });
+    </div>`;
+  det.classList.add('open');
+  det.scrollIntoView({behavior:'smooth', block:'nearest'});
 }
 
-function buildEquipment() {
-  const grid=document.getElementById('wc-equipment');
-  EQUIPMENT.filter(e=>e.id!=='none').forEach(e=>{
-    const d=document.createElement('div');
-    d.className='wiki-card';
-    d.innerHTML=`
-      <div class="wc-top">
-        <div class="wc-icon">🔧</div>
-        <div><div class="wc-title">${e.name}</div><div class="wc-sub">Снаряжение юнита</div></div>
+/* ══════════════════════════════════
+   RENDER — офицеры
+   ══════════════════════════════════ */
+let activeOfficerFilter = 'all';
+
+const FOCUS_CLASS = {Атака:'atk', Защита:'def', Баланс:'bal', Особый:'spc'};
+const SKILL_LABEL = {atk:'Атака', def:'Защита', bal:'Баланс', spc:'Особый'};
+
+function renderOfficers(){
+  const grid = document.getElementById('officer-grid');
+  grid.innerHTML = '';
+  const list = OFFICERS_WIKI.filter(o => {
+    if(activeOfficerFilter === 'all') return true;
+    if(activeOfficerFilter === 'land') return o.domain === 'land';
+    if(activeOfficerFilter === 'air')  return o.domain === 'air';
+    if(activeOfficerFilter === 'sea')  return o.domain === 'sea';
+    if(activeOfficerFilter === 'gen5') return o.gen === 5;
+    if(activeOfficerFilter === 'gen4') return o.gen === 4;
+    if(activeOfficerFilter === 'S')    return o.tier === 'S';
+    if(activeOfficerFilter === 'A')    return o.tier === 'A';
+    return true;
+  });
+  if(!list.length){
+    grid.innerHTML = '<div class="coming-soon" style="grid-column:1/-1"><div class="coming-soon-icon">🔍</div><div>Нет офицеров по этому фильтру</div></div>';
+    return;
+  }
+  list.forEach(o => {
+    const skillsHtml = o.skills.map(s => `
+      <div class="oskill">
+        <span class="oskill-type obadge ${s.type}">${SKILL_LABEL[s.type]||s.type}</span>
+        <div><div class="oskill-name">${s.name}</div><div class="oskill-desc">${s.desc}</div></div>
+      </div>`).join('');
+    const unitsHtml = o.units.map(u => `<span class="ounit-tag">${u}</span>`).join('');
+    const domainLabel = o.domain === 'land' ? 'Наземный' : o.domain === 'air' ? 'Авиация' : 'Морской';
+    const focusCls = FOCUS_CLASS[o.focus] || 'spc';
+
+    const card = document.createElement('div');
+    card.className = 'ocard';
+    card.dataset.domain = o.domain;
+    card.dataset.gen = o.gen;
+    card.dataset.tier = o.tier;
+    card.innerHTML = `
+      <div class="ocard-head">
+        <div class="ocard-top">
+          <div class="ocard-avatar">${o.emoji}</div>
+          <div>
+            <div class="ocard-name">${o.name}</div>
+            <div class="ocard-meta">${domainLabel}</div>
+          </div>
+          <div class="ocard-tier ${o.tier}">${o.tier}</div>
+        </div>
+        <div class="ocard-badges">
+          <span class="obadge gen">${o.gen} поколение</span>
+          <span class="obadge type">${domainLabel}</span>
+          <span class="obadge ${focusCls}">${o.focus}</span>
+        </div>
       </div>
-      <div style="display:flex;gap:.3rem;flex-wrap:wrap;margin-top:.4rem">
-        ${e.atkB?`<span class="pill ${e.atkB>0?'pill-tag':'pill-hard'}">Атк ${e.atkB>0?'+':''}${e.atkB}%</span>`:''}
-        ${e.defB?`<span class="pill ${e.defB>0?'pill-tag':'pill-hard'}">Защ ${e.defB>0?'+':''}${e.defB}%</span>`:''}
-        ${e.hpB?`<span class="pill pill-tag">HP +${e.hpB}%</span>`:''}
+      <div class="ocard-stats">
+        <div class="ostat"><div class="ostat-lbl">Атака</div><div class="ostat-val atk">+${o.atkBonus}%</div></div>
+        <div class="ostat"><div class="ostat-lbl">Защита</div><div class="ostat-val def">+${o.defBonus}%</div></div>
+      </div>
+      <div class="ocard-skills">${skillsHtml}
+        <div class="oskill-awaken"><span style="font-size:.65rem">✦</span><span class="oskill-awaken-lbl">${o.awaken}</span></div>
+      </div>
+      <div class="ocard-foot">
+        <div class="ud-section-title" style="margin-bottom:4px">Юниты</div>
+        <div class="ocard-units">${unitsHtml}</div>
+        <div class="ud-section-title" style="margin-top:.5rem;margin-bottom:4px">Рекомендация</div>
+        <div class="ocard-rec">${o.rec}</div>
       </div>`;
-    grid.appendChild(d);
+    grid.appendChild(card);
   });
 }
 
-document.addEventListener('DOMContentLoaded',()=>{
-  initShared();
-  buildWikiNav();
-  buildUnits();
-  buildOfficers();
-  buildMechanics();
-  buildEquipment();
+function filterOfficers(f, el){
+  activeOfficerFilter = f;
+  document.querySelectorAll('#officer-filters .ofilter').forEach(e => e.classList.remove('active'));
+  el.classList.add('active');
+  renderOfficers();
+}
+
+/* ══════════════════════════════════
+   SIDEBAR NAV
+   ══════════════════════════════════ */
+document.querySelectorAll('.wiki-nav-item').forEach(item => {
+  item.addEventListener('click', () => {
+    document.querySelectorAll('.wiki-nav-item').forEach(i => i.classList.remove('active'));
+    document.querySelectorAll('.wiki-panel').forEach(p => p.classList.remove('active'));
+    item.classList.add('active');
+    document.getElementById('panel-' + item.dataset.panel).classList.add('active');
+  });
+});
+
+/* ══════════════════════════════════
+   INIT
+   ══════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  if(typeof initShared === 'function') initShared();
+  renderUnitGrid();
+  renderOfficers();
 });
 </script>
 </body>
