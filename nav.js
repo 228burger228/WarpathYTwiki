@@ -10,6 +10,7 @@
     <li><a href="tier-list.html">Тир-лист</a></li>
     <li><a href="wiki.html">Wiki</a></li>
     <li><a href="youtubers.html">YouTubers</a></li>
+    <li><a href="donate-bar.html">🍺 Донатный бар</a></li>
   </ul>
   <div class="nav-right">
     <a href="https://t.me/WarpathHub" target="_blank" class="nav-tg">✈ Telegram</a>
@@ -33,6 +34,7 @@
       <li onclick="location.href='unit-builder.html'">Unit Builder</li>
       <li onclick="location.href='army-builder.html'">Army Builder</li>
       <li onclick="location.href='tier-list.html'">Тир-лист</li>
+      <li onclick="location.href='donate-bar.html'">🍺 Донатный бар</li>
     </ul></div>
     <div class="footer-col"><h4>Контент</h4><ul>
       <li onclick="location.href='wiki.html'">Wiki</li>
