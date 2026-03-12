@@ -4,52 +4,90 @@
 
 /* ── TICKER ──────────────────────────── */
 const TICKER = [
-  'Патч 13.4 — новые юниты Super Heavy и ивент Тихого океана',
-  'Army Builder: сохраняй составы прямо в браузере',
-  'Тир-лист обновлён под патч 13.3 — Мартин поднялся в S',
-  'Wiki: добавлен раздел «Механики пробития» с формулами',
-  'TankCommander — разбор лучших билдов тяжёлых танков 2025',
-  'Unit Builder теперь поддерживает сравнение двух конфигов',
-  'WarpathHub Telegram: 5000+ участников, присоединяйся!',
+  'Патч 13.5 — обзор от ClanGothic уже на канале!',
+  'Дорожная карта 2026 — новые юниты и морской кубок гегемона',
+  'Бургер: тест нового офицера Haymeker — смотри на канале',
+  'е6ака: лучшие F2P сборки на истребитель 2026',
+  'Экспедиции в патче 13.4 — полный разбор от ClanGothic',
+  'WarpathHub Telegram: присоединяйся к сообществу!',
+  'Unit Builder обновлён — сравнивай два конфига юнитов',
 ];
 
 /* ── YOUTUBERS DATA ──────────────────── */
+/* approved: true = официальный партнёр Lilith · false = ожидает одобрения (звёздочка) */
 const YOUTUBERS = [
-  {id:'warpathru',    name:'WarpathRU',      spec:'Общие гайды',   emoji:'🦊',
-   desc:'Первый официальный русскоязычный блогер Warpath. Стартовые гайды, механики, актуальные новости.',
-   subs:'48K', videos:95, guides:32,
-   yt:'https://youtube.com/@warpathru',     tg:'https://t.me/warpathru',
-   donate:'https://t.me/donatebar_bot?start=warpathru'},
-  {id:'tankcommander',name:'TankCommander',  spec:'Бронетехника',  emoji:'⚔️',
-   desc:'Эксперт по наземным операциям. Точные цифры, проверенные билды, анализ формирований танков.',
-   subs:'35K', videos:72, guides:28,
-   yt:'https://youtube.com/@tankcommander', tg:'https://t.me/tankcommander',
-   donate:'https://t.me/donatebar_bot?start=tankcommander'},
-  {id:'aceflyer',     name:'AceFlyer',       spec:'Авиация',       emoji:'✈️',
-   desc:'Всё об авиации: бомбардировщики, истребители, синергии с наземными юнитами после патча 13.3.',
-   subs:'29K', videos:58, guides:21,
-   yt:'https://youtube.com/@aceflyer',      tg:'https://t.me/aceflyer',
-   donate:'https://t.me/donatebar_bot?start=aceflyer'},
-  {id:'offcoach',     name:'OffCoach',        spec:'Офицеры',      emoji:'🎖️',
-   desc:'Глубокий анализ каждого офицера. Сравнения, синергии, тир-листы после каждого патча.',
-   subs:'22K', videos:44, guides:19,
-   yt:'https://youtube.com/@offcoach',      tg:'https://t.me/offcoach',
-   donate:'https://t.me/donatebar_bot?start=offcoach'},
-  {id:'pvpmaster',    name:'PvPMaster',      spec:'PvP тактика',   emoji:'💥',
-   desc:'Топ-1 сервера. Тактики PvP, разборы боёв, учит выигрывать даже при слабости.',
-   subs:'41K', videos:89, guides:17,
-   yt:'https://youtube.com/@pvpmaster',     tg:'https://t.me/pvpmaster',
-   donate:'https://t.me/donatebar_bot?start=pvpmaster'},
-  {id:'navywolf',     name:'NavyWolf',       spec:'Флот',          emoji:'⚓',
-   desc:'Единственный русскоязычный специалист по флоту. Морские операции, корабли, стратегия.',
-   subs:'14K', videos:31, guides:12,
-   yt:'https://youtube.com/@navywolf',      tg:'https://t.me/navywolf',
-   donate:'https://t.me/donatebar_bot?start=navywolf'},
-  {id:'ecoking',      name:'EcoKing',        spec:'Экономика',     emoji:'⛏️',
-   desc:'Ресурсный менеджмент, экономика альянса, пассивный доход. Оптимизация без платежей.',
-   subs:'18K', videos:39, guides:15,
-   yt:'https://youtube.com/@ecoking',       tg:'https://t.me/ecoking',
-   donate:'https://t.me/donatebar_bot?start=ecoking'},
+  {
+    id: 'burger',
+    name: 'Бургер',
+    spec: 'Гайды и нарезки',
+    emoji: '🍔',
+    approved: false,
+    quote: 'Показываю игру такой, какая она есть',
+    tags: ['Гайды', 'Нарезки боёв', 'Другие игры', 'О жизни'],
+    desc: 'Честный взгляд на Warpath без прикрас. Нарезки эпичных боёв, разборы механик и немного жизни за кадром.',
+    subs: '352', videos: 95, guides: 12,
+    yt: 'https://www.youtube.com/@burgerdom6/videos',
+    tg: 'https://t.me/WarpathHub',
+    donate: 'https://t.me/donatebar_bot?start=burger',
+    latestVideos: [
+      { title: 'Epic1 battle от лица r4 ч1 — Warpath 13.4', url: 'https://youtu.be/Xy1UkZrxkrY?si=A943_6GeXwMOc591' },
+      { title: 'Обзор аккаунта лидера .MU. Эпик II — итог трат', url: 'https://youtu.be/sJJxi8jqE1A?si=d7XrNMt-PKBo0MnA' },
+    ],
+  },
+  {
+    id: 'ebaka',
+    name: 'е6ака',
+    spec: 'Тесты и сборки',
+    emoji: '🔥',
+    approved: false,
+    quote: 'Надо удалить игру... надо удалить...',
+    tags: ['F2P сборки', 'Тесты механик', 'Авиация', 'Обзоры патчей'],
+    desc: 'Сервер 56. Тестирует всё подряд — от новых офицеров до сборок на истребитель. Много реальных цифр и честных выводов.',
+    subs: '673', videos: 71, guides: 18,
+    yt: 'https://www.youtube.com/@e6aka56',
+    tg: 'https://t.me/WarpathHub',
+    donate: 'https://t.me/donatebar_bot?start=ebaka',
+    latestVideos: [
+      { title: 'День рождения Warpath — раздача скинов и подарков', url: 'https://www.youtube.com/@e6aka56' },
+      { title: 'Лучшие F2P сборки на истребитель 2026', url: 'https://www.youtube.com/@e6aka56' },
+    ],
+  },
+  {
+    id: 'ehson',
+    name: 'Ehson',
+    spec: 'Аналитика и детали',
+    emoji: '🎯',
+    approved: false,
+    quote: 'Warpath глазами игрока, который любит разбираться в деталях',
+    tags: ['Тактика', 'F2P методы', 'Сборки для сноса баз', 'Новичкам'],
+    desc: 'Молодой канал с глубоким подходом. Разбирает стратегию и детали — от выбора МБТ до лучших F2P методов фарма золота.',
+    subs: '85', videos: 6, guides: 5,
+    yt: 'https://www.youtube.com/@ItsEhson',
+    tg: 'https://t.me/WarpathHub',
+    donate: 'https://t.me/donatebar_bot?start=ehson',
+    latestVideos: [
+      { title: 'Какой МБТ самый лучший? | Warpath: Ace Shooter', url: 'https://www.youtube.com/@ItsEhson' },
+      { title: 'Лучшая F2P сборка для сноса баз!', url: 'https://www.youtube.com/@ItsEhson' },
+    ],
+  },
+  {
+    id: 'clangothic',
+    name: 'ClanGothic',
+    spec: 'Гайды и обзоры патчей',
+    emoji: '🏰',
+    approved: true,
+    quote: 'Клан Gothic — 15 лет в игре, и мы всё ещё здесь',
+    tags: ['Обзоры патчей', 'Офицеры', 'Стратегия', 'Экспедиции'],
+    desc: 'Официальный партнёр Lilith Games. Крупнейший русскоязычный Warpath-канал. Сократ разбирает каждый патч, офицеров и глобальную стратегию.',
+    subs: '27.5K', videos: 890, guides: 120,
+    yt: 'https://www.youtube.com/@ClanGothic',
+    tg: 'https://t.me/WarpathHub',
+    donate: 'https://t.me/donatebar_bot?start=clangothic',
+    latestVideos: [
+      { title: 'Обзор патча 13.5 — наконец-то это добавляют в игру', url: 'https://www.youtube.com/@ClanGothic' },
+      { title: 'Фулл офицеры или нет — ошибки. Часть 16', url: 'https://www.youtube.com/@ClanGothic' },
+    ],
+  },
 ];
 
 /* ── UNIT TYPES ──────────────────────── */
@@ -123,7 +161,7 @@ const UNIT_WIKI = [
 ];
 
 const MECHANICS_WIKI = [
-  {icon:'⚔️', title:'Система урона',      sub:'Основы',    desc:'Урон зависит от типа юнита, офицера, исследований и типа цели. Каждый тип имеет преимущества и уязвимости против других типов.',          tip:'Каменьножницы-бумага: танки бьют пехоту, пехота уязвима к артиллерии, артиллерия беззащитна без охраны.'},
+  {icon:'⚔️', title:'Система урона',      sub:'Основы',    desc:'Урон зависит от типа юнита, офицера, исследований и типа цели. Каждый тип имеет преимущества и уязвимости против других типов.',          tip:'Камень-ножницы-бумага: танки бьют пехоту, пехота уязвима к артиллерии, артиллерия беззащитна без охраны.'},
   {icon:'🛡️', title:'Броня и пробитие',   sub:'Механика',  desc:'Броня уменьшает входящий урон в процентах. Пробитие снижает эффективную броню цели. Превышение пробития даёт бонусный урон.',              tip:'Если пробитие 60% > броня 40% → 20% сверх = +12% бонусного урона к финальному пулу.'},
   {icon:'⚡', title:'Очки силы (Power)',   sub:'Основы',    desc:'Power — общий показатель развития. Высокий Power ≠ сильный игрок. Можно иметь 50М силы и проигрывать игроку с 20М при правильной прокачке.',   tip:'Фокусируйся на правильных исследованиях, а не на простом наборе очков силы.'},
   {icon:'🏹', title:'Формирования',        sub:'Тактика',   desc:'Порядок юнитов в отряде влияет на бой. Передние ряды принимают удар, задние — наносят урон издали.',                                         tip:'Тяжёлые танки — вперёд. Артиллерия и пехота — назад. Никогда не ставь артиллерию в первый ряд.'},
@@ -181,7 +219,7 @@ function buildYtStrip(id) {
   [...YOUTUBERS,...YOUTUBERS].forEach(y => {
     const a = document.createElement('a');
     a.className = 'yt-card'; a.href = y.yt; a.target = '_blank';
-    a.innerHTML = `<div class="yt-avatar">${y.emoji}</div><div><div class="yt-name">${y.name}</div><div class="yt-subs">${y.subs} подписчиков</div><div class="yt-red">▶ YouTube</div></div>`;
+    a.innerHTML = `<div class="yt-avatar">${y.emoji}</div><div><div class="yt-name">${y.name}${y.approved?'':' ✦'}</div><div class="yt-subs">${y.subs} подписчиков</div><div class="yt-red">▶ YouTube</div></div>`;
     el.appendChild(a);
   });
 }
@@ -205,7 +243,6 @@ function initFadeUp() {
   document.querySelectorAll('.fade-up').forEach(el => obs.observe(el));
 }
 
-// Called by each page on DOMContentLoaded
 function initShared() {
   buildTicker();
   setActiveNav();
