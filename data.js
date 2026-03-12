@@ -88,6 +88,24 @@ const YOUTUBERS = [
       { title: 'Фулл офицеры или нет — ошибки. Часть 16', url: 'https://www.youtube.com/@ClanGothic' },
     ],
   },
+  {
+    id: 'vnwarpath',
+    name: 'VN Warpath',
+    spec: 'Мета и офицеры · EN',
+    emoji: '🇻🇳',
+    approved: false,
+    quote: "Don't play Warpath without watching this first",
+    tags: ['Мета-анализ', 'Офицеры', 'Экономика', 'F2P vs P2W', 'English'],
+    desc: 'Вьетнамский автор с англоязычным контентом.',
+    subs: '2.59K', videos: 88, guides: 40,
+    yt: 'https://www.youtube.com/@VNwarpath1',
+    tg: 'https://t.me/WarpathHub',
+    donate: 'https://ko-fi.com/vnwarpath',
+    latestVideos: [
+      { title: '70% of Warpath Players Are Using the WRONG META', url: 'https://www.youtube.com/@VNwarpath1' },
+      { title: 'MUST WATCH To Save Money!', url: 'https://www.youtube.com/@VNwarpath1' },
+    ],
+  },
 ];
 
 /* ── UNIT TYPES ──────────────────────── */
