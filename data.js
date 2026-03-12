@@ -266,4 +266,5 @@ function initShared() {
   setActiveNav();
   initFadeUp();
   initModals();
+  if (typeof applyLang === 'function') applyLang();
 }
