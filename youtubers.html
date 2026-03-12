@@ -1,101 +1,171 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-<title>YouTubers — Warpath Guide</title>
-<link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Блогеры — Warpath Guide</title>
+  <link rel="stylesheet" href="style.css">
+  <style>
+    .yt-page { max-width: 1100px; margin: 0 auto; padding: 2rem 1rem 4rem; }
+    .yt-page-title { font-family: 'Bebas Neue', sans-serif; font-size: 2.4rem; color: var(--gold); letter-spacing: 2px; margin-bottom: 0.25rem; }
+    .yt-page-sub { color: var(--muted); font-size: 0.95rem; margin-bottom: 2rem; }
+
+    .legend { display: flex; gap: 1.5rem; margin-bottom: 2rem; flex-wrap: wrap; }
+    .legend-item { display: flex; align-items: center; gap: 0.5rem; font-size: 0.82rem; color: var(--muted); }
+    .badge-official { background: var(--gold); color: #000; font-size: 0.7rem; font-weight: 700; padding: 2px 8px; border-radius: 99px; letter-spacing: 0.5px; }
+    .badge-pending  { background: rgba(255,255,255,0.08); color: var(--muted); font-size: 0.7rem; font-weight: 600; padding: 2px 8px; border-radius: 99px; border: 1px solid rgba(255,255,255,0.15); }
+
+    .yt-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1.25rem; }
+
+    .ypc {
+      background: var(--panel);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: border-color 0.2s, transform 0.2s;
+    }
+    .ypc:hover { border-color: var(--gold); transform: translateY(-2px); }
+    .ypc.official { border-color: rgba(232,255,71,0.35); }
+
+    /* Header */
+    .ypc-head { padding: 1rem 1.1rem 0.75rem; border-bottom: 1px solid var(--border); }
+    .ypc-top  { display: flex; align-items: center; gap: 0.75rem; margin-bottom: 0.5rem; }
+    .ypc-avatar {
+      width: 48px; height: 48px; border-radius: 50%;
+      background: rgba(232,255,71,0.1);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px; flex-shrink: 0;
+    }
+    .ypc.official .ypc-avatar { background: rgba(232,255,71,0.18); }
+    .ypc-info { flex: 1; min-width: 0; }
+    .ypc-name { font-weight: 700; font-size: 1rem; color: var(--text); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; display: flex; align-items: center; gap: 0.4rem; }
+    .ypc-spec { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+    .ypc-quote { font-size: 0.78rem; color: var(--orange); font-style: italic; line-height: 1.4; }
+
+    /* Tags */
+    .ypc-tags { padding: 0.6rem 1.1rem; border-bottom: 1px solid var(--border); display: flex; flex-wrap: wrap; gap: 5px; }
+    .ypc-tag { font-size: 0.7rem; padding: 2px 9px; border-radius: 99px; background: rgba(255,255,255,0.06); color: var(--muted); border: 1px solid rgba(255,255,255,0.1); }
+
+    /* Videos */
+    .ypc-videos { padding: 0.6rem 1.1rem; border-bottom: 1px solid var(--border); display: flex; flex-direction: column; gap: 6px; }
+    .ypc-videos-label { font-size: 0.65rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
+    .ypc-video-link {
+      display: flex; align-items: center; gap: 8px;
+      text-decoration: none;
+      padding: 5px 7px;
+      border-radius: 6px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.07);
+      transition: background 0.15s;
+    }
+    .ypc-video-link:hover { background: rgba(232,255,71,0.07); border-color: rgba(232,255,71,0.2); }
+    .ypc-play {
+      width: 30px; height: 20px; border-radius: 3px;
+      background: #c00; flex-shrink: 0;
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ypc-play svg { display: block; }
+    .ypc-video-title { font-size: 0.73rem; color: var(--text); line-height: 1.3; }
+
+    /* Stats + buttons */
+    .ypc-foot { padding: 0.75rem 1.1rem; margin-top: auto; }
+    .ypc-stats { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin-bottom: 0.6rem; }
+    .ypc-stat { text-align: center; padding: 5px 4px; border-radius: 6px; background: rgba(255,255,255,0.04); }
+    .ypc-stat-val { font-size: 0.88rem; font-weight: 700; color: var(--text); }
+    .ypc-stat-lbl { font-size: 0.62rem; color: var(--muted); margin-top: 1px; }
+    .ypc-btns { display: flex; gap: 6px; }
+    .ypc-btn {
+      flex: 1; font-size: 0.7rem; padding: 5px 4px; text-align: center; text-decoration: none;
+      border-radius: 6px; border: 1px solid var(--border);
+      color: var(--muted); background: transparent; cursor: pointer;
+      transition: background 0.15s, color 0.15s, border-color 0.15s;
+      font-family: inherit;
+    }
+    .ypc-btn:hover { background: rgba(232,255,71,0.1); color: var(--gold); border-color: rgba(232,255,71,0.3); }
+    .ypc-btn.yt:hover  { background: rgba(200,0,0,0.15); color: #f55; border-color: rgba(200,0,0,0.4); }
+    .ypc-btn.tg:hover  { background: rgba(41,182,246,0.1); color: #29b6f6; border-color: rgba(41,182,246,0.3); }
+    .ypc-btn.don:hover { background: rgba(232,255,71,0.12); color: var(--gold); border-color: rgba(232,255,71,0.35); }
+
+    .star-note { font-size: 0.8rem; color: var(--muted); margin-top: 2rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+    .star-note span { color: var(--orange); }
+  </style>
 </head>
 <body>
-
-<div class="page-header">
-  <div class="wrap">
-    <div class="tag">▶ Контент-креаторы</div>
-    <div class="title">YouTubers</div>
-    <p class="sub">Официальные русскоязычные блогеры Warpath. Поддержи любимого блогера донатом через нашего бота.</p>
-  </div>
-</div>
-
-<section class="section" style="background:var(--bg)">
-  <div class="wrap">
-
-    <!-- Filters -->
-    <div class="tier-filters fade-up" id="yt-filters"></div>
-
-    <!-- Grid -->
-    <div class="yt-page-grid fade-up" id="yt-grid"></div>
-
-    <!-- Community CTA -->
-    <div class="fade-up" style="margin-top:3rem">
-      <div style="background:var(--panel);border:var(--line);padding:2rem;text-align:center;position:relative;overflow:hidden">
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse 80% 80% at 50% 50%,rgba(41,182,246,.04),transparent);pointer-events:none"></div>
-        <div class="tag">💬 Сообщество</div>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:clamp(1.4rem,2.5vw,2rem);letter-spacing:2px;margin:.4rem 0 .8rem">Стань частью WarpathHub</div>
-        <p style="color:var(--dim);font-size:.88rem;max-width:460px;margin:0 auto 1.4rem;line-height:1.7">Объединяй знания с лучшими игроками России. Обсуждения, события, турниры — всё в одном Telegram-чате.</p>
-        <a href="https://t.me/WarpathHub" target="_blank" class="btn-tg" style="display:inline-flex">✈ Вступить в WarpathHub</a>
-      </div>
-    </div>
-  </div>
-</section>
-
 <script src="nav.js"></script>
+
+<main class="yt-page fade-up">
+  <div class="yt-page-title">Блогеры сообщества</div>
+  <div class="yt-page-sub">Русскоязычные авторы, которые делают контент по Warpath: Ace Shooter</div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="badge-official">✓ Партнёр</span> — официальный партнёр Lilith Games</div>
+    <div class="legend-item"><span class="badge-pending">✦ Скоро</span> — ожидает подтверждения</div>
+  </div>
+
+  <div class="yt-grid" id="yt-grid"></div>
+
+  <div class="star-note"><span>✦</span> — блогер ещё не получил официальный статус партнёра, но уже является частью нашего сообщества.</div>
+</main>
+
 <script src="data.js"></script>
 <script>
-const SPECS = ['Все',...new Set(YOUTUBERS.map(y=>y.spec))];
-let activeSpec = 'Все';
+document.addEventListener('DOMContentLoaded', () => {
+  initShared();
 
-function buildFilters() {
-  const wrap=document.getElementById('yt-filters');
-  SPECS.forEach(s=>{
-    const b=document.createElement('button');
-    b.className='tf-btn'+(s===activeSpec?' active':'');
-    b.textContent=s;
-    b.onclick=()=>{
-      activeSpec=s;
-      document.querySelectorAll('#yt-filters .tf-btn').forEach(x=>x.classList.remove('active'));
-      b.classList.add('active');
-      buildGrid();
-    };
-    wrap.appendChild(b);
-  });
-}
+  const grid = document.getElementById('yt-grid');
 
-function buildGrid() {
-  const grid=document.getElementById('yt-grid');
-  grid.innerHTML='';
-  const list = activeSpec==='Все' ? YOUTUBERS : YOUTUBERS.filter(y=>y.spec===activeSpec);
-  list.forEach(y=>{
-    const d=document.createElement('div');
-    d.className='yt-page-card';
-    d.innerHTML=`
-      <div class="ypc-top">
-        <div class="ypc-avatar">${y.emoji}</div>
-        <div>
-          <div class="ypc-name">${y.name}</div>
-          <div class="ypc-spec">${y.spec}</div>
-          <div class="ypc-ver">● Официальный блогер</div>
+  YOUTUBERS.forEach(y => {
+    const card = document.createElement('div');
+    card.className = 'ypc fade-up' + (y.approved ? ' official' : '');
+
+    const badge = y.approved
+      ? `<span class="badge-official">✓ Партнёр</span>`
+      : `<span class="badge-pending">✦ Скоро</span>`;
+
+    const tags = (y.tags || []).map(t =>
+      `<span class="ypc-tag">${t}</span>`
+    ).join('');
+
+    const videos = (y.latestVideos || []).map(v =>
+      `<a class="ypc-video-link" href="${v.url}" target="_blank" rel="noopener">
+        <div class="ypc-play"><svg width="10" height="10" viewBox="0 0 10 10"><polygon points="2.5,1.5 8.5,5 2.5,8.5" fill="white"/></svg></div>
+        <span class="ypc-video-title">${v.title}</span>
+      </a>`
+    ).join('');
+
+    card.innerHTML = `
+      <div class="ypc-head">
+        <div class="ypc-top">
+          <div class="ypc-avatar">${y.emoji}</div>
+          <div class="ypc-info">
+            <div class="ypc-name">${y.name} ${badge}</div>
+            <div class="ypc-spec">${y.spec}</div>
+          </div>
+        </div>
+        <div class="ypc-quote">"${y.quote}"</div>
+      </div>
+      <div class="ypc-tags">${tags}</div>
+      <div class="ypc-videos">
+        <div class="ypc-videos-label">Последние видео</div>
+        ${videos}
+      </div>
+      <div class="ypc-foot">
+        <div class="ypc-stats">
+          <div class="ypc-stat"><div class="ypc-stat-val">${y.subs}</div><div class="ypc-stat-lbl">подписчиков</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">${y.videos}</div><div class="ypc-stat-lbl">видео</div></div>
+          <div class="ypc-stat"><div class="ypc-stat-val">${y.guides}</div><div class="ypc-stat-lbl">гайдов</div></div>
+        </div>
+        <div class="ypc-btns">
+          <a class="ypc-btn yt"  href="${y.yt}"     target="_blank" rel="noopener">▶ YouTube</a>
+          <a class="ypc-btn tg"  href="${y.tg}"     target="_blank" rel="noopener">✈ Telegram</a>
+          <a class="ypc-btn don" href="${y.donate}" target="_blank" rel="noopener">★ Донат</a>
         </div>
       </div>
-      <div class="ypc-body">
-        <div class="ypc-desc">${y.desc}</div>
-        <div class="ypc-stats">
-          <div class="ypc-stat"><div class="ypc-stat-n">${y.subs}</div><div class="ypc-stat-l">Подписч.</div></div>
-          <div class="ypc-stat"><div class="ypc-stat-n">${y.videos}</div><div class="ypc-stat-l">Видео</div></div>
-          <div class="ypc-stat"><div class="ypc-stat-n">${y.guides}</div><div class="ypc-stat-l">Гайдов</div></div>
-        </div>
-        <div class="ypc-links">
-          <a href="${y.yt}" target="_blank" class="ypc-lnk lnk-yt">▶ YouTube</a>
-          <a href="${y.tg}" target="_blank" class="ypc-lnk lnk-tg">✈ Telegram</a>
-          <a href="${y.donate}" target="_blank" class="ypc-lnk lnk-don">⭐ Донат</a>
-        </div>
-      </div>`;
-    grid.appendChild(d);
+    `;
+    grid.appendChild(card);
   });
-}
-
-document.addEventListener('DOMContentLoaded',()=>{
-  initShared();
-  buildFilters();
-  buildGrid();
 });
 </script>
 </body>
