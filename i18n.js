@@ -13,6 +13,8 @@ const TRANSLATIONS = {
     'nav.wiki':        'Wiki',
     'nav.youtubers':   'YouTubers',
     'nav.donate-bar':  '🍺 Донатный бар',
+    'nav.daily':       '📅 Daily',
+    'nav.leaderboard': '🏆 Лидерборд',
     'nav.telegram':    '✈ Telegram',
 
     'footer.tools':    'Инструменты',
@@ -96,6 +98,31 @@ const TRANSLATIONS = {
     'db.tier2-sub':    '15–51 бокал (15 + 5)',
     'db.tier3-lbl':    'напитков',
     'db.tier3-sub':    '52+ бокала (65 + 5)',
+
+    /* Daily */
+    'daily.today':     'СЕГОДНЯ',
+    'daily.calc':      '🧮 Калькулятор очков',
+    'daily.tasks':     '📋 Задания и очки',
+    'daily.personal':  '🏆 Личные награды',
+    'daily.city':      '🏙 Городские награды',
+    'daily.enter':     'Введи значения выше',
+    'daily.total':     'Итого очков',
+    'daily.reached':   'Достигнут',
+    'daily.need':      'нужно',
+
+    /* Leaderboard */
+    'lb.players':      '⚔️ Игроки',
+    'lb.clans':        '🛡️ Кланы / Альянсы',
+    'lb.server':       '🌍 Статистика сервера',
+    'lb.io':           '📥 Импорт / Экспорт',
+    'lb.add-player':   '+ Добавить игрока',
+    'lb.add-clan':     '+ Добавить клан',
+    'lb.search-p':     '🔍 Поиск по нику или клану...',
+    'lb.search-c':     '🔍 Поиск по клану...',
+    'lb.all-servers':  'Все серверы',
+    'lb.all-clans':    'Все кланы',
+    'lb.save':         'Сохранить',
+    'lb.cancel':       'Отмена',
   },
 
   en: {
@@ -106,6 +133,8 @@ const TRANSLATIONS = {
     'nav.wiki':        'Wiki',
     'nav.youtubers':   'YouTubers',
     'nav.donate-bar':  '🍺 Donate Bar',
+    'nav.daily':       '📅 Daily',
+    'nav.leaderboard': '🏆 Leaderboard',
     'nav.telegram':    '✈ Telegram',
 
     'footer.tools':    'Tools',
@@ -189,9 +218,32 @@ const TRANSLATIONS = {
     'db.tier2-sub':    '15–51 glasses (15 + 5)',
     'db.tier3-lbl':    'drinks',
     'db.tier3-sub':    '52+ glasses (65 + 5)',
-  },
 
-  vi: {
+    /* Daily */
+    'daily.today':     'TODAY',
+    'daily.calc':      '🧮 Score Calculator',
+    'daily.tasks':     '📋 Tasks & Points',
+    'daily.personal':  '🏆 Personal Rewards',
+    'daily.city':      '🏙 City Rewards',
+    'daily.enter':     'Enter values above',
+    'daily.total':     'Total points',
+    'daily.reached':   'Reached',
+    'daily.need':      'need',
+
+    /* Leaderboard */
+    'lb.players':      '⚔️ Players',
+    'lb.clans':        '🛡️ Clans / Alliances',
+    'lb.server':       '🌍 Server Stats',
+    'lb.io':           '📥 Import / Export',
+    'lb.add-player':   '+ Add player',
+    'lb.add-clan':     '+ Add clan',
+    'lb.search-p':     '🔍 Search by name or clan...',
+    'lb.search-c':     '🔍 Search by clan...',
+    'lb.all-servers':  'All servers',
+    'lb.all-clans':    'All clans',
+    'lb.save':         'Save',
+    'lb.cancel':       'Cancel',
+  },
     'nav.home':        'Trang chủ',
     'nav.unit-builder':'Unit Builder',
     'nav.army-builder':'Army Builder',
@@ -200,7 +252,9 @@ const TRANSLATIONS = {
     'nav.youtubers':   'YouTubers',
     'nav.donate-bar':  '🍺 Donate Bar',
     'nav.telegram':    '✈ Telegram',
-
+    'nav.donate-bar':  '🍺 Donate Bar',
+    'nav.daily':       '📅 Daily',
+    'nav.leaderboard': '🏆 Bảng xếp hạng',
     'footer.tools':    'Công cụ',
     'footer.content':  'Nội dung',
     'footer.community':'Cộng đồng',
@@ -282,6 +336,31 @@ const TRANSLATIONS = {
     'db.tier2-sub':    '15–51 ly (15 + 5)',
     'db.tier3-lbl':    'đồ uống',
     'db.tier3-sub':    '52+ ly (65 + 5)',
+
+    /* Daily */
+    'daily.today':     'HÔM NAY',
+    'daily.calc':      '🧮 Máy tính điểm',
+    'daily.tasks':     '📋 Nhiệm vụ & Điểm',
+    'daily.personal':  '🏆 Phần thưởng cá nhân',
+    'daily.city':      '🏙 Phần thưởng thành phố',
+    'daily.enter':     'Nhập giá trị ở trên',
+    'daily.total':     'Tổng điểm',
+    'daily.reached':   'Đạt được',
+    'daily.need':      'cần',
+
+    /* Leaderboard */
+    'lb.players':      '⚔️ Người chơi',
+    'lb.clans':        '🛡️ Clan / Liên minh',
+    'lb.server':       '🌍 Thống kê server',
+    'lb.io':           '📥 Nhập / Xuất',
+    'lb.add-player':   '+ Thêm người chơi',
+    'lb.add-clan':     '+ Thêm clan',
+    'lb.search-p':     '🔍 Tìm theo tên hoặc clan...',
+    'lb.search-c':     '🔍 Tìm theo clan...',
+    'lb.all-servers':  'Tất cả server',
+    'lb.all-clans':    'Tất cả clan',
+    'lb.save':         'Lưu',
+    'lb.cancel':       'Hủy',
   },
 };
 
