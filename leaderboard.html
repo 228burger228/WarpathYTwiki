@@ -1,0 +1,898 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Лидерборд — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<style>
+/* ══════════════════════════════════════════
+   LAYOUT
+══════════════════════════════════════════ */
+.lb-page { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem 6rem; }
+
+/* ══════════════════════════════════════════
+   TABS
+══════════════════════════════════════════ */
+.lb-tabs {
+  display: flex; gap: .4rem; margin-bottom: 1.5rem;
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 10px; padding: .4rem; flex-wrap: wrap;
+}
+.lb-tab {
+  padding: .55rem 1.2rem; border-radius: 7px; cursor: pointer;
+  font-family: 'Bebas Neue', sans-serif; font-size: .95rem; letter-spacing: 1.5px;
+  color: var(--muted); border: 1px solid transparent; transition: all .18s; white-space: nowrap;
+}
+.lb-tab:hover { color: var(--gold); background: rgba(200,150,28,.06); }
+.lb-tab.active { color: var(--gold2); background: rgba(200,150,28,.12); border-color: rgba(200,150,28,.3); }
+
+/* ══════════════════════════════════════════
+   TOOLBAR
+══════════════════════════════════════════ */
+.lb-toolbar {
+  display: flex; gap: .6rem; margin-bottom: 1.2rem; flex-wrap: wrap; align-items: center;
+}
+.lb-search {
+  flex: 1; min-width: 200px;
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--text); font-family: inherit; font-size: .85rem;
+  padding: .55rem 1rem; border-radius: 8px; outline: none;
+  transition: border-color .18s;
+}
+.lb-search:focus { border-color: var(--gold); }
+.lb-search::placeholder { color: var(--muted); }
+.lb-filter {
+  background: var(--panel); border: 1px solid var(--border);
+  color: var(--text); font-family: inherit; font-size: .82rem;
+  padding: .55rem .9rem; border-radius: 8px; outline: none; cursor: pointer;
+}
+.lb-filter option { background: #1a1a1a; }
+.btn-sm {
+  padding: .52rem 1rem; border-radius: 8px; cursor: pointer; font-family: inherit;
+  font-size: .8rem; letter-spacing: .5px; border: 1px solid var(--border);
+  background: var(--panel); color: var(--muted); transition: all .18s; white-space: nowrap;
+}
+.btn-sm:hover { color: var(--gold); border-color: var(--gold); }
+.btn-primary {
+  background: rgba(200,150,28,.12); color: var(--gold2);
+  border-color: rgba(200,150,28,.35);
+}
+.btn-primary:hover { background: rgba(200,150,28,.22); }
+
+/* ══════════════════════════════════════════
+   STATS STRIP
+══════════════════════════════════════════ */
+.lb-stats {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: .8rem;
+  margin-bottom: 1.5rem;
+}
+@media(max-width:700px){ .lb-stats { grid-template-columns: repeat(2,1fr); } }
+.stat-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  padding: .9rem 1.1rem;
+}
+.stat-card-val {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.7rem; letter-spacing: 1.5px; color: var(--gold2); line-height: 1;
+}
+.stat-card-lbl { font-size: .65rem; color: var(--muted); text-transform: uppercase; letter-spacing: .8px; margin-top: .25rem; }
+
+/* ══════════════════════════════════════════
+   TABLE
+══════════════════════════════════════════ */
+.lb-table-wrap { overflow-x: auto; }
+.lb-table {
+  width: 100%; border-collapse: collapse; font-size: .83rem;
+}
+.lb-table th {
+  font-family: 'Bebas Neue', sans-serif; font-size: .75rem; letter-spacing: 2px;
+  color: var(--muted); padding: .6rem .9rem; text-align: left;
+  border-bottom: 1px solid var(--border); cursor: pointer; white-space: nowrap;
+  user-select: none; transition: color .15s;
+}
+.lb-table th:hover { color: var(--gold); }
+.lb-table th.sorted { color: var(--gold2); }
+.lb-table th .sort-arrow { margin-left: .3rem; font-size: .65rem; }
+.lb-table td {
+  padding: .65rem .9rem; border-bottom: 1px solid rgba(255,255,255,.04);
+  vertical-align: middle;
+}
+.lb-table tr { transition: background .12s; }
+.lb-table tr:hover td { background: rgba(255,255,255,.025); }
+.lb-table tr.top1 td { background: rgba(255,208,64,.05); }
+.lb-table tr.top2 td { background: rgba(192,192,192,.04); }
+.lb-table tr.top3 td { background: rgba(205,127,50,.04); }
+
+.rank-num {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 1px;
+  width: 40px; text-align: center;
+}
+.rank-num.r1 { color: #ffd040; }
+.rank-num.r2 { color: #c0c0c0; }
+.rank-num.r3 { color: #cd7f32; }
+.rank-num.other { color: var(--muted); }
+
+.player-name { font-weight: 600; color: var(--text); }
+.player-server {
+  font-size: .7rem; color: var(--muted);
+  background: rgba(255,255,255,.05); border: 1px solid var(--border);
+  padding: .1rem .4rem; border-radius: 4px; margin-left: .5rem;
+}
+.clan-tag {
+  font-family: 'Bebas Neue', sans-serif; font-size: .85rem; letter-spacing: 1px;
+  color: var(--gold); background: rgba(200,150,28,.08);
+  border: 1px solid rgba(200,150,28,.2); padding: .1rem .5rem; border-radius: 4px;
+}
+.power-val {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700; color: var(--text);
+}
+.power-change {
+  font-size: .7rem; margin-left: .4rem;
+}
+.power-change.up   { color: #7ec850; }
+.power-change.down { color: #e04848; }
+.power-change.same { color: var(--muted); }
+
+.power-bar-wrap { position: relative; height: 4px; background: rgba(255,255,255,.07); border-radius: 2px; width: 100px; }
+.power-bar { height: 100%; border-radius: 2px; background: linear-gradient(90deg, var(--gold), var(--gold2)); transition: width .4s; }
+
+.row-actions { display: flex; gap: .4rem; }
+.row-btn {
+  padding: .2rem .55rem; font-size: .7rem; border-radius: 5px; cursor: pointer;
+  border: 1px solid var(--border); background: transparent; color: var(--muted);
+  transition: all .15s; font-family: inherit;
+}
+.row-btn:hover { color: var(--gold); border-color: var(--gold); }
+.row-btn.danger:hover { color: #e04848; border-color: #e04848; }
+
+/* ══════════════════════════════════════════
+   EMPTY STATE
+══════════════════════════════════════════ */
+.lb-empty {
+  text-align: center; padding: 4rem 2rem; color: var(--muted);
+}
+.lb-empty-icon { font-size: 3.5rem; margin-bottom: 1rem; opacity: .4; }
+.lb-empty h3 { font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; font-size: 1.3rem; margin-bottom: .5rem; }
+.lb-empty p { font-size: .82rem; }
+
+/* ══════════════════════════════════════════
+   MODAL
+══════════════════════════════════════════ */
+.modal-overlay {
+  position: fixed; inset: 0; background: rgba(0,0,0,.75); z-index: 1000;
+  display: flex; align-items: center; justify-content: center; padding: 1rem;
+  opacity: 0; pointer-events: none; transition: opacity .2s;
+}
+.modal-overlay.open { opacity: 1; pointer-events: all; }
+.modal {
+  background: #1c1c1c; border: 1px solid var(--border); border-radius: 14px;
+  padding: 2rem; width: 100%; max-width: 500px; max-height: 90vh; overflow-y: auto;
+  transform: translateY(20px); transition: transform .2s;
+}
+.modal-overlay.open .modal { transform: translateY(0); }
+.modal-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: 1.5rem; letter-spacing: 2px;
+  color: var(--gold2); margin-bottom: 1.5rem;
+}
+.modal-field { margin-bottom: 1rem; }
+.modal-label { font-size: .72rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-bottom: .4rem; display: block; }
+.modal-input {
+  width: 100%; box-sizing: border-box;
+  background: rgba(255,255,255,.05); border: 1px solid var(--border);
+  color: var(--text); font-family: inherit; font-size: .88rem;
+  padding: .6rem .9rem; border-radius: 8px; outline: none; transition: border-color .15s;
+}
+.modal-input:focus { border-color: var(--gold); }
+.modal-row { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+.modal-actions { display: flex; gap: .7rem; margin-top: 1.5rem; justify-content: flex-end; }
+.btn-cancel { padding: .6rem 1.4rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: .85rem; border: 1px solid var(--border); background: transparent; color: var(--muted); transition: all .15s; }
+.btn-cancel:hover { color: var(--text); }
+.btn-save {
+  padding: .6rem 1.6rem; border-radius: 8px; cursor: pointer; font-family: inherit; font-size: .85rem;
+  background: rgba(200,150,28,.15); border: 1px solid rgba(200,150,28,.4); color: var(--gold2); transition: all .15s;
+}
+.btn-save:hover { background: rgba(200,150,28,.25); }
+
+/* ══════════════════════════════════════════
+   HISTORY PANEL
+══════════════════════════════════════════ */
+.history-panel {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+  padding: 1.5rem; margin-bottom: 1.5rem; display: none;
+}
+.history-panel.open { display: block; }
+.history-title {
+  font-family: 'Bebas Neue', sans-serif; letter-spacing: 2px; color: var(--gold2);
+  font-size: 1rem; margin-bottom: 1rem; display: flex; align-items: center; gap: .7rem;
+}
+.history-close { cursor: pointer; color: var(--muted); font-size: .9rem; margin-left: auto; }
+.history-close:hover { color: var(--gold); }
+.chart-wrap { position: relative; height: 220px; }
+
+/* ══════════════════════════════════════════
+   IMPORT/EXPORT
+══════════════════════════════════════════ */
+.io-note { font-size: .72rem; color: var(--muted); margin-top: .3rem; }
+
+/* ══════════════════════════════════════════
+   CLAN VIEW
+══════════════════════════════════════════ */
+.clan-card {
+  background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
+  padding: 1rem 1.2rem; display: flex; align-items: center; gap: 1rem;
+  transition: border-color .15s; cursor: default;
+}
+.clan-card:hover { border-color: rgba(200,150,28,.25); }
+.clan-rank-big {
+  font-family: 'Bebas Neue', sans-serif; font-size: 2rem; color: var(--muted);
+  width: 44px; text-align: center; flex-shrink: 0;
+}
+.clan-rank-big.r1 { color: #ffd040; }
+.clan-rank-big.r2 { color: #c0c0c0; }
+.clan-rank-big.r3 { color: #cd7f32; }
+.clan-info { flex: 1; min-width: 0; }
+.clan-name { font-weight: 700; font-size: 1rem; color: var(--text); }
+.clan-meta { font-size: .72rem; color: var(--muted); margin-top: .2rem; }
+.clan-power-big {
+  font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem; font-weight: 700; color: var(--gold2);
+  text-align: right;
+}
+.clans-grid { display: flex; flex-direction: column; gap: .6rem; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="wrap">
+    <div class="tag">🏆 Рейтинги</div>
+    <div class="title">Лидерборд</div>
+    <p class="sub">Топ игроков и кланов твоего сервера. Добавляй данные вручную, следи за ростом силы.</p>
+  </div>
+</div>
+
+<div class="lb-page">
+
+  <!-- TABS -->
+  <div class="lb-tabs">
+    <div class="lb-tab active" data-tab="players">⚔️ Игроки</div>
+    <div class="lb-tab" data-tab="clans">🛡️ Кланы / Альянсы</div>
+    <div class="lb-tab" data-tab="server">🌍 Статистика сервера</div>
+    <div class="lb-tab" data-tab="io">📥 Импорт / Экспорт</div>
+  </div>
+
+  <!-- ══ TAB: PLAYERS ══ -->
+  <div id="tab-players" class="tab-panel">
+
+    <!-- Stats strip -->
+    <div class="lb-stats">
+      <div class="stat-card">
+        <div class="stat-card-val" id="stat-total">0</div>
+        <div class="stat-card-lbl">Игроков в базе</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-val" id="stat-top-power">—</div>
+        <div class="stat-card-lbl">Сила #1</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-val" id="stat-avg-power">—</div>
+        <div class="stat-card-lbl">Средняя сила</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-card-val" id="stat-clans-count">0</div>
+        <div class="stat-card-lbl">Кланов</div>
+      </div>
+    </div>
+
+    <!-- Toolbar -->
+    <div class="lb-toolbar">
+      <input class="lb-search" id="player-search" placeholder="🔍 Поиск по нику или клану..." oninput="renderPlayers()">
+      <select class="lb-filter" id="filter-server" onchange="renderPlayers()">
+        <option value="">Все серверы</option>
+      </select>
+      <select class="lb-filter" id="filter-clan" onchange="renderPlayers()">
+        <option value="">Все кланы</option>
+      </select>
+      <select class="lb-filter" id="sort-by" onchange="renderPlayers()">
+        <option value="power">По силе ↓</option>
+        <option value="name">По нику A–Z</option>
+        <option value="kills">По убийствам</option>
+        <option value="updated">По дате обновления</option>
+      </select>
+      <button class="btn-sm btn-primary" onclick="openAddModal()">+ Добавить игрока</button>
+    </div>
+
+    <!-- History chart -->
+    <div class="history-panel" id="history-panel">
+      <div class="history-title">
+        <span>📈 История роста силы: <span id="history-name">—</span></span>
+        <span class="history-close" onclick="closeHistory()">✕ закрыть</span>
+      </div>
+      <div class="chart-wrap"><canvas id="history-chart"></canvas></div>
+    </div>
+
+    <!-- Table -->
+    <div class="lb-table-wrap">
+      <table class="lb-table">
+        <thead>
+          <tr>
+            <th style="width:50px">#</th>
+            <th>Игрок</th>
+            <th>Клан</th>
+            <th onclick="setSortBy('power')" id="th-power">СИЛА <span class="sort-arrow">▼</span></th>
+            <th onclick="setSortBy('kills')" id="th-kills">Убийства <span class="sort-arrow"></span></th>
+            <th>Динамика</th>
+            <th style="width:130px">Действия</th>
+          </tr>
+        </thead>
+        <tbody id="players-tbody"></tbody>
+      </table>
+      <div id="players-empty" class="lb-empty" style="display:none">
+        <div class="lb-empty-icon">🪖</div>
+        <h3>Нет данных</h3>
+        <p>Нажми «+ Добавить игрока» чтобы начать заполнять лидерборд</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ TAB: CLANS ══ -->
+  <div id="tab-clans" class="tab-panel" style="display:none">
+    <div class="lb-toolbar">
+      <input class="lb-search" id="clan-search" placeholder="🔍 Поиск по клану..." oninput="renderClans()">
+      <button class="btn-sm btn-primary" onclick="openAddModal('clan')">+ Добавить клан</button>
+    </div>
+    <div class="clans-grid" id="clans-list"></div>
+    <div id="clans-empty" class="lb-empty" style="display:none">
+      <div class="lb-empty-icon">🛡️</div>
+      <h3>Нет кланов</h3>
+      <p>Добавь игроков с тегом клана — они появятся здесь автоматически</p>
+    </div>
+  </div>
+
+  <!-- ══ TAB: SERVER STATS ══ -->
+  <div id="tab-server" class="tab-panel" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;margin-bottom:1.5rem">
+      <div class="history-panel open" style="margin:0">
+        <div class="history-title">📊 Распределение силы по игрокам</div>
+        <div class="chart-wrap"><canvas id="power-dist-chart"></canvas></div>
+      </div>
+      <div class="history-panel open" style="margin:0">
+        <div class="history-title">🛡️ Топ кланов по суммарной силе</div>
+        <div class="chart-wrap"><canvas id="clan-power-chart"></canvas></div>
+      </div>
+    </div>
+    <div class="lb-stats" id="server-stats" style="grid-template-columns:repeat(3,1fr)"></div>
+  </div>
+
+  <!-- ══ TAB: IMPORT/EXPORT ══ -->
+  <div id="tab-io" class="tab-panel" style="display:none">
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:1.2rem;max-width:700px">
+      <div class="history-panel open" style="margin:0">
+        <div class="history-title">📤 Экспорт данных</div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">Скачай JSON со всеми игроками — можно поделиться с модераторами клана</p>
+        <button class="btn-sm btn-primary" onclick="exportData()" style="width:100%">💾 Скачать JSON</button>
+        <button class="btn-sm" onclick="copyShareLink()" style="width:100%;margin-top:.5rem">🔗 Скопировать ссылку</button>
+      </div>
+      <div class="history-panel open" style="margin:0">
+        <div class="history-title">📥 Импорт данных</div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">Загрузи JSON файл. <strong style="color:#e04848">Внимание: перезапишет текущие данные!</strong></p>
+        <input type="file" id="import-file" accept=".json" onchange="importData(this)" style="display:none">
+        <button class="btn-sm" onclick="document.getElementById('import-file').click()" style="width:100%">📂 Выбрать файл JSON</button>
+        <div class="io-note" id="import-status"></div>
+      </div>
+    </div>
+    <div style="margin-top:1.5rem;max-width:700px">
+      <div class="history-panel open" style="margin:0">
+        <div class="history-title">🗑️ Сброс</div>
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:1rem">Удалить все данные лидерборда из браузера</p>
+        <button class="btn-sm" onclick="clearAll()" style="width:100%;color:#e04848;border-color:#e04848">Очистить все данные</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ══ MODAL: ADD / EDIT ══ -->
+<div class="modal-overlay" id="modal-overlay" onclick="closeModal(event)">
+  <div class="modal">
+    <div class="modal-title" id="modal-title">Добавить игрока</div>
+    <input type="hidden" id="edit-id">
+
+    <div class="modal-field">
+      <label class="modal-label">Ник (обязательно)</label>
+      <input class="modal-input" id="f-name" placeholder="Напр. Commander777">
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label class="modal-label">Клан / Альянс</label>
+        <input class="modal-input" id="f-clan" placeholder="GOTH, WRK, ...">
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Сервер</label>
+        <input class="modal-input" id="f-server" placeholder="Напр. S40">
+      </div>
+    </div>
+    <div class="modal-row">
+      <div class="modal-field">
+        <label class="modal-label">Сила (power)</label>
+        <input class="modal-input" id="f-power" type="number" min="0" placeholder="Напр. 52000000">
+      </div>
+      <div class="modal-field">
+        <label class="modal-label">Убийства (kills)</label>
+        <input class="modal-input" id="f-kills" type="number" min="0" placeholder="Напр. 8500000">
+      </div>
+    </div>
+    <div class="modal-field">
+      <label class="modal-label">Заметка (необязательно)</label>
+      <input class="modal-input" id="f-note" placeholder="Напр. «вышел из клана» или «кит»">
+    </div>
+
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Отмена</button>
+      <button class="btn-save" onclick="savePlayer()">Сохранить</button>
+    </div>
+  </div>
+</div>
+
+<script src="i18n.js"></script>
+<script src="nav.js"></script>
+<script src="data.js"></script>
+<script>
+
+/* ═══════════════════════════════════════════
+   STORAGE KEY
+═══════════════════════════════════════════ */
+const STORAGE_KEY = 'wb_leaderboard_v2';
+
+/* ═══════════════════════════════════════════
+   DATA MODEL
+  player: { id, name, clan, server, power, kills, note, history:[{ts,power}], createdAt, updatedAt }
+═══════════════════════════════════════════ */
+let db = { players: [] };
+
+function loadDB() {
+  try {
+    const raw = localStorage.getItem(STORAGE_KEY);
+    if (raw) db = JSON.parse(raw);
+  } catch(e) {}
+  if (!db.players) db.players = [];
+}
+function saveDB() {
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(db));
+}
+function uid() {
+  return Date.now().toString(36) + Math.random().toString(36).slice(2,6);
+}
+
+/* ═══════════════════════════════════════════
+   FORMAT HELPERS
+═══════════════════════════════════════════ */
+function fmtPow(n) {
+  if (!n) return '—';
+  n = +n;
+  if (n >= 1e9) return (n/1e9).toFixed(2) + 'B';
+  if (n >= 1e6) return (n/1e6).toFixed(1) + 'M';
+  if (n >= 1e3) return (n/1e3).toFixed(0) + 'K';
+  return n.toString();
+}
+function fmtDate(ts) {
+  if (!ts) return '';
+  const d = new Date(ts);
+  return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'});
+}
+
+/* ═══════════════════════════════════════════
+   TABS
+═══════════════════════════════════════════ */
+let activeTab = 'players';
+document.querySelectorAll('.lb-tab').forEach(t => {
+  t.addEventListener('click', () => {
+    activeTab = t.dataset.tab;
+    document.querySelectorAll('.lb-tab').forEach(x => x.classList.remove('active'));
+    t.classList.add('active');
+    document.querySelectorAll('.tab-panel').forEach(p => p.style.display = 'none');
+    document.getElementById('tab-' + activeTab).style.display = '';
+    if (activeTab === 'clans')  renderClans();
+    if (activeTab === 'server') renderServerStats();
+  });
+});
+
+/* ═══════════════════════════════════════════
+   RENDER PLAYERS
+═══════════════════════════════════════════ */
+function getFiltered() {
+  const q    = (document.getElementById('player-search')?.value || '').toLowerCase();
+  const srv  = document.getElementById('filter-server')?.value || '';
+  const clan = document.getElementById('filter-clan')?.value || '';
+  const sort = document.getElementById('sort-by')?.value || 'power';
+
+  let list = db.players.filter(p => {
+    if (q    && !p.name.toLowerCase().includes(q) && !(p.clan||'').toLowerCase().includes(q)) return false;
+    if (srv  && p.server !== srv)  return false;
+    if (clan && p.clan   !== clan) return false;
+    return true;
+  });
+
+  list.sort((a,b) => {
+    if (sort === 'power')   return (+b.power||0) - (+a.power||0);
+    if (sort === 'kills')   return (+b.kills||0) - (+a.kills||0);
+    if (sort === 'name')    return (a.name||'').localeCompare(b.name||'');
+    if (sort === 'updated') return (b.updatedAt||0) - (a.updatedAt||0);
+    return 0;
+  });
+  return list;
+}
+
+function powerChange(p) {
+  if (!p.history || p.history.length < 2) return null;
+  const prev = p.history[p.history.length - 2].power;
+  return (+p.power||0) - (+prev||0);
+}
+
+function renderPlayers() {
+  updateFilters();
+  updateStats();
+
+  const list  = getFiltered();
+  const tbody = document.getElementById('players-tbody');
+  const empty = document.getElementById('players-empty');
+  const maxPow = Math.max(...db.players.map(p => +p.power||0), 1);
+
+  if (!list.length) {
+    tbody.innerHTML = '';
+    empty.style.display = '';
+    return;
+  }
+  empty.style.display = 'none';
+
+  tbody.innerHTML = list.map((p, i) => {
+    const rank = i + 1;
+    const rc = rank === 1 ? 'r1' : rank === 2 ? 'r2' : rank === 3 ? 'r3' : 'other';
+    const trClass = rank === 1 ? 'top1' : rank === 2 ? 'top2' : rank === 3 ? 'top3' : '';
+    const ch = powerChange(p);
+    let chHtml = '<span class="power-change same">—</span>';
+    if (ch !== null) {
+      if (ch > 0) chHtml = `<span class="power-change up">▲ +${fmtPow(ch)}</span>`;
+      else if (ch < 0) chHtml = `<span class="power-change down">▼ ${fmtPow(ch)}</span>`;
+    }
+    const barPct = Math.round(((+p.power||0) / maxPow) * 100);
+    return `<tr class="${trClass}">
+      <td><div class="rank-num ${rc}">${rank}</div></td>
+      <td>
+        <span class="player-name">${escHtml(p.name)}</span>
+        ${p.server ? `<span class="player-server">${escHtml(p.server)}</span>` : ''}
+        ${p.note ? `<br><span style="font-size:.68rem;color:var(--muted)">${escHtml(p.note)}</span>` : ''}
+      </td>
+      <td>${p.clan ? `<span class="clan-tag">${escHtml(p.clan)}</span>` : '<span style="color:var(--muted);font-size:.75rem">—</span>'}</td>
+      <td>
+        <div class="power-val">${fmtPow(p.power)}</div>
+        <div class="power-bar-wrap" style="margin-top:4px"><div class="power-bar" style="width:${barPct}%"></div></div>
+      </td>
+      <td><span class="power-val" style="font-size:.88rem">${fmtPow(p.kills)}</span></td>
+      <td>${chHtml}<br><span style="font-size:.65rem;color:var(--muted)">${fmtDate(p.updatedAt)}</span></td>
+      <td>
+        <div class="row-actions">
+          <button class="row-btn" onclick="openHistory('${p.id}')">📈</button>
+          <button class="row-btn" onclick="openEditModal('${p.id}')">✏️</button>
+          <button class="row-btn danger" onclick="deletePlayer('${p.id}')">✕</button>
+        </div>
+      </td>
+    </tr>`;
+  }).join('');
+}
+
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+/* ═══════════════════════════════════════════
+   FILTERS
+═══════════════════════════════════════════ */
+function updateFilters() {
+  const servers = [...new Set(db.players.map(p=>p.server).filter(Boolean))].sort();
+  const clans   = [...new Set(db.players.map(p=>p.clan).filter(Boolean))].sort();
+
+  const sEl = document.getElementById('filter-server');
+  const cEl = document.getElementById('filter-clan');
+  const sv = sEl?.value; const cv = cEl?.value;
+
+  if(sEl){ sEl.innerHTML = '<option value="">Все серверы</option>' + servers.map(s=>`<option value="${s}">${s}</option>`).join(''); sEl.value = sv||''; }
+  if(cEl){ cEl.innerHTML = '<option value="">Все кланы</option>' + clans.map(c=>`<option value="${c}">${c}</option>`).join(''); cEl.value = cv||''; }
+}
+
+/* ═══════════════════════════════════════════
+   STATS STRIP
+═══════════════════════════════════════════ */
+function updateStats() {
+  const ps = db.players;
+  document.getElementById('stat-total').textContent = ps.length;
+  const sorted = [...ps].sort((a,b)=>(+b.power||0)-(+a.power||0));
+  document.getElementById('stat-top-power').textContent = ps.length ? fmtPow(sorted[0].power) : '—';
+  const avg = ps.length ? ps.reduce((s,p)=>s+(+p.power||0),0)/ps.length : 0;
+  document.getElementById('stat-avg-power').textContent = ps.length ? fmtPow(avg) : '—';
+  const clans = new Set(ps.map(p=>p.clan).filter(Boolean));
+  document.getElementById('stat-clans-count').textContent = clans.size;
+}
+
+/* ═══════════════════════════════════════════
+   SORT
+═══════════════════════════════════════════ */
+function setSortBy(val) {
+  document.getElementById('sort-by').value = val;
+  renderPlayers();
+}
+
+/* ═══════════════════════════════════════════
+   CLANS VIEW
+═══════════════════════════════════════════ */
+function renderClans() {
+  const q = (document.getElementById('clan-search')?.value||'').toLowerCase();
+  // aggregate by clan
+  const map = {};
+  db.players.forEach(p => {
+    if (!p.clan) return;
+    if (!map[p.clan]) map[p.clan] = { name: p.clan, totalPower: 0, members: 0, server: p.server };
+    map[p.clan].totalPower += (+p.power||0);
+    map[p.clan].members++;
+  });
+  let clans = Object.values(map).filter(c => !q || c.name.toLowerCase().includes(q));
+  clans.sort((a,b) => b.totalPower - a.totalPower);
+
+  const el = document.getElementById('clans-list');
+  const empty = document.getElementById('clans-empty');
+  if (!clans.length) { el.innerHTML=''; empty.style.display=''; return; }
+  empty.style.display = 'none';
+
+  el.innerHTML = clans.map((c,i)=>{
+    const rank = i+1;
+    const rc = rank===1?'r1':rank===2?'r2':rank===3?'r3':'';
+    return `<div class="clan-card">
+      <div class="clan-rank-big ${rc}">${rank}</div>
+      <div class="clan-info">
+        <div class="clan-name">${escHtml(c.name)}</div>
+        <div class="clan-meta">${c.members} игрок(ов)${c.server?' · '+escHtml(c.server):''}</div>
+      </div>
+      <div class="clan-power-big">${fmtPow(c.totalPower)}<div style="font-size:.65rem;color:var(--muted);font-family:inherit;font-weight:400">суммарная сила</div></div>
+    </div>`;
+  }).join('');
+}
+
+/* ═══════════════════════════════════════════
+   SERVER STATS
+═══════════════════════════════════════════ */
+let distChart = null, clanChart = null;
+
+function renderServerStats() {
+  const ps = db.players;
+  if (!ps.length) return;
+
+  // Power distribution buckets
+  const buckets = { '<10M':0, '10-30M':0, '30-60M':0, '60-100M':0, '>100M':0 };
+  ps.forEach(p => {
+    const pw = +p.power||0;
+    if (pw < 10e6)       buckets['<10M']++;
+    else if (pw < 30e6)  buckets['10-30M']++;
+    else if (pw < 60e6)  buckets['30-60M']++;
+    else if (pw < 100e6) buckets['60-100M']++;
+    else                 buckets['>100M']++;
+  });
+
+  if (distChart) distChart.destroy();
+  const ctx1 = document.getElementById('power-dist-chart').getContext('2d');
+  distChart = new Chart(ctx1, {
+    type: 'bar',
+    data: {
+      labels: Object.keys(buckets),
+      datasets: [{ data: Object.values(buckets), backgroundColor: 'rgba(200,150,28,.5)', borderColor: 'rgba(200,150,28,.8)', borderWidth: 1, borderRadius: 4 }]
+    },
+    options: { responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}}, scales:{ x:{ticks:{color:'#888'}}, y:{ticks:{color:'#888',stepSize:1}} } }
+  });
+
+  // Clan power bar
+  const clanMap = {};
+  ps.forEach(p => { if(p.clan){ if(!clanMap[p.clan]) clanMap[p.clan]=0; clanMap[p.clan]+=(+p.power||0); } });
+  const clanSorted = Object.entries(clanMap).sort((a,b)=>b[1]-a[1]).slice(0,8);
+
+  if (clanChart) clanChart.destroy();
+  const ctx2 = document.getElementById('clan-power-chart').getContext('2d');
+  clanChart = new Chart(ctx2, {
+    type: 'bar',
+    data: {
+      labels: clanSorted.map(c=>c[0]),
+      datasets: [{ data: clanSorted.map(c=>c[1]), backgroundColor: 'rgba(80,160,255,.45)', borderColor: 'rgba(80,160,255,.8)', borderWidth:1, borderRadius:4 }]
+    },
+    options: { indexAxis:'y', responsive:true, maintainAspectRatio:false, plugins:{legend:{display:false}},
+      scales:{ x:{ ticks:{ color:'#888', callback: v=>fmtPow(v) } }, y:{ticks:{color:'#aaa'}} } }
+  });
+
+  // Server summary cards
+  const totalP = ps.reduce((s,p)=>s+(+p.power||0),0);
+  const maxP   = Math.max(...ps.map(p=>+p.power||0));
+  const clans  = new Set(ps.map(p=>p.clan).filter(Boolean));
+  document.getElementById('server-stats').innerHTML = `
+    <div class="stat-card"><div class="stat-card-val">${ps.length}</div><div class="stat-card-lbl">Игроков</div></div>
+    <div class="stat-card"><div class="stat-card-val">${clans.size}</div><div class="stat-card-lbl">Кланов</div></div>
+    <div class="stat-card"><div class="stat-card-val">${fmtPow(totalP)}</div><div class="stat-card-lbl">Суммарная сила</div></div>`;
+}
+
+/* ═══════════════════════════════════════════
+   HISTORY CHART
+═══════════════════════════════════════════ */
+let histChart = null;
+
+function openHistory(id) {
+  const p = db.players.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('history-name').textContent = p.name;
+  const panel = document.getElementById('history-panel');
+  panel.classList.add('open');
+  if (histChart) histChart.destroy();
+  const hist = p.history || [];
+  const labels = hist.map(h => fmtDate(h.ts));
+  const vals   = hist.map(h => h.power);
+  // current entry
+  if (!hist.length || hist[hist.length-1].power !== +p.power) {
+    labels.push('Сейчас'); vals.push(+p.power||0);
+  }
+  const ctx = document.getElementById('history-chart').getContext('2d');
+  histChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+      labels,
+      datasets: [{
+        data: vals, label: 'Сила',
+        borderColor: 'rgba(200,150,28,.9)', backgroundColor: 'rgba(200,150,28,.08)',
+        pointBackgroundColor: '#c8961c', tension: .35, fill: true, borderWidth: 2, pointRadius: 5
+      }]
+    },
+    options: { responsive:true, maintainAspectRatio:false,
+      plugins:{ legend:{ display:false } },
+      scales:{ x:{ticks:{color:'#888'}}, y:{ticks:{color:'#888',callback:v=>fmtPow(v)}} } }
+  });
+  panel.scrollIntoView({behavior:'smooth', block:'nearest'});
+}
+function closeHistory() {
+  document.getElementById('history-panel').classList.remove('open');
+}
+
+/* ═══════════════════════════════════════════
+   ADD / EDIT MODAL
+═══════════════════════════════════════════ */
+function openAddModal() {
+  document.getElementById('modal-title').textContent = '+ Добавить игрока';
+  document.getElementById('edit-id').value = '';
+  ['f-name','f-clan','f-server','f-power','f-kills','f-note'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('modal-overlay').classList.add('open');
+  document.getElementById('f-name').focus();
+}
+function openEditModal(id) {
+  const p = db.players.find(x=>x.id===id);
+  if (!p) return;
+  document.getElementById('modal-title').textContent = '✏️ Изменить: ' + p.name;
+  document.getElementById('edit-id').value = id;
+  document.getElementById('f-name').value   = p.name  || '';
+  document.getElementById('f-clan').value   = p.clan  || '';
+  document.getElementById('f-server').value = p.server|| '';
+  document.getElementById('f-power').value  = p.power || '';
+  document.getElementById('f-kills').value  = p.kills || '';
+  document.getElementById('f-note').value   = p.note  || '';
+  document.getElementById('modal-overlay').classList.add('open');
+}
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modal-overlay').classList.remove('open');
+}
+function savePlayer() {
+  const name = document.getElementById('f-name').value.trim();
+  if (!name) { document.getElementById('f-name').focus(); return; }
+  const id   = document.getElementById('edit-id').value;
+  const now  = Date.now();
+  const pow  = +document.getElementById('f-power').value || 0;
+
+  if (id) {
+    const p = db.players.find(x=>x.id===id);
+    if (p) {
+      // push history snapshot if power changed
+      if (pow && +p.power !== pow) {
+        if (!p.history) p.history = [];
+        p.history.push({ ts: p.updatedAt || now, power: +p.power||0 });
+        if (p.history.length > 30) p.history.shift();
+      }
+      p.name   = name;
+      p.clan   = document.getElementById('f-clan').value.trim();
+      p.server = document.getElementById('f-server').value.trim();
+      p.power  = pow;
+      p.kills  = +document.getElementById('f-kills').value || 0;
+      p.note   = document.getElementById('f-note').value.trim();
+      p.updatedAt = now;
+    }
+  } else {
+    db.players.push({
+      id: uid(), name,
+      clan:   document.getElementById('f-clan').value.trim(),
+      server: document.getElementById('f-server').value.trim(),
+      power:  pow,
+      kills:  +document.getElementById('f-kills').value || 0,
+      note:   document.getElementById('f-note').value.trim(),
+      history: [],
+      createdAt: now, updatedAt: now
+    });
+  }
+  saveDB();
+  document.getElementById('modal-overlay').classList.remove('open');
+  renderPlayers();
+}
+
+function deletePlayer(id) {
+  if (!confirm('Удалить игрока из лидерборда?')) return;
+  db.players = db.players.filter(p=>p.id!==id);
+  saveDB(); renderPlayers();
+}
+
+/* ═══════════════════════════════════════════
+   IMPORT / EXPORT
+═══════════════════════════════════════════ */
+function exportData() {
+  const blob = new Blob([JSON.stringify(db, null, 2)], {type:'application/json'});
+  const a = document.createElement('a');
+  a.href = URL.createObjectURL(blob);
+  a.download = 'warpath-leaderboard-' + new Date().toISOString().slice(0,10) + '.json';
+  a.click();
+}
+function importData(input) {
+  const file = input.files[0];
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = e => {
+    try {
+      const parsed = JSON.parse(e.target.result);
+      if (!parsed.players) throw new Error('Неверный формат');
+      db = parsed;
+      saveDB(); renderPlayers();
+      document.getElementById('import-status').textContent = '✓ Импортировано ' + db.players.length + ' игроков';
+      document.getElementById('import-status').style.color = '#7ec850';
+    } catch(err) {
+      document.getElementById('import-status').textContent = '✕ Ошибка: ' + err.message;
+      document.getElementById('import-status').style.color = '#e04848';
+    }
+    input.value = '';
+  };
+  reader.readAsText(file);
+}
+function clearAll() {
+  if (!confirm('Очистить все данные лидерборда? Это необратимо.')) return;
+  db = { players: [] };
+  saveDB(); renderPlayers();
+}
+function copyShareLink() {
+  const encoded = btoa(unescape(encodeURIComponent(JSON.stringify(db))));
+  const url = location.origin + location.pathname + '?lb=' + encoded;
+  navigator.clipboard.writeText(url).then(()=>alert('Ссылка скопирована!\n\nВнимание: очень длинная если много игроков.'));
+}
+
+/* ═══════════════════════════════════════════
+   URL IMPORT (share link)
+═══════════════════════════════════════════ */
+function tryUrlImport() {
+  try {
+    const params = new URLSearchParams(location.search);
+    const lb = params.get('lb');
+    if (!lb) return;
+    const parsed = JSON.parse(decodeURIComponent(escape(atob(lb))));
+    if (parsed.players) { db = parsed; saveDB(); }
+    history.replaceState(null,'',location.pathname);
+  } catch(e) {}
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+═══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof initShared === 'function') initShared();
+  loadDB();
+  tryUrlImport();
+  renderPlayers();
+});
+</script>
+</body>
+</html>
