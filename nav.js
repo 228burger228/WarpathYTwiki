@@ -15,6 +15,8 @@
     <li><a href="wiki.html"         data-i18n="nav.wiki"></a></li>
     <li><a href="youtubers.html"    data-i18n="nav.youtubers"></a></li>
     <li><a href="donate-bar.html"   data-i18n="nav.donate-bar"></a></li>
+    <li><a href="daily.html"        data-i18n="nav.daily"></a></li>
+    <li><a href="leaderboard.html"  data-i18n="nav.leaderboard"></a></li>
   </ul>
   <div class="nav-right">
     <a href="https://t.me/WarpathHub" target="_blank" class="nav-tg nav-tg-btn">✈ Telegram</a>
@@ -39,6 +41,8 @@
     <a href="wiki.html"         data-i18n="nav.wiki"></a>
     <a href="youtubers.html"    data-i18n="nav.youtubers"></a>
     <a href="donate-bar.html"   data-i18n="nav.donate-bar"></a>
+    <a href="daily.html"        data-i18n="nav.daily"></a>
+    <a href="leaderboard.html"  data-i18n="nav.leaderboard"></a>
     <a href="https://t.me/WarpathHub" target="_blank" class="nav-mobile-tg">✈ Telegram</a>
   </nav>
   <div class="nav-mobile-lang" id="nav-mobile-lang"></div>
@@ -364,6 +368,27 @@
   .db-tiers { grid-template-columns: 1fr !important; }
   .db-page  { padding: 1.5rem 1rem 4rem !important; }
 
+  /* Daily */
+  .daily-page   { padding: 1.2rem .75rem 5rem !important; }
+  .daily-grid   { grid-template-columns: 1fr !important; }
+  .calc-block   { grid-column: 1 !important; }
+  .calc-inputs  { grid-template-columns: 1fr 1fr !important; }
+  .rewards-grid { grid-template-columns: 1fr !important; }
+  .day-title    { font-size: 1.5rem !important; }
+
+  /* Leaderboard */
+  .lb-page      { padding: 1.2rem .75rem 5rem !important; }
+  .lb-tabs      { gap: .25rem; padding: .3rem; }
+  .lb-tab       { padding: .4rem .7rem; font-size: .78rem; letter-spacing: 1px; }
+  .lb-toolbar   { gap: .4rem; }
+  .lb-search    { min-width: 0; font-size: .8rem; }
+  .lb-stats     { grid-template-columns: repeat(2,1fr) !important; gap: .6rem; }
+  .lb-table td,
+  .lb-table th  { padding: .5rem .6rem; }
+  .power-bar-wrap { display: none; }
+  .clan-card    { flex-wrap: wrap; }
+  .rewards-block { font-size: .75rem; }
+
   /* Modals */
   .modal-bg  { padding: .75rem !important; align-items: flex-end !important; }
   .modal-box { max-height: 90vh !important; border-radius: 8px 8px 0 0 !important; }
@@ -383,6 +408,18 @@
   .hero-stats { grid-template-columns: repeat(2,1fr) !important; }
   .stat-grid  { grid-template-columns: 1fr !important; }
   .stat-row.full { grid-column: 1 !important; }
+
+  /* Daily 480px */
+  .week-tabs    { gap: .15rem; padding: .25rem; }
+  .calc-inputs  { grid-template-columns: 1fr !important; }
+  .day-header   { gap: .6rem; }
+
+  /* Leaderboard 480px */
+  .lb-tabs      { gap: .15rem; }
+  .lb-tab       { padding: .35rem .5rem; font-size: .7rem; }
+  .lb-stats     { grid-template-columns: repeat(2,1fr) !important; }
+  .modal-row    { grid-template-columns: 1fr !important; }
+  .row-actions  { gap: .25rem; }
 }
 
 /* ═══════════════════════════════════════
@@ -436,6 +473,8 @@
         <li onclick="location.href='army-builder.html'" data-i18n="nav.army-builder"></li>
         <li onclick="location.href='tier-list.html'"    data-i18n="nav.tier-list"></li>
         <li onclick="location.href='donate-bar.html'"   data-i18n="nav.donate-bar"></li>
+        <li onclick="location.href='daily.html'"        data-i18n="nav.daily"></li>
+        <li onclick="location.href='leaderboard.html'"  data-i18n="nav.leaderboard"></li>
       </ul>
     </div>
     <div class="footer-col">
