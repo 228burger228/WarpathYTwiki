@@ -4,8 +4,217 @@
 <meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Unit Builder — Warpath Guide</title>
 <link rel="stylesheet" href="style.css">
+<style>
+/* ── Мобильное меню ── */
+.nav-hamburger {
+  display: none;
+  flex-direction: column;
+  gap: 5px;
+  cursor: pointer;
+  padding: 6px;
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  background: transparent;
+  margin-left: .5rem;
+}
+.nav-hamburger span {
+  display: block;
+  width: 20px;
+  height: 2px;
+  background: var(--text);
+  border-radius: 2px;
+  transition: all .2s;
+}
+.nav-mobile-menu {
+  display: none;
+  position: fixed;
+  top: 56px;
+  left: 0; right: 0;
+  background: rgba(7,8,10,.98);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid var(--border);
+  z-index: 899;
+  padding: .5rem 0;
+}
+.nav-mobile-menu.open { display: block; }
+.nav-mobile-menu a {
+  display: block;
+  padding: .75rem 2rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  color: var(--muted);
+  border-left: 3px solid transparent;
+  transition: all .15s;
+}
+.nav-mobile-menu a:hover,
+.nav-mobile-menu a.active {
+  color: var(--gold2);
+  border-left-color: var(--gold);
+  background: rgba(200,150,28,.05);
+}
+
+@media(max-width:768px) {
+  .nav-links { display: none !important; }
+  .nav-hamburger { display: flex; }
+}
+
+/* ── Builder адаптив ── */
+.builder-layout {
+  display: grid;
+  grid-template-columns: 320px 1fr;
+  gap: 1.4rem;
+  align-items: start;
+}
+
+@media(max-width:900px) {
+  .builder-layout {
+    grid-template-columns: 1fr;
+  }
+  .stat-grid {
+    grid-template-columns: 1fr 1fr !important;
+  }
+}
+
+@media(max-width:480px) {
+  .stat-grid {
+    grid-template-columns: 1fr !important;
+  }
+  .stat-row.full {
+    grid-column: 1 !important;
+  }
+  .bp {
+    padding: 1rem !important;
+  }
+  .page-header .wrap {
+    padding: 0 1rem;
+  }
+  .wrap {
+    padding: 0 1rem;
+  }
+}
+
+/* ── Таблица юнитов — скролл на мобиле ── */
+.u-table-wrap {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+  border: 1px solid var(--border);
+  border-radius: 4px;
+}
+.u-table-wrap table {
+  min-width: 520px;
+}
+
+/* ── Улучшенный stat-display ── */
+.stat-display {
+  position: relative;
+}
+
+/* ── Кнопки управления ── */
+.builder-controls {
+  display: flex;
+  gap: .55rem;
+  margin-top: 1.1rem;
+  flex-wrap: wrap;
+}
+.builder-controls .btn {
+  flex: 1;
+  min-width: 120px;
+  text-align: center;
+}
+
+/* ── Unit preview улучшение ── */
+.unit-preview {
+  background: var(--bg3);
+  border: 1px solid var(--border);
+  height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 4.5rem;
+  margin-bottom: 1rem;
+  position: relative;
+  overflow: hidden;
+  transition: border-color .2s;
+}
+.unit-preview:hover {
+  border-color: var(--border2);
+}
+.unit-preview::after {
+  content: attr(data-name);
+  position: absolute;
+  bottom: .4rem;
+  left: 0; right: 0;
+  text-align: center;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .72rem;
+  letter-spacing: 2px;
+  color: var(--muted);
+}
+
+/* ── Compare panel ── */
+#cmp-panel {
+  margin-top: .9rem;
+  animation: fadeIn .25s ease;
+}
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(8px); }
+  to   { opacity: 1; transform: none; }
+}
+
+/* ── Таблица ── */
+#u-table { width: 100%; border-collapse: collapse; }
+#u-table tr { border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s; }
+#u-table tr:hover { background: var(--panel); }
+#u-table th {
+  text-align: left;
+  padding: .55rem .7rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .68rem;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--muted);
+  white-space: nowrap;
+}
+#u-table th:not(:first-child) { text-align: right; }
+
+/* ── Scroll to top кнопка ── */
+.scroll-top {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  width: 40px;
+  height: 40px;
+  background: var(--gold);
+  color: #000;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  cursor: pointer;
+  display: none;
+  align-items: center;
+  justify-content: center;
+  z-index: 800;
+  transition: opacity .2s;
+}
+.scroll-top.visible { display: flex; }
+.scroll-top:hover { opacity: .85; }
+</style>
 </head>
 <body>
+
+<!-- Мобильное меню (вставляется nav.js, но продублируем для страховки) -->
+<div class="nav-mobile-menu" id="mobile-menu">
+  <a href="index.html"        data-i18n="nav.home">Главная</a>
+  <a href="unit-builder.html" data-i18n="nav.unit-builder" class="active">Unit Builder</a>
+  <a href="army-builder.html" data-i18n="nav.army-builder">Army Builder</a>
+  <a href="tier-list.html"    data-i18n="nav.tier-list">Тир-лист</a>
+  <a href="wiki.html"         data-i18n="nav.wiki">Wiki</a>
+  <a href="youtubers.html"    data-i18n="nav.youtubers">YouTubers</a>
+  <a href="donate-bar.html"   data-i18n="nav.donate-bar">Донатный Бар</a>
+</div>
 
 <div class="page-header">
   <div class="wrap">
@@ -31,8 +240,12 @@
             <select class="field-select" id="sel-type" onchange="rebuild()"></select>
           </div>
           <div class="field">
-            <div class="field-label">Уровень <em id="lv-val">1</em></div>
+            <div class="field-label">Уровень <em id="lv-val" style="color:var(--gold2)">1</em></div>
             <input class="field-range" type="range" id="sel-level" min="1" max="10" value="1" oninput="rebuild()">
+            <!-- Метки уровней -->
+            <div style="display:flex;justify-content:space-between;font-size:.6rem;color:var(--muted);margin-top:.15rem">
+              <span>1</span><span>5</span><span>10</span>
+            </div>
           </div>
           <div class="field">
             <div class="field-label">Офицер</div>
@@ -43,7 +256,7 @@
             <select class="field-select" id="sel-eq" onchange="rebuild()"></select>
           </div>
 
-          <div style="display:flex;gap:.55rem;margin-top:1.1rem;flex-wrap:wrap">
+          <div class="builder-controls">
             <button class="btn btn-primary" onclick="saveSnap()">📌 Сохранить для сравнения</button>
             <button class="btn btn-outline" onclick="clearSnap()">✕ Сброс</button>
           </div>
@@ -60,6 +273,8 @@
               <div id="s-power" style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;color:var(--gold2)">—</div>
               <div style="font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Сила юнита</div>
             </div>
+            <!-- Тип юнита-бейдж -->
+            <div id="s-badge" style="font-size:.7rem;padding:.2rem .6rem;border:1px solid var(--border);border-radius:4px;color:var(--muted);align-self:flex-start;display:none"></div>
           </div>
 
           <div style="margin-top:.3rem">
@@ -86,17 +301,17 @@
           </div>
         </div>
 
-        <div class="stat-grid" style="margin-top:.9rem">
+        <div class="stat-grid" style="margin-top:.9rem;display:grid;grid-template-columns:1fr 1fr;gap:.4rem">
           <div class="stat-row"><span class="sn">Атака</span><span class="sv" id="sv-atk">—</span></div>
           <div class="stat-row"><span class="sn">Защита</span><span class="sv" id="sv-def">—</span></div>
           <div class="stat-row"><span class="sn">HP</span><span class="sv" id="sv-hp">—</span></div>
           <div class="stat-row"><span class="sn">Скорость</span><span class="sv" id="sv-mov">—</span></div>
-          <div class="stat-row full"><span class="sn">Стоимость</span><span class="sv" id="sv-cost">—</span></div>
+          <div class="stat-row full" style="grid-column:1/-1"><span class="sn">Стоимость</span><span class="sv" id="sv-cost">—</span></div>
         </div>
 
         <!-- Compare panel -->
-        <div id="cmp-panel" style="display:none;margin-top:.9rem">
-          <div class="bp">
+        <div id="cmp-panel" style="display:none">
+          <div class="bp" style="margin-top:.9rem">
             <div class="bp-title">Сравнение с сохранённым</div>
             <div id="cmp-rows"></div>
           </div>
@@ -111,15 +326,15 @@
         <div class="title">Все типы юнитов (базовые, Ур.1)</div>
         <div class="sub">Нажми на строку — юнит загрузится в калькулятор</div>
       </div>
-      <div style="overflow-x:auto;margin-top:1rem">
-        <table id="u-table" style="width:100%;border-collapse:collapse">
-          <thead><tr style="border-bottom:var(--line)">
-            <th style="text-align:left;padding:.55rem .7rem;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Юнит</th>
-            <th style="text-align:right;padding:.55rem .7rem;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Атака</th>
-            <th style="text-align:right;padding:.55rem .7rem;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Защита</th>
-            <th style="text-align:right;padding:.55rem .7rem;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">HP</th>
-            <th style="text-align:right;padding:.55rem .7rem;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Скорость</th>
-            <th style="text-align:right;padding:.55rem .7rem;font-family:'Barlow Condensed',sans-serif;font-size:.68rem;letter-spacing:1px;text-transform:uppercase;color:var(--muted)">Стоимость</th>
+      <div class="u-table-wrap" style="margin-top:1rem">
+        <table id="u-table">
+          <thead><tr>
+            <th>Юнит</th>
+            <th style="text-align:right">Атака</th>
+            <th style="text-align:right">Защита</th>
+            <th style="text-align:right">HP</th>
+            <th style="text-align:right">Скорость</th>
+            <th style="text-align:right">Стоимость</th>
           </tr></thead>
           <tbody id="u-tbody"></tbody>
         </table>
@@ -128,18 +343,69 @@
   </div>
 </section>
 
+<!-- Scroll to top -->
+<button class="scroll-top" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
+
+<!-- ВАЖНО: i18n.js первым! -->
+<script src="i18n.js"></script>
 <script src="nav.js"></script>
 <script src="data.js"></script>
 <script>
 let snap = null;
 
+/* ── Hamburger меню ── */
+function initHamburger() {
+  const nav = document.querySelector('.nav');
+  if (!nav) return;
+
+  // Кнопка-бургер
+  const hb = document.createElement('button');
+  hb.className = 'nav-hamburger';
+  hb.setAttribute('aria-label', 'Меню');
+  hb.innerHTML = '<span></span><span></span><span></span>';
+  nav.querySelector('.nav-right').prepend(hb);
+
+  const menu = document.getElementById('mobile-menu');
+  hb.addEventListener('click', () => {
+    menu.classList.toggle('open');
+  });
+  // Закрыть при клике вне
+  document.addEventListener('click', (e) => {
+    if (!nav.contains(e.target) && !menu.contains(e.target)) {
+      menu.classList.remove('open');
+    }
+  });
+}
+
+/* ── Scroll to top ── */
+window.addEventListener('scroll', () => {
+  const btn = document.getElementById('scroll-top-btn');
+  if (btn) btn.classList.toggle('visible', window.scrollY > 300);
+});
+
+/* ── Builder ── */
 function populateSelects() {
   const st = document.getElementById('sel-type');
-  UNIT_TYPES.forEach(u => { const o=document.createElement('option'); o.value=u.id; o.textContent=`${u.emoji}  ${u.label}`; st.appendChild(o); });
+  UNIT_TYPES.forEach(u => {
+    const o = document.createElement('option');
+    o.value = u.id;
+    o.textContent = `${u.emoji}  ${u.label}`;
+    st.appendChild(o);
+  });
   const so = document.getElementById('sel-off');
-  OFFICERS.forEach(o => { const op=document.createElement('option'); op.value=o.id; op.textContent=o.name; so.appendChild(op); });
+  OFFICERS.forEach(o => {
+    const op = document.createElement('option');
+    op.value = o.id;
+    op.textContent = o.name;
+    so.appendChild(op);
+  });
   const se = document.getElementById('sel-eq');
-  EQUIPMENT.forEach(e => { const op=document.createElement('option'); op.value=e.id; op.textContent=e.name; se.appendChild(op); });
+  EQUIPMENT.forEach(e => {
+    const op = document.createElement('option');
+    op.value = e.id;
+    op.textContent = e.name;
+    se.appendChild(op);
+  });
 }
 
 function getConfig() {
@@ -152,29 +418,34 @@ function getConfig() {
 }
 
 function rebuild() {
-  const {typeId,level,offId,eqId} = getConfig();
+  const { typeId, level, offId, eqId } = getConfig();
   const unit = UNIT_TYPES.find(u => u.id === typeId);
   const s = calcUnit(typeId, level, offId, eqId);
+
   document.getElementById('lv-val').textContent = level;
   document.getElementById('unit-preview').textContent = unit.emoji;
   document.getElementById('unit-preview').setAttribute('data-name', `${unit.label} · Ур.${level}`);
   document.getElementById('s-name').textContent  = `${unit.label} · Уровень ${level}`;
   document.getElementById('s-power').textContent = fmt(s.power);
 
-  const M = {atk:5000,def:4000,hp:120000,mov:80};
+  // Бейдж
+  const badge = document.getElementById('s-badge');
+  badge.textContent = unit.emoji + ' ' + unit.label;
+  badge.style.display = 'block';
+
+  const M = { atk: 5000, def: 4000, hp: 120000, mov: 80 };
   ['atk','def','hp','mov'].forEach(k => {
-    const pct = Math.min(100, Math.round(s[k]/M[k]*100));
-    document.getElementById(`bar-${k}`).style.width = pct+'%';
-    document.getElementById(`bv-${k}`).textContent = k==='hp'?fmt(s[k]):s[k];
+    const pct = Math.min(100, Math.round(s[k] / M[k] * 100));
+    document.getElementById(`bar-${k}`).style.width = pct + '%';
   });
-  document.getElementById('bv-atk').textContent  = fmt(s.atk);
-  document.getElementById('bv-def').textContent  = fmt(s.def);
-  document.getElementById('bv-hp').textContent   = fmt(s.hp);
-  document.getElementById('bv-mov').textContent  = s.mov;
-  document.getElementById('sv-atk').textContent  = fmt(s.atk);
-  document.getElementById('sv-def').textContent  = fmt(s.def);
-  document.getElementById('sv-hp').textContent   = fmt(s.hp);
-  document.getElementById('sv-mov').textContent  = s.mov;
+  document.getElementById('bv-atk').textContent = fmt(s.atk);
+  document.getElementById('bv-def').textContent = fmt(s.def);
+  document.getElementById('bv-hp').textContent  = fmt(s.hp);
+  document.getElementById('bv-mov').textContent = s.mov;
+  document.getElementById('sv-atk').textContent = fmt(s.atk);
+  document.getElementById('sv-def').textContent = fmt(s.def);
+  document.getElementById('sv-hp').textContent  = fmt(s.hp);
+  document.getElementById('sv-mov').textContent = s.mov;
   document.getElementById('sv-cost').textContent = fmt(s.cost);
 
   if (snap) renderCompare(s);
@@ -183,7 +454,7 @@ function rebuild() {
 function saveSnap() {
   const cfg = getConfig();
   const unit = UNIT_TYPES.find(u => u.id === cfg.typeId);
-  snap = { ...calcUnit(cfg.typeId, cfg.level, cfg.offId, cfg.eqId), label:`${unit.label} Ур.${cfg.level}` };
+  snap = { ...calcUnit(cfg.typeId, cfg.level, cfg.offId, cfg.eqId), label: `${unit.label} Ур.${cfg.level}` };
   document.getElementById('snap-notice').textContent = `📌 Сохранено: ${snap.label}`;
   rebuild();
 }
@@ -196,17 +467,22 @@ function clearSnap() {
 
 function renderCompare(cur) {
   document.getElementById('cmp-panel').style.display = 'block';
-  const keys = [['atk','Атака','var(--gold2)'],['def','Защита','#60a8f0'],['hp','HP','#7ec850'],['mov','Скорость','#d090d0'],['cost','Стоимость','var(--dim)']];
-  document.getElementById('cmp-rows').innerHTML = keys.map(([k,label,col]) => {
+  const keys = [
+    ['atk','Атака','var(--gold2)'],
+    ['def','Защита','#60a8f0'],
+    ['hp','HP','#7ec850'],
+    ['mov','Скорость','#d090d0'],
+    ['cost','Стоимость','var(--dim)']
+  ];
+  document.getElementById('cmp-rows').innerHTML = keys.map(([k, label, col]) => {
     const diff = cur[k] - snap[k];
-    const cls  = diff > 0 ? 'up' : diff < 0 ? 'down' : '';
     const dc   = diff > 0 ? '#7ec850' : diff < 0 ? '#e04848' : 'var(--muted)';
     return `<div class="tot-row">
       <span style="color:var(--muted);font-size:.78rem">${label}</span>
       <span>
         <span style="color:var(--dim);font-size:.74rem">${fmt(snap[k])} → </span>
         <span style="font-family:'Barlow Condensed',sans-serif;font-weight:700;color:${col}">${fmt(cur[k])}</span>
-        ${diff!==0?`<span style="font-size:.68rem;color:${dc};margin-left:.25rem">${diff>0?'+':''}${fmt(diff)}</span>`:''}
+        ${diff !== 0 ? `<span style="font-size:.68rem;color:${dc};margin-left:.25rem">${diff > 0 ? '+' : ''}${fmt(diff)}</span>` : ''}
       </span>
     </div>`;
   }).join('');
@@ -217,26 +493,30 @@ function buildTable() {
   UNIT_TYPES.forEach(u => {
     const s = calcUnit(u.id, 1, 'none', 'none');
     const tr = document.createElement('tr');
-    tr.style.cssText = 'border-bottom:var(--line);cursor:pointer;transition:background .15s';
-    tr.onmouseenter = () => tr.style.background='var(--panel)';
-    tr.onmouseleave = () => tr.style.background='';
-    tr.onclick = () => {
-      document.getElementById('sel-type').value = u.id;
-      rebuild();
-      window.scrollTo({top:0,behavior:'smooth'});
-    };
-    tr.innerHTML = `<td style="padding:.6rem .7rem;display:flex;align-items:center;gap:.55rem"><span style="font-size:1.15rem">${u.emoji}</span><span style="font-weight:600">${u.label}</span></td>
+    tr.innerHTML = `
+      <td style="padding:.6rem .7rem">
+        <div style="display:flex;align-items:center;gap:.55rem">
+          <span style="font-size:1.15rem">${u.emoji}</span>
+          <span style="font-weight:600">${u.label}</span>
+        </div>
+      </td>
       <td style="text-align:right;padding:.6rem .7rem;color:var(--gold2);font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.atk)}</td>
       <td style="text-align:right;padding:.6rem .7rem;color:#60a8f0;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.def)}</td>
       <td style="text-align:right;padding:.6rem .7rem;color:#7ec850;font-family:'Barlow Condensed',sans-serif;font-weight:700">${fmt(s.hp)}</td>
       <td style="text-align:right;padding:.6rem .7rem;color:#d090d0;font-family:'Barlow Condensed',sans-serif;font-weight:700">${s.mov}</td>
       <td style="text-align:right;padding:.6rem .7rem;color:var(--dim)">${fmt(s.cost)}</td>`;
+    tr.onclick = () => {
+      document.getElementById('sel-type').value = u.id;
+      rebuild();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
     tb.appendChild(tr);
   });
 }
 
 document.addEventListener('DOMContentLoaded', () => {
   initShared();
+  initHamburger();
   populateSelects();
   rebuild();
   buildTable();
