@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Daily Arms Race — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+<style>
+
+/* ═══════════════════════════════════════════
+   PAGE LAYOUT
+   ═══════════════════════════════════════════ */
+.daily-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem 5rem;
+}
+
+/* ═══════════════════════════════════════════
+   WEEK TABS
+   ═══════════════════════════════════════════ */
+.week-tabs {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  gap: .4rem;
+  margin-bottom: 2rem;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: .5rem;
+}
+.day-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3px;
+  padding: .6rem .3rem;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 1px solid transparent;
+  transition: all .2s;
+  position: relative;
+}
+.day-tab:hover {
+  background: rgba(200,150,28,.07);
+  border-color: var(--border);
+}
+.day-tab.active {
+  background: rgba(200,150,28,.12);
+  border-color: var(--gold);
+}
+.day-tab.today {
+  background: rgba(200,150,28,.18);
+  border-color: var(--gold2);
+}
+.day-tab.today::before {
+  content: 'СЕГОДНЯ';
+  position: absolute;
+  top: -10px;
+  left: 50%;
+  transform: translateX(-50%);
+  font-size: .48rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #000;
+  background: var(--gold);
+  padding: 1px 5px;
+  border-radius: 3px;
+  white-space: nowrap;
+}
+.day-tab.today.active { background: rgba(200,150,28,.25); }
+.day-tab-short {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .85rem;
+  letter-spacing: 1.5px;
+  color: var(--muted);
+  transition: color .2s;
+}
+.day-tab.active .day-tab-short,
+.day-tab.today .day-tab-short { color: var(--gold2); }
+.day-tab-icon { font-size: 1.1rem; }
+.day-tab-name {
+  font-size: .6rem;
+  color: var(--muted);
+  text-align: center;
+  line-height: 1.2;
+}
+
+@media (max-width: 600px) {
+  .week-tabs { grid-template-columns: repeat(7, 1fr); gap: .2rem; padding: .35rem; }
+  .day-tab { padding: .4rem .15rem; }
+  .day-tab-name { display: none; }
+  .day-tab-short { font-size: .75rem; }
+  .day-tab-icon { font-size: .9rem; }
+  .day-tab.today::before { font-size: .4rem; top: -9px; }
+}
+
+/* ═══════════════════════════════════════════
+   DAY PANEL
+   ═══════════════════════════════════════════ */
+.day-panel { display: none; }
+.day-panel.active { display: block; }
+
+.day-header {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+  flex-wrap: wrap;
+}
+.day-icon-big { font-size: 2.5rem; }
+.day-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: var(--gold2);
+  line-height: 1;
+}
+.day-weekday {
+  font-size: .72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-top: .2rem;
+}
+.today-badge {
+  display: none;
+  background: var(--gold);
+  color: #000;
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .9rem;
+  letter-spacing: 2px;
+  padding: .2rem .8rem;
+  border-radius: 6px;
+}
+.day-panel[data-today="true"] .today-badge { display: block; }
+
+.daily-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.2rem;
+}
+@media (max-width: 700px) {
+  .daily-grid { grid-template-columns: 1fr; }
+}
+
+/* ═══════════════════════════════════════════
+   TASKS BLOCK
+   ═══════════════════════════════════════════ */
+.block-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .8rem;
+  letter-spacing: 3px;
+  color: var(--muted);
+  margin-bottom: .85rem;
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+}
+.block-title::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--border);
+}
+
+.task-item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: .75rem;
+  padding: .55rem .75rem;
+  background: rgba(255,255,255,.03);
+  border: 1px solid var(--border);
+  border-radius: 7px;
+  margin-bottom: .4rem;
+  transition: border-color .15s;
+  cursor: default;
+}
+.task-item:hover { border-color: rgba(200,150,28,.25); }
+.task-text {
+  font-size: .82rem;
+  color: var(--text);
+  line-height: 1.35;
+  flex: 1;
+}
+.task-pts {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem;
+  letter-spacing: 1px;
+  color: var(--gold);
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+.task-pts::before { content: '+'; }
+
+/* ═══════════════════════════════════════════
+   CALCULATOR
+   ═══════════════════════════════════════════ */
+.calc-block {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.2rem;
+  margin-bottom: 1.2rem;
+  grid-column: 1 / -1;
+}
+.calc-inputs {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+  gap: .75rem;
+  margin-bottom: 1rem;
+}
+.calc-field { display: flex; flex-direction: column; gap: .3rem; }
+.calc-label {
+  font-size: .7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+}
+.calc-input-row {
+  display: flex;
+  align-items: center;
+}
+.calc-btn {
+  width: 32px; height: 36px;
+  background: rgba(255,255,255,.05);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: 1rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background .15s;
+  flex-shrink: 0;
+}
+.calc-btn:first-child { border-radius: 6px 0 0 6px; border-right: none; }
+.calc-btn:last-child  { border-radius: 0 6px 6px 0; border-left: none; }
+.calc-btn:hover { background: rgba(200,150,28,.12); color: var(--gold); }
+.calc-num {
+  width: 60px;
+  text-align: center;
+  background: rgba(255,255,255,.04);
+  border: 1px solid var(--border);
+  color: var(--text);
+  font-size: .95rem;
+  font-family: inherit;
+  padding: .45rem 0;
+  outline: none;
+  -moz-appearance: textfield;
+}
+.calc-num::-webkit-inner-spin-button { -webkit-appearance: none; }
+.calc-num:focus { border-color: var(--gold); }
+
+.calc-result {
+  background: rgba(200,150,28,.06);
+  border: 1px solid rgba(200,150,28,.2);
+  border-radius: 10px;
+  padding: 1rem 1.3rem;
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+.calc-total-pts {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2.4rem;
+  letter-spacing: 2px;
+  color: var(--gold2);
+  line-height: 1;
+}
+.calc-total-label {
+  font-size: .72rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: .5px;
+  margin-top: .2rem;
+}
+.calc-rank-result {
+  flex: 1;
+  min-width: 180px;
+}
+.calc-rank-line {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: .78rem;
+  padding: .22rem 0;
+  border-bottom: 1px solid rgba(255,255,255,.05);
+}
+.calc-rank-line:last-child { border-bottom: none; }
+.calc-rank-name { color: var(--muted); }
+.calc-rank-val  { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; color: var(--gold2); }
+.calc-rank-need { font-size: .7rem; color: #e04848; }
+.calc-rank-ok   { color: #7ec850; }
+
+/* ═══════════════════════════════════════════
+   REWARDS TABLE
+   ═══════════════════════════════════════════ */
+.rewards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+  grid-column: 1 / -1;
+}
+@media (max-width: 600px) {
+  .rewards-grid { grid-template-columns: 1fr; }
+}
+
+.rewards-block {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  overflow: hidden;
+}
+.rewards-block-head {
+  padding: .6rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .78rem;
+  letter-spacing: 2.5px;
+  color: var(--muted);
+  background: rgba(255,255,255,.02);
+}
+.reward-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: .45rem 1rem;
+  border-bottom: 1px solid var(--border);
+  font-size: .8rem;
+  transition: background .12s;
+}
+.reward-row:last-child { border-bottom: none; }
+.reward-row:hover { background: rgba(255,255,255,.025); }
+.reward-row.highlight {
+  background: rgba(200,150,28,.07);
+  border-left: 2px solid var(--gold);
+}
+.rank-badge {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .9rem;
+  letter-spacing: 1px;
+  color: var(--muted);
+  width: 52px;
+  flex-shrink: 0;
+}
+.rank-badge.r1 { color: #ffd040; }
+.rank-badge.r2 { color: #c0c0c0; }
+.rank-badge.r3 { color: #cd7f32; }
+.reward-pts {
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .95rem;
+  font-weight: 700;
+  color: var(--text);
+}
+.reward-pts span {
+  font-size: .65rem;
+  color: var(--muted);
+  margin-left: .2rem;
+}
+
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="wrap">
+    <div class="tag">📅 Ежедневно</div>
+    <div class="title">Daily Arms Race</div>
+    <p class="sub">Расписание заданий на каждый день недели. Вычисли свои очки и узнай какой ранг получишь.</p>
+  </div>
+</div>
+
+<div class="daily-page">
+
+  <!-- WEEK TABS -->
+  <div class="week-tabs" id="week-tabs"></div>
+
+  <!-- DAY PANELS (генерируются JS) -->
+  <div id="day-panels"></div>
+
+</div>
+
+<script src="i18n.js"></script>
+<script src="nav.js"></script>
+<script src="data.js"></script>
+<script>
+
+/* ═══════════════════════════════════════════
+   DATA
+   ═══════════════════════════════════════════ */
+const DAYS_DATA = [
+  {
+    id: 'mon',
+    icon: '💰',
+    name: { ru: 'Сбор ресурсов', en: 'Resource Collection', vi: 'Thu thập tài nguyên' },
+    weekday: { ru: 'Понедельник', en: 'Monday', vi: 'Thứ Hai' },
+    tasks: [
+      { text: { ru: 'Собрать 100 военных фондов', en: 'Collect 100 military funds', vi: 'Thu thập 100 quỹ quân sự' }, pts: 1 },
+      { text: { ru: 'Собрать 100 стали', en: 'Collect 100 steel', vi: 'Thu thập 100 thép' }, pts: 1 },
+      { text: { ru: 'Собрать 100 нефти', en: 'Collect 100 pts of oil', vi: 'Thu thập 100 dầu' }, pts: 1 },
+      { text: { ru: 'Собрать 1 золото', en: 'Collect 1 Golden', vi: 'Thu thập 1 vàng' }, pts: 20 },
+    ],
+    personal: [20000, 40000, 90000, 150000, 250000, 450000, 550000, 700000, 900000],
+    city:     [3000, 11000, 18000],
+  },
+  {
+    id: 'tue',
+    icon: '🏗️',
+    name: { ru: 'Улучшение зданий', en: 'Building Upgrades', vi: 'Nâng cấp công trình' },
+    weekday: { ru: 'Вторник', en: 'Tuesday', vi: 'Thứ Ba' },
+    tasks: [
+      { text: { ru: 'Получить 1 силы (здания)', en: 'Gain 1 power (building)', vi: 'Nhận 1 sức mạnh (công trình)' }, pts: 10 },
+      { text: { ru: 'Ускорение производства 1 мин', en: '1 min Production Rush', vi: 'Tăng tốc sản xuất 1 phút' }, pts: 15 },
+    ],
+    personal: [46000, 110000, 520000, 850000, 1600000, 4400000, 4800000, 5600000, 8800000],
+    city:     [16000, 54000, 86000],
+  },
+  {
+    id: 'wed',
+    icon: '🔬',
+    name: { ru: 'Научный прорыв', en: 'Scientific Breakthrough', vi: 'Đột phá khoa học' },
+    weekday: { ru: 'Среда', en: 'Wednesday', vi: 'Thứ Tư' },
+    tasks: [
+      { text: { ru: 'Получить 1 силы (технологии)', en: 'Gain 1 power (Technology)', vi: 'Nhận 1 sức mạnh (công nghệ)' }, pts: 10 },
+      { text: { ru: 'Ускорение исследований 1 мин', en: '1 min Research Rush', vi: 'Tăng tốc nghiên cứu 1 phút' }, pts: 15 },
+    ],
+    personal: [46000, 110000, 520000, 850000, 1600000, 4400000, 4800000, 5600000, 8800000],
+    city:     [16000, 54000, 86000],
+  },
+  {
+    id: 'thu',
+    icon: '🎖️',
+    name: { ru: 'Набор войск', en: 'Recruiting Drive', vi: 'Chiến dịch tuyển quân' },
+    weekday: { ru: 'Четверг', en: 'Thursday', vi: 'Thứ Năm' },
+    tasks: [
+      { text: { ru: 'Использовать универсальный купон', en: 'Use 1 Universal Coupon', vi: 'Dùng 1 phiếu đa năng' }, pts: 10000 },
+      { text: { ru: 'Использовать купон лагеря', en: 'Use 1 Camp Coupon', vi: 'Dùng 1 phiếu trại' }, pts: 10000 },
+      { text: { ru: 'Использовать универсальный кусок 4★', en: 'Use Universal 4-Star Piece', vi: 'Dùng mảnh đa năng 4★' }, pts: 5000 },
+      { text: { ru: 'Использовать универсальный кусок 5★', en: 'Use Universal 5-Star Piece', vi: 'Dùng mảnh đa năng 5★' }, pts: 45000 },
+      { text: { ru: 'Использовать кусок авиации 5★', en: 'Use Universal 5-Star Airforce Piece', vi: 'Dùng mảnh không quân 5★' }, pts: 45000 },
+    ],
+    personal: [32000, 75200, 362000, 720000, 1600000, 4800000, 5200000, 6000000, 9600000],
+    city:     [10000, 32000, 52000],
+  },
+  {
+    id: 'fri',
+    icon: '🏰',
+    name: { ru: 'Строительство базы', en: 'Base Construction', vi: 'Xây dựng căn cứ' },
+    weekday: { ru: 'Пятница', en: 'Friday', vi: 'Thứ Sáu' },
+    tasks: [
+      { text: { ru: 'Получить 1 силы (здания)', en: 'Gain 1 power (building)', vi: 'Nhận 1 sức mạnh (công trình)' }, pts: 10 },
+      { text: { ru: 'Получить 1 силы (технологии)', en: 'Gain 1 power (Technology)', vi: 'Nhận 1 sức mạnh (công nghệ)' }, pts: 10 },
+    ],
+    personal: [46000, 110000, 520000, 850000, 1600000, 4400000, 4800000, 5600000, 8800000],
+    city:     [9000, 30000, 48000],
+  },
+  {
+    id: 'sat',
+    icon: '⚡',
+    name: { ru: 'Полный вперёд', en: 'Full Speed Ahead', vi: 'Toàn tốc tiến lên' },
+    weekday: { ru: 'Суббота', en: 'Saturday', vi: 'Thứ Bảy' },
+    tasks: [
+      { text: { ru: 'Ускорение производства 1 мин', en: '1 min Production Rush', vi: 'Tăng tốc sản xuất 1 phút' }, pts: 15 },
+      { text: { ru: 'Ускорение исследований 1 мин', en: '1 min Research Rush', vi: 'Tăng tốc nghiên cứu 1 phút' }, pts: 15 },
+    ],
+    personal: [28000, 45000, 310000, 410000, 630000, 1450000, 1670000, 2220000, 4420000],
+    city:     [9000, 28000, 45000],
+  },
+  {
+    id: 'sun',
+    icon: '⚔️',
+    name: { ru: 'Непревзойдённый прогресс', en: 'Unrivalled Progress', vi: 'Tiến bộ vô song' },
+    weekday: { ru: 'Воскресенье', en: 'Sunday', vi: 'Chủ nhật' },
+    tasks: [
+      { text: { ru: 'Получить 1 силы (здания)', en: 'Gain 1 power (building)', vi: 'Nhận 1 sức mạnh (công trình)' }, pts: 10 },
+      { text: { ru: 'Получить 1 силы (технологии)', en: 'Gain 1 power (Technology)', vi: 'Nhận 1 sức mạnh (công nghệ)' }, pts: 10 },
+      { text: { ru: 'Собрать 100 военных фондов', en: 'Collect 100 military funds', vi: 'Thu thập 100 quỹ quân sự' }, pts: 1 },
+      { text: { ru: 'Собрать 100 стали', en: 'Collect 100 steel', vi: 'Thu thập 100 thép' }, pts: 1 },
+      { text: { ru: 'Победить Raven Ур.1–10', en: 'Defeat Lv.1-10 Raven', vi: 'Đánh bại Raven Cấp 1–10' }, pts: 600 },
+      { text: { ru: 'Победить Raven Ур.11–15', en: 'Defeat Lv.11-15 Raven', vi: 'Đánh bại Raven Cấp 11–15' }, pts: 700 },
+      { text: { ru: 'Победить Raven Ур.16–20', en: 'Defeat Lv.16-20 Raven', vi: 'Đánh bại Raven Cấp 16–20' }, pts: 800 },
+      { text: { ru: 'Победить Raven Ур.21–25', en: 'Defeat Lv.21-25 Raven', vi: 'Đánh bại Raven Cấp 21–25' }, pts: 900 },
+      { text: { ru: 'Победить Raven Ур.26–30', en: 'Defeat Lv.26-30 Raven', vi: 'Đánh bại Raven Cấp 26–30' }, pts: 1000 },
+      { text: { ru: 'Уничтожить бункер Raven Ур.1', en: 'Destroy Lv.1 Raven Bunker', vi: 'Phá hủy Bunker Raven Cấp 1' }, pts: 3000 },
+      { text: { ru: 'Уничтожить бункер Raven Ур.5', en: 'Destroy Lv.5 Raven Bunker', vi: 'Phá hủy Bunker Raven Cấp 5' }, pts: 3800 },
+      { text: { ru: 'Уничтожить бункер Raven Ур.10', en: 'Destroy Lv.10 Raven Bunker', vi: 'Phá hủy Bunker Raven Cấp 10' }, pts: 4800 },
+      { text: { ru: 'Уничтожить бункер Raven Ур.13', en: 'Destroy Lv.13 Raven Bunker', vi: 'Phá hủy Bunker Raven Cấp 13' }, pts: 5400 },
+    ],
+    personal: [60000, 96000, 660000, 850000, 1100000, 3000000, 3500000, 4350000, 9300000],
+    city:     [18000, 58000, 90000],
+  },
+];
+
+const RANK_LABELS = ['Ранг 1','Ранг 2','Ранг 3','Ранг 4','Ранг 5','Ранг 6','Ранг 7','Ранг 8','Ранг 9'];
+const CITY_LABELS = ['Город 1','Город 2','Город 3'];
+
+const DAY_SHORTS_RU = ['ПН','ВТ','СР','ЧТ','ПТ','СБ','ВС'];
+const DAY_SHORTS_EN = ['MON','TUE','WED','THU','FRI','SAT','SUN'];
+const DAY_SHORTS_VI = ['T2','T3','T4','T5','T6','T7','CN'];
+
+/* JS Date: 0=Sun,1=Mon..6=Sat → наш индекс 0=Mon..6=Sun */
+function getTodayIndex() {
+  const d = new Date().getDay(); // 0=Sun
+  return d === 0 ? 6 : d - 1;
+}
+
+function fmtNum(n) {
+  if (n >= 1000000) return (n / 1000000).toFixed(1) + 'M';
+  if (n >= 1000)    return (n / 1000).toFixed(0) + 'K';
+  return n.toString();
+}
+
+let activeDay = getTodayIndex();
+
+/* ═══════════════════════════════════════════
+   RENDER
+   ═══════════════════════════════════════════ */
+function getLang() {
+  return (typeof currentLang !== 'undefined') ? currentLang : 'ru';
+}
+function txt(obj) {
+  const l = getLang();
+  return obj[l] || obj['ru'];
+}
+
+function renderWeekTabs() {
+  const today = getTodayIndex();
+  const lang  = getLang();
+  const shorts = lang === 'en' ? DAY_SHORTS_EN : lang === 'vi' ? DAY_SHORTS_VI : DAY_SHORTS_RU;
+  const tabsEl = document.getElementById('week-tabs');
+  tabsEl.innerHTML = '';
+  DAYS_DATA.forEach((d, i) => {
+    const tab = document.createElement('div');
+    tab.className = 'day-tab' +
+      (i === activeDay ? ' active' : '') +
+      (i === today     ? ' today'  : '');
+    tab.innerHTML = `
+      <div class="day-tab-short">${shorts[i]}</div>
+      <div class="day-tab-icon">${d.icon}</div>
+      <div class="day-tab-name">${txt(d.weekday)}</div>`;
+    tab.addEventListener('click', () => { activeDay = i; renderAll(); });
+    tabsEl.appendChild(tab);
+  });
+}
+
+function renderDayPanel(d, idx) {
+  const today = getTodayIndex();
+  const lang  = getLang();
+  const isToday = idx === today;
+
+  /* Tasks HTML */
+  const tasksHtml = d.tasks.map(t => `
+    <div class="task-item">
+      <span class="task-text">${txt(t.text)}</span>
+      <span class="task-pts">${fmtNum(t.pts)}</span>
+    </div>`).join('');
+
+  /* Calc fields */
+  const calcFields = d.tasks.map((t, ti) => `
+    <div class="calc-field">
+      <div class="calc-label">${txt(t.text).slice(0, 28)}${txt(t.text).length > 28 ? '…' : ''} <span style="color:var(--gold);font-size:.65rem">(+${fmtNum(t.pts)} за ед.)</span></div>
+      <div class="calc-input-row">
+        <button class="calc-btn" onclick="calcAdj('${d.id}',${ti},-1)">−</button>
+        <input class="calc-num" id="calc-${d.id}-${ti}" type="number" min="0" value="0" oninput="calcUpdate('${d.id}')">
+        <button class="calc-btn" onclick="calcAdj('${d.id}',${ti},1)">+</button>
+      </div>
+    </div>`).join('');
+
+  /* Personal rewards */
+  const personalHtml = d.personal.map((pts, ri) => {
+    const rc = ri === 0 ? 'r1' : ri === 1 ? 'r2' : ri === 2 ? 'r3' : '';
+    return `<div class="reward-row" id="prow-${d.id}-${ri}">
+      <span class="rank-badge ${rc}">${RANK_LABELS[ri]}</span>
+      <span class="reward-pts">${fmtNum(pts)}<span>очков</span></span>
+    </div>`;
+  }).join('');
+
+  /* City rewards */
+  const cityHtml = d.city.map((pts, ri) => {
+    const rc = ri === 0 ? 'r1' : ri === 1 ? 'r2' : ri === 2 ? 'r3' : '';
+    return `<div class="reward-row">
+      <span class="rank-badge ${rc}">${CITY_LABELS[ri]}</span>
+      <span class="reward-pts">${fmtNum(pts)}<span>очков</span></span>
+    </div>`;
+  }).join('');
+
+  const todayLabel = lang === 'en' ? 'TODAY' : lang === 'vi' ? 'HÔM NAY' : 'СЕГОДНЯ';
+
+  return `
+  <div class="day-panel${idx === activeDay ? ' active' : ''}" data-idx="${idx}" data-today="${isToday}">
+    <div class="day-header">
+      <div class="day-icon-big">${d.icon}</div>
+      <div>
+        <div class="day-title">${txt(d.name)}</div>
+        <div class="day-weekday">${txt(d.weekday)}</div>
+      </div>
+      <div class="today-badge">${todayLabel}</div>
+    </div>
+
+    <div class="daily-grid">
+
+      <!-- Калькулятор очков -->
+      <div class="calc-block">
+        <div class="block-title">
+          ${lang === 'en' ? '🧮 Score Calculator' : lang === 'vi' ? '🧮 Máy tính điểm' : '🧮 Калькулятор очков'}
+        </div>
+        <div class="calc-inputs">${calcFields}</div>
+        <div class="calc-result">
+          <div>
+            <div class="calc-total-pts" id="calc-total-${d.id}">0</div>
+            <div class="calc-total-label">${lang === 'en' ? 'Total points' : lang === 'vi' ? 'Tổng điểm' : 'Итого очков'}</div>
+          </div>
+          <div class="calc-rank-result" id="calc-rank-${d.id}">
+            <div class="calc-rank-line">
+              <span class="calc-rank-name">${lang === 'en' ? 'Enter values above' : lang === 'vi' ? 'Nhập giá trị ở trên' : 'Введи значения выше'}</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Задания -->
+      <div>
+        <div class="block-title">${lang === 'en' ? '📋 Tasks & Points' : lang === 'vi' ? '📋 Nhiệm vụ' : '📋 Задания и очки'}</div>
+        ${tasksHtml}
+      </div>
+
+      <!-- Личные награды -->
+      <div>
+        <div class="block-title">${lang === 'en' ? '🏆 Personal Rewards' : lang === 'vi' ? '🏆 Phần thưởng cá nhân' : '🏆 Личные награды'}</div>
+        <div class="rewards-block">
+          <div class="rewards-block-head">${lang === 'en' ? 'Rank → Required points' : lang === 'vi' ? 'Hạng → Điểm cần thiết' : 'Ранг → Нужно очков'}</div>
+          ${personalHtml}
+        </div>
+      </div>
+
+      <!-- Городские награды -->
+      <div>
+        <div class="block-title">${lang === 'en' ? '🏙 City Rewards' : lang === 'vi' ? '🏙 Phần thưởng thành phố' : '🏙 Городские награды'}</div>
+        <div class="rewards-block">
+          <div class="rewards-block-head">${lang === 'en' ? 'City Rank → Required points' : lang === 'vi' ? 'Hạng thành phố → Điểm cần' : 'Ранг города → Нужно очков'}</div>
+          ${cityHtml}
+        </div>
+      </div>
+
+    </div>
+  </div>`;
+}
+
+function renderDayPanels() {
+  const container = document.getElementById('day-panels');
+  container.innerHTML = DAYS_DATA.map((d, i) => renderDayPanel(d, i)).join('');
+}
+
+function renderAll() {
+  renderWeekTabs();
+  renderDayPanels();
+}
+
+/* ═══════════════════════════════════════════
+   CALCULATOR LOGIC
+   ═══════════════════════════════════════════ */
+function calcAdj(dayId, taskIdx, delta) {
+  const el = document.getElementById(`calc-${dayId}-${taskIdx}`);
+  if (!el) return;
+  el.value = Math.max(0, (parseInt(el.value) || 0) + delta);
+  calcUpdate(dayId);
+}
+
+function calcUpdate(dayId) {
+  const dIdx = DAYS_DATA.findIndex(d => d.id === dayId);
+  if (dIdx < 0) return;
+  const d = DAYS_DATA[dIdx];
+
+  let total = 0;
+  d.tasks.forEach((t, ti) => {
+    const el = document.getElementById(`calc-${dayId}-${ti}`);
+    const val = Math.max(0, parseInt(el?.value) || 0);
+    total += val * t.pts;
+  });
+
+  const totalEl = document.getElementById(`calc-total-${dayId}`);
+  if (totalEl) totalEl.textContent = fmtNum(total);
+
+  const rankEl = document.getElementById(`calc-rank-${dayId}`);
+  if (!rankEl) return;
+
+  const lang = getLang();
+  const reachedLabel  = lang === 'en' ? 'Reached' : lang === 'vi' ? 'Đạt được' : 'Достигнут';
+  const needLabel     = lang === 'en' ? 'need' : lang === 'vi' ? 'cần' : 'нужно';
+
+  /* Подсвечиваем строки в таблице личных наград */
+  d.personal.forEach((req, ri) => {
+    const row = document.getElementById(`prow-${dayId}-${ri}`);
+    if (row) row.classList.toggle('highlight', total >= req);
+  });
+
+  /* Показываем текущий и следующий ранг */
+  let currentRank = -1;
+  d.personal.forEach((req, ri) => {
+    if (total >= req) currentRank = ri;
+  });
+
+  let html = '';
+  if (currentRank >= 0) {
+    html += `<div class="calc-rank-line">
+      <span class="calc-rank-name">${RANK_LABELS[currentRank]}</span>
+      <span class="calc-rank-val calc-rank-ok">✓ ${reachedLabel}</span>
+    </div>`;
+  }
+  if (currentRank < d.personal.length - 1) {
+    const nextReq  = d.personal[currentRank + 1];
+    const diff     = nextReq - total;
+    html += `<div class="calc-rank-line">
+      <span class="calc-rank-name">${RANK_LABELS[currentRank + 1]}</span>
+      <span class="calc-rank-need">${needLabel} ${fmtNum(diff)}</span>
+    </div>`;
+  }
+  if (!html) {
+    html = `<div class="calc-rank-line">
+      <span class="calc-rank-name" style="color:var(--gold)">🏆 MAX — ${RANK_LABELS[d.personal.length - 1]}</span>
+    </div>`;
+  }
+  rankEl.innerHTML = html;
+}
+
+/* ═══════════════════════════════════════════
+   LANG CHANGE HOOK
+   ═══════════════════════════════════════════ */
+function onLangChange() {
+  renderAll();
+}
+
+/* ═══════════════════════════════════════════
+   INIT
+   ═══════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof initShared === 'function') initShared();
+  renderAll();
+});
+</script>
+</body>
+</html>
