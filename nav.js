@@ -1,7 +1,6 @@
 /* nav.js — shared nav + ticker + footer + lang switcher */
-(function(){
-
-document.body.insertAdjacentHTML('afterbegin',`
+(function () {
+  document.body.insertAdjacentHTML('afterbegin', `
 <nav class="nav">
   <div class="nav-logo">WARPATH <span class="dot">GUIDE</span></div>
   <ul class="nav-links">
@@ -39,7 +38,7 @@ document.body.insertAdjacentHTML('afterbegin',`
   <div class="ticker-overflow"><div class="ticker-track" id="ticker-track"></div></div>
 </div>`);
 
-document.body.insertAdjacentHTML('beforeend',`
+  document.body.insertAdjacentHTML('beforeend', `
 <div class="divider"></div>
 <footer class="footer">
   <div class="footer-grid">
@@ -60,8 +59,8 @@ document.body.insertAdjacentHTML('beforeend',`
       <li onclick="location.href='index.html'"      data-i18n="nav.home"></li>
     </ul></div>
     <div class="footer-col"><h4 data-i18n="footer.community"></h4><ul>
-      <li><a href="https://t.me/WarpathHub"      target="_blank" data-i18n="nav.telegram"></a></li>
-      <li><a href="https://t.me/donatebar_bot"   target="_blank" data-i18n="footer.donate"></a></li>
+      <li><a href="https://t.me/WarpathHub"    target="_blank" data-i18n="nav.telegram"></a></li>
+      <li><a href="https://t.me/donatebar_bot" target="_blank" data-i18n="footer.donate"></a></li>
       <li data-i18n="footer.suggest"></li>
     </ul></div>
   </div>
@@ -71,12 +70,22 @@ document.body.insertAdjacentHTML('beforeend',`
   </div>
 </footer>`);
 
-/* вставить переключатель языка после рендера DOM */
-document.addEventListener('DOMContentLoaded', () => {
-  const slot = document.getElementById('nav-lang-switcher');
-  if (slot && typeof buildLangSwitcher === 'function') {
-    slot.appendChild(buildLangSwitcher());
+  /* Вставляем переключатель языка.
+     nav.js подключается ПОСЛЕ i18n.js на всех страницах,
+     поэтому buildLangSwitcher() уже доступна синхронно. */
+  function tryInsertLangSwitcher() {
+    const slot = document.getElementById('nav-lang-switcher');
+    if (!slot) return;
+    if (typeof buildLangSwitcher === 'function') {
+      slot.appendChild(buildLangSwitcher());
+    }
   }
-});
 
+  /* Пробуем сразу (скрипт выполняется синхронно после i18n.js) */
+  tryInsertLangSwitcher();
+
+  /* Страховка — если DOM ещё не готов */
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', tryInsertLangSwitcher);
+  }
 })();
