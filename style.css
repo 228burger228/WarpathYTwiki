@@ -1,7 +1,6 @@
 /* ═══════════════════════════════════════════
    WARPATH GUIDE — SHARED STYLES
    Military-Industrial Dark Theme
-   Fonts: Bebas Neue + Barlow Condensed + Barlow
 ═══════════════════════════════════════════ */
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Barlow:wght@300;400;500;600;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap');
 
@@ -20,6 +19,7 @@
   --dim:     #8a8478;
   --line:    1px solid var(--border);
 }
+
 *,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
 body{background:var(--bg);color:var(--text);font-family:'Barlow',sans-serif;font-size:15px;overflow-x:hidden;-webkit-font-smoothing:antialiased}
@@ -62,17 +62,13 @@ ul{list-style:none}
 .btn-tg{display:inline-flex;align-items:center;gap:.45rem;background:rgba(41,182,246,.12);border:1px solid rgba(41,182,246,.28);color:#5bb8f5;padding:.6rem 1.4rem;font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;transition:all .2s}
 .btn-tg:hover{background:rgba(41,182,246,.22)}
 
-/* Nav */
-.nav{position:fixed;top:0;width:100%;z-index:900;background:rgba(7,8,10,.97);backdrop-filter:blur(16px);border-bottom:var(--line);height:56px;display:flex;align-items:center;justify-content:space-between;padding:0 2rem}
-.nav-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:4px;color:var(--gold2);display:flex;align-items:center;gap:.5rem;flex-shrink:0}
-.nav-logo .dot{color:var(--orange)}
-.nav-logo::before{content:'⊕';font-size:.9rem;color:var(--gold)}
-.nav-links{display:flex}
-.nav-links a{display:block;padding:0 .85rem;height:56px;line-height:56px;font-family:'Barlow Condensed',sans-serif;font-size:.74rem;font-weight:700;letter-spacing:1.5px;text-transform:uppercase;color:var(--muted);border-bottom:2px solid transparent;transition:all .18s}
-.nav-links a:hover,.nav-links a.active{color:var(--gold2);border-bottom-color:var(--gold)}
-.nav-right{display:flex;align-items:center;gap:.7rem}
-.nav-tg{display:flex;align-items:center;gap:.35rem;background:rgba(41,182,246,.1);border:1px solid rgba(41,182,246,.25);color:#5bb8f5;padding:.28rem .8rem;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all .18s}
-.nav-tg:hover{background:rgba(41,182,246,.2)}
+/* ═══════════════════════════════════════
+   NAV — ВАЖНО: здесь нет стилей .nav,
+   .nav-links, .nav-hamburger и т.д.
+   Они определены в nav.js чтобы
+   не было конфликтов специфичности.
+   Здесь только ticker + footer + scroll-top.
+═══════════════════════════════════════ */
 
 /* Ticker */
 .ticker-bar{margin-top:56px;background:linear-gradient(90deg,#1a0404,#2e0808,#1a0404);border-bottom:var(--line);height:30px;display:flex;align-items:center;overflow:hidden}
@@ -120,7 +116,7 @@ ul{list-style:none}
 .field-select{width:100%;background:var(--bg3);border:var(--line);color:var(--text);padding:.55rem .85rem;font-size:.84rem;outline:none;appearance:none;cursor:pointer}
 .field-range{width:100%;accent-color:var(--gold);margin-top:.2rem}
 
-/* ── INDEX ─────────────────────────────── */
+/* INDEX */
 .hero-wrap{min-height:78vh;display:flex;align-items:center;padding:7rem 2rem 4rem;max-width:1280px;margin:0 auto}
 .hero-badge{display:inline-flex;align-items:center;gap:.45rem;border:1px solid var(--border2);color:var(--gold);font-family:'Barlow Condensed',sans-serif;font-size:.64rem;font-weight:700;letter-spacing:2px;text-transform:uppercase;padding:.26rem .85rem;margin-bottom:1.3rem}
 .hero-badge::before{content:'●';color:#5dca38;animation:blink 2.2s ease-in-out infinite}
@@ -146,20 +142,6 @@ ul{list-style:none}
 .nav-card-label{font-family:'Bebas Neue',sans-serif;font-size:1rem;letter-spacing:1.5px}
 .nav-card-sub{font-size:.67rem;color:var(--muted);margin-top:.12rem}
 
-.yt-strip{overflow:hidden;position:relative;padding:.3rem 0}
-.yt-strip::before,.yt-strip::after{content:'';position:absolute;top:0;bottom:0;width:100px;z-index:2;pointer-events:none}
-.yt-strip::before{left:0;background:linear-gradient(to right,var(--bg2),transparent)}
-.yt-strip::after{right:0;background:linear-gradient(to left,var(--bg2),transparent)}
-.yt-track{display:flex;gap:1rem;width:max-content;animation:yt-scroll 36s linear infinite;padding:.4rem .5rem}
-.yt-track:hover{animation-play-state:paused}
-@keyframes yt-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.yt-card{display:flex;align-items:center;gap:.75rem;background:var(--panel);border:var(--line);padding:.6rem .95rem;min-width:190px;transition:border-color .18s,transform .18s;flex-shrink:0}
-.yt-card:hover{border-color:var(--border2);transform:translateY(-1px)}
-.yt-avatar{width:40px;height:40px;border-radius:50%;background:var(--bg3);border:2px solid var(--border2);display:flex;align-items:center;justify-content:center;font-size:1.2rem;flex-shrink:0}
-.yt-name{font-family:'Barlow Condensed',sans-serif;font-size:.82rem;font-weight:700}
-.yt-subs{font-size:.62rem;color:var(--muted)}
-.yt-red{font-size:.6rem;color:#f06060;text-transform:uppercase;letter-spacing:.5px}
-
 .community-wrap{display:grid;grid-template-columns:1fr 1fr;gap:1.5rem;align-items:center;background:var(--panel);border:var(--line);padding:2.4rem 2rem;position:relative;overflow:hidden}
 .community-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 100% at 0% 50%,rgba(200,148,28,.04),transparent);pointer-events:none}
 .community-wrap h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,2.5vw,2.2rem);letter-spacing:2px;margin-bottom:.5rem}
@@ -169,7 +151,7 @@ ul{list-style:none}
 .cstat-n{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--gold2);line-height:1}
 .cstat-l{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
 
-/* ── BUILDER ───────────────────────────── */
+/* Builder */
 .page-header{background:var(--bg2);border-bottom:var(--line);padding:2.4rem 0 1.5rem}
 .builder-layout{display:grid;grid-template-columns:320px 1fr;gap:1.4rem;align-items:start}
 .bp{background:var(--panel);border:var(--line);padding:1.3rem}
@@ -192,7 +174,7 @@ ul{list-style:none}
 .sv.up{color:#7ec850}
 .sv.down{color:#e04848}
 
-/* ── ARMY ──────────────────────────────── */
+/* Army */
 .army-layout{display:grid;grid-template-columns:1fr 300px;gap:1.4rem;align-items:start}
 .army-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(180px,1fr));gap:.7rem}
 .army-slot{background:var(--panel);border:var(--line);padding:.85rem;cursor:pointer;transition:all .2s;position:relative;min-height:100px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.4rem;text-align:center}
@@ -212,7 +194,7 @@ ul{list-style:none}
 .tot-row:last-child{border-bottom:none}
 .tot-val{font-family:'Barlow Condensed',sans-serif;font-weight:700;font-size:.95rem;color:var(--gold2)}
 
-/* ── TIER LIST ─────────────────────────── */
+/* Tier List */
 .tier-filters{display:flex;gap:.45rem;flex-wrap:wrap;margin-bottom:1.5rem}
 .tf-btn{background:var(--panel);border:var(--line);color:var(--muted);padding:.4rem .9rem;font-family:'Barlow Condensed',sans-serif;font-size:.72rem;font-weight:700;letter-spacing:1px;text-transform:uppercase;transition:all .18s}
 .tf-btn:hover,.tf-btn.active{background:rgba(200,150,28,.12);border-color:var(--gold);color:var(--gold2)}
@@ -235,7 +217,7 @@ ul{list-style:none}
 .tg-card{background:var(--panel);border:var(--line);padding:.9rem;cursor:pointer;transition:all .2s}
 .tg-card:hover{border-color:var(--border2);transform:translateY(-1px)}
 
-/* ── WIKI ──────────────────────────────── */
+/* Wiki */
 .wiki-layout{display:grid;grid-template-columns:215px 1fr;gap:1.4rem;align-items:start}
 .wiki-sidebar{background:var(--panel);border:var(--line);padding:1.1rem;position:sticky;top:76px}
 .wiki-sidebar-title{font-family:'Bebas Neue',sans-serif;font-size:.78rem;letter-spacing:3px;color:var(--muted);margin-bottom:.75rem;padding-bottom:.4rem;border-bottom:var(--line)}
@@ -254,7 +236,7 @@ ul{list-style:none}
 .wc-desc{font-size:.8rem;color:var(--dim);line-height:1.62}
 .tip-box{background:rgba(200,150,28,.06);border-left:2px solid var(--gold);padding:.5rem .7rem;font-size:.76rem;line-height:1.55;margin-top:.65rem;color:var(--dim)}
 
-/* ── YOUTUBERS ─────────────────────────── */
+/* YouTubers */
 .yt-page-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(285px,1fr));gap:1.1rem}
 .yt-page-card{background:var(--panel);border:var(--line);overflow:hidden;transition:border-color .18s,transform .18s}
 .yt-page-card:hover{border-color:var(--border2);transform:translateY(-2px)}
@@ -279,7 +261,9 @@ ul{list-style:none}
 .lnk-don{border-color:var(--border2);color:var(--gold);background:rgba(200,150,28,.07)}
 .lnk-don:hover{background:rgba(200,150,28,.18)}
 
-/* ── RESPONSIVE ────────────────────────── */
+/* ═══════════════════════════════════════
+   RESPONSIVE
+═══════════════════════════════════════ */
 @media(max-width:960px){
   .builder-layout,.army-layout,.wiki-layout{grid-template-columns:1fr}
   .wiki-sidebar{position:static}
@@ -289,7 +273,50 @@ ul{list-style:none}
   .community-stats{align-items:flex-start;flex-direction:row;gap:1.5rem}
 }
 @media(max-width:768px){
-  .nav-links{display:none}
-  .hero h1{font-size:3rem}
+  .hero-wrap{padding:5rem 1rem 2rem;min-height:auto}
+  .hero h1{font-size:clamp(2.4rem,8vw,3.5rem)}
+  .hero-desc{font-size:.88rem}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .hero-btns{flex-direction:column}
+  .hero-btns .btn{width:100%;text-align:center}
+  .nav-cards{grid-template-columns:repeat(2,1fr)}
+  .donate-wrap{grid-template-columns:1fr;gap:1.2rem}
+  .section{padding:2.5rem 0}
+  .section-sm{padding:1.8rem 0}
+  .wrap{padding:0 1rem}
+  .tier-row-wrap{flex-direction:column;min-height:auto}
+  .tier-letter{width:100%;height:38px;border-right:none;border-bottom:1px solid var(--border)}
+  .tier-cards-row{padding:.5rem}
+  .t-card{min-width:100px}
+  .army-grid{grid-template-columns:repeat(2,1fr)}
+  .daily-page{padding:1.2rem .75rem 5rem}
+  .daily-grid{grid-template-columns:1fr}
+  .calc-block{grid-column:1}
+  .calc-inputs{grid-template-columns:1fr 1fr}
+  .rewards-grid{grid-template-columns:1fr}
+  .day-title{font-size:1.5rem}
+  .lb-page{padding:1.2rem .75rem 5rem}
+  .lb-tabs{gap:.25rem;padding:.3rem}
+  .lb-tab{padding:.4rem .7rem;font-size:.78rem;letter-spacing:1px}
+  .lb-toolbar{gap:.4rem}
+  .lb-search{min-width:0;font-size:.8rem}
+  .lb-stats{grid-template-columns:repeat(2,1fr);gap:.6rem}
+  .lb-table td,.lb-table th{padding:.5rem .6rem}
+  .power-bar-wrap{display:none}
+  .clan-card{flex-wrap:wrap}
+  table{display:block;overflow-x:auto;-webkit-overflow-scrolling:touch}
   .footer-grid{grid-template-columns:1fr}
+  .footer-bottom{flex-direction:column;text-align:center;gap:.4rem}
+}
+@media(max-width:480px){
+  .nav-cards{grid-template-columns:1fr}
+  .army-grid{grid-template-columns:1fr}
+  .hero-stats{grid-template-columns:repeat(2,1fr)}
+  .stat-grid{grid-template-columns:1fr}
+  .stat-row.full{grid-column:1}
+  .calc-inputs{grid-template-columns:1fr}
+  .week-tabs{gap:.15rem;padding:.25rem}
+  .lb-tabs{gap:.15rem}
+  .lb-tab{padding:.35rem .5rem;font-size:.7rem}
+  .modal-row{grid-template-columns:1fr}
 }
