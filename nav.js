@@ -13,8 +13,6 @@
     <li><a href="army-builder.html" data-i18n="nav.army-builder"></a></li>
     <li><a href="tier-list.html"    data-i18n="nav.tier-list"></a></li>
     <li><a href="wiki.html"         data-i18n="nav.wiki"></a></li>
-    <li><a href="youtubers.html"    data-i18n="nav.youtubers"></a></li>
-    <li><a href="donate-bar.html"   data-i18n="nav.donate-bar"></a></li>
     <li><a href="daily.html"        data-i18n="nav.daily"></a></li>
     <li><a href="leaderboard.html"  data-i18n="nav.leaderboard"></a></li>
   </ul>
