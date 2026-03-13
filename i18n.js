@@ -1,19 +1,11 @@
 /* ════════════════════════════════════════════════════════
    i18n.js — система переводов Warpath Guide
    Языки: ru (по умолчанию) · en · vi
-   
-   Использование в HTML:
-     <span data-i18n="nav.home"></span>
-     <div data-i18n="hero.title"></div>
-   
-   Вызов из JS:
-     t('nav.home')  → возвращает строку на текущем языке
    ════════════════════════════════════════════════════════ */
 
 const TRANSLATIONS = {
 
   ru: {
-    /* ── nav ── */
     'nav.home':        'Главная',
     'nav.unit-builder':'Unit Builder',
     'nav.army-builder':'Army Builder',
@@ -23,7 +15,6 @@ const TRANSLATIONS = {
     'nav.donate-bar':  '🍺 Донатный бар',
     'nav.telegram':    '✈ Telegram',
 
-    /* ── footer ── */
     'footer.tools':    'Инструменты',
     'footer.content':  'Контент',
     'footer.community':'Сообщество',
@@ -33,10 +24,8 @@ const TRANSLATIONS = {
     'footer.suggest':  'Предложить гайд',
     'footer.donate':   'Донаты блогерам',
 
-    /* ── ticker ── */
     'ticker.label':    'НОВОСТИ',
 
-    /* ── index ── */
     'hero.badge':      'Официальный ресурс · RU · Патч 13.4',
     'hero.title1':     'ВСЁ ОБ',
     'hero.title2':     'WARPATH',
@@ -72,7 +61,6 @@ const TRANSLATIONS = {
     'community.join':     '✈ Вступить в Telegram',
     'community.bloggers': '👥 Блогеры',
 
-    /* ── youtubers ── */
     'yt.title':        'Блогеры сообщества',
     'yt.sub':          'Русскоязычные авторы, которые делают контент по Warpath: Ace Shooter',
     'yt.partner':      '✓ Партнёр',
@@ -80,12 +68,11 @@ const TRANSLATIONS = {
     'yt.partner-desc': '— официальный партнёр Lilith Games',
     'yt.pending-desc': '— ожидает подтверждения',
     'yt.latest':       'Последние видео',
-    'yt.subs':         'подписчиков',
+    'yt.subs':         'подп.',
     'yt.videos':       'видео',
     'yt.guides':       'гайдов',
     'yt.star-note':    '✦ — блогер ещё не получил официальный статус партнёра, но уже является частью нашего сообщества.',
 
-    /* ── wiki ── */
     'wiki.title':      'WIKI',
     'wiki.sub':        'Юниты, офицеры, механики — разрабатывается сообществом блогеров. Данные пополняются.',
     'wiki.units':      '🛡 Юниты',
@@ -94,7 +81,6 @@ const TRANSLATIONS = {
     'wiki.economy':    '💰 Экономика',
     'wiki.coming-soon':'Скоро',
 
-    /* ── donate bar page ── */
     'db.title':        '🍺 Донатный Бар',
     'db.sub':          'Введи количество кружек и бокалов которые у тебя есть на это открытие.',
     'db.calc-label':   'Расчёт на месяц',
@@ -175,7 +161,7 @@ const TRANSLATIONS = {
     'yt.partner-desc': '— official Lilith Games partner',
     'yt.pending-desc': '— pending confirmation',
     'yt.latest':       'Latest videos',
-    'yt.subs':         'subscribers',
+    'yt.subs':         'subs',
     'yt.videos':       'videos',
     'yt.guides':       'guides',
     'yt.star-note':    '✦ — blogger has not yet received official partner status but is already part of our community.',
@@ -230,7 +216,7 @@ const TRANSLATIONS = {
     'hero.title1':     'TẤT CẢ VỀ',
     'hero.title2':     'WARPATH',
     'hero.title3':     'BẰNG TIẾNG VIỆT',
-    'hero.desc':       'Hướng dẫn, cơ chế, nghiên cứu — được giải thích bằng ngôn ngữ đơn giản. Unit Builder, Army Builder, bảng xếp hạng, wiki — tất cả trong một nơi.',
+    'hero.desc':       'Hướng dẫn, cơ chế, nghiên cứu — được giải thích bằng ngôn ngữ đơn giản.',
     'hero.btn.builder':'⚔ Unit Builder',
     'hero.btn.wiki':   '📖 Wiki',
     'hero.stat.units': 'Loại đơn vị',
@@ -274,7 +260,7 @@ const TRANSLATIONS = {
     'yt.star-note':    '✦ — blogger chưa nhận được trạng thái đối tác chính thức nhưng đã là một phần của cộng đồng.',
 
     'wiki.title':      'WIKI',
-    'wiki.sub':        'Đơn vị, sĩ quan, cơ chế — được xây dựng bởi cộng đồng blogger. Dữ liệu đang được cập nhật.',
+    'wiki.sub':        'Đơn vị, sĩ quan, cơ chế — được xây dựng bởi cộng đồng blogger.',
     'wiki.units':      '🛡 Đơn vị',
     'wiki.officers':   '🎖 Sĩ quan',
     'wiki.mechanics':  '⚙ Cơ chế',
@@ -297,7 +283,6 @@ const TRANSLATIONS = {
     'db.tier3-lbl':    'đồ uống',
     'db.tier3-sub':    '52+ ly (65 + 5)',
   },
-
 };
 
 /* ════════════════════════════════════════════
@@ -305,9 +290,9 @@ const TRANSLATIONS = {
    ════════════════════════════════════════════ */
 const I18N_KEY = 'wg-lang';
 const LANGS = [
-  { code:'ru', label:'RU', flag:'🇷🇺' },
-  { code:'en', label:'EN', flag:'🇬🇧' },
-  { code:'vi', label:'VI', flag:'🇻🇳' },
+  { code: 'ru', label: 'RU', flag: '🇷🇺' },
+  { code: 'en', label: 'EN', flag: '🇬🇧' },
+  { code: 'vi', label: 'VI', flag: '🇻🇳' },
 ];
 
 let currentLang = localStorage.getItem(I18N_KEY) || 'ru';
@@ -320,18 +305,23 @@ function t(key) {
 
 function applyLang() {
   document.documentElement.lang = currentLang;
+
   document.querySelectorAll('[data-i18n]').forEach(el => {
     const key = el.dataset.i18n;
-    el.textContent = t(key);
+    const val = t(key);
+    if (val) el.textContent = val;
   });
+
   document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
-    el.placeholder = t(el.dataset.i18nPlaceholder);
+    const val = t(el.dataset.i18nPlaceholder);
+    if (val) el.placeholder = val;
   });
-  /* обновить переключатель */
+
+  /* Обновляем все lang-кнопки на странице */
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === currentLang);
   });
-  /* вызвать колбэк страницы если есть */
+
   if (typeof onLangChange === 'function') onLangChange(currentLang);
 }
 
@@ -341,7 +331,7 @@ function setLang(code) {
   applyLang();
 }
 
-/* вставляет переключатель — вызывается из nav.js */
+/* Строит переключатель языка (один экземпляр) */
 function buildLangSwitcher() {
   const wrap = document.createElement('div');
   wrap.className = 'lang-switcher';
@@ -356,4 +346,9 @@ function buildLangSwitcher() {
   return wrap;
 }
 
-document.addEventListener('DOMContentLoaded', applyLang);
+/*
+  НЕ вызываем applyLang() автоматически здесь.
+  Вызов происходит из nav.js после того, как он вставил
+  весь HTML с data-i18n атрибутами.
+  Это предотвращает двойной перевод.
+*/
