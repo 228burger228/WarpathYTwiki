@@ -1,14 +1,11 @@
-/* ════════════════════════════════════════════════════════
-   i18n.js — система переводов Warpath Guide
-   Языки: ru (по умолчанию) · en · vi
-
-   ИСПРАВЛЕНО: вьетнамский раздел не был обёрнут в vi:{...}
-   — ключи висели снаружи объекта TRANSLATIONS и ломали
-     весь JS на всех страницах сайта.
-   ════════════════════════════════════════════════════════ */
+/* i18n.js — система переводов Warpath Guide
+   Языки: ru (по умолчанию) · en · vi        */
 
 const TRANSLATIONS = {
 
+  /* ══════════════════════════════════════════
+     РУССКИЙ
+  ══════════════════════════════════════════ */
   ru: {
     'nav.home':        'Главная',
     'nav.unit-builder':'Unit Builder',
@@ -19,8 +16,9 @@ const TRANSLATIONS = {
     'nav.donate-bar':  '🍺 Донатный бар',
     'nav.daily':       '📅 Daily',
     'nav.leaderboard': '🏆 Лидерборд',
-    'nav.telegram':    '✈ Telegram',
+    'nav.community':   '💬 Чат',
     'nav.ai-chat':     '🤖 ИИ-помощник',
+    'nav.telegram':    '✈ Telegram',
 
     'footer.tools':    'Инструменты',
     'footer.content':  'Контент',
@@ -128,6 +126,9 @@ const TRANSLATIONS = {
     'lb.cancel':       'Отмена',
   },
 
+  /* ══════════════════════════════════════════
+     ENGLISH
+  ══════════════════════════════════════════ */
   en: {
     'nav.home':        'Home',
     'nav.unit-builder':'Unit Builder',
@@ -138,8 +139,10 @@ const TRANSLATIONS = {
     'nav.donate-bar':  '🍺 Donate Bar',
     'nav.daily':       '📅 Daily',
     'nav.leaderboard': '🏆 Leaderboard',
-    'nav.telegram':    '✈ Telegram',
+    'nav.community':   '💬 Chat',
     'nav.ai-chat':     '🤖 AI Assistant',
+    'nav.telegram':    '✈ Telegram',
+
     'footer.tools':    'Tools',
     'footer.content':  'Content',
     'footer.community':'Community',
@@ -246,13 +249,9 @@ const TRANSLATIONS = {
     'lb.cancel':       'Cancel',
   },
 
-  /* ════════════════════════════════════════════
-     ИСПРАВЛЕНО: был не обёрнут в vi:{} — все
-     ключи висели снаружи объекта TRANSLATIONS
-     и вызывали SyntaxError/логическую ошибку,
-     из-за которой nav.js тоже не выполнялся
-     (бургер не инициализировался).
-  ════════════════════════════════════════════ */
+  /* ══════════════════════════════════════════
+     TIẾNG VIỆT
+  ══════════════════════════════════════════ */
   vi: {
     'nav.home':        'Trang chủ',
     'nav.unit-builder':'Unit Builder',
@@ -263,8 +262,10 @@ const TRANSLATIONS = {
     'nav.donate-bar':  '🍺 Donate Bar',
     'nav.daily':       '📅 Daily',
     'nav.leaderboard': '🏆 Bảng xếp hạng',
-    'nav.telegram':    '✈ Telegram',
+    'nav.community':   '💬 Chat',
     'nav.ai-chat':     '🤖 Trợ lý AI',
+    'nav.telegram':    '✈ Telegram',
+
     'footer.tools':    'Công cụ',
     'footer.content':  'Nội dung',
     'footer.community':'Cộng đồng',
@@ -395,8 +396,7 @@ function applyLang() {
   document.documentElement.lang = currentLang;
 
   document.querySelectorAll('[data-i18n]').forEach(el => {
-    const key = el.dataset.i18n;
-    const val = t(key);
+    const val = t(el.dataset.i18n);
     if (val) el.textContent = val;
   });
 
