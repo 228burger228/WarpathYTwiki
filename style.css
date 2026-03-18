@@ -542,6 +542,38 @@ ul{list-style:none}
 .lnk-don{border-color:var(--border2);color:var(--gold);background:rgba(200,150,28,.07)}
 .lnk-don:hover{background:rgba(200,150,28,.18)}
 
+/* Специальная подсветка ссылки ИИ-помощника в навигации */
+.nav-ai-link {
+  color: var(--gold) !important;
+  position: relative;
+}
+.nav-ai-link::after {
+  content: 'NEW';
+  position: absolute;
+  top: 10px;
+  right: -2px;
+  font-size: .42rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  color: #000;
+  background: var(--gold);
+  padding: 1px 3px;
+  border-radius: 2px;
+  line-height: 1;
+}
+.nav-ai-link:hover { color: var(--gold2) !important; }
+
+/* ИИ-ссылка в мобильном меню */
+.nav-mobile-ai {
+  color: var(--gold) !important;
+  border-left-color: var(--gold) !important;
+}
+.nav-mobile-ai:hover,
+.nav-mobile-ai.active {
+  color: var(--gold2) !important;
+  background: rgba(200,150,28,.08) !important;
+}
+
 /* ═══════════════════════════════════════
    SCROLL TO TOP
 ═══════════════════════════════════════ */
