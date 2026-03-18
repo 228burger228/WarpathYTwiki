@@ -20,6 +20,7 @@ const TRANSLATIONS = {
     'nav.daily':       '📅 Daily',
     'nav.leaderboard': '🏆 Лидерборд',
     'nav.telegram':    '✈ Telegram',
+    'nav.ai-chat':     '🤖 ИИ-помощник',
 
     'footer.tools':    'Инструменты',
     'footer.content':  'Контент',
@@ -138,8 +139,7 @@ const TRANSLATIONS = {
     'nav.daily':       '📅 Daily',
     'nav.leaderboard': '🏆 Leaderboard',
     'nav.telegram':    '✈ Telegram',
-
-    'footer.tools':    'Tools',
+    'nav.ai-chat':     '🤖 AI Assistant',    'Tools',
     'footer.content':  'Content',
     'footer.community':'Community',
     'footer.desc':     'Official resource of Russian-speaking Warpath: Ace Shooter bloggers. Guides, tools, wiki.',
@@ -263,8 +263,7 @@ const TRANSLATIONS = {
     'nav.daily':       '📅 Daily',
     'nav.leaderboard': '🏆 Bảng xếp hạng',
     'nav.telegram':    '✈ Telegram',
-
-    'footer.tools':    'Công cụ',
+    'nav.ai-chat':     '🤖 Trợ lý AI',    'Công cụ',
     'footer.content':  'Nội dung',
     'footer.community':'Cộng đồng',
     'footer.desc':     'Tài nguyên chính thức của các blogger Warpath: Ace Shooter. Hướng dẫn, công cụ, wiki.',
