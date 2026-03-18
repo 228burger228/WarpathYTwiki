@@ -1,6 +1,10 @@
 /* ════════════════════════════════════════════════════════
    i18n.js — система переводов Warpath Guide
    Языки: ru (по умолчанию) · en · vi
+
+   ИСПРАВЛЕНО: вьетнамский раздел не был обёрнут в vi:{...}
+   — ключи висели снаружи объекта TRANSLATIONS и ломали
+     весь JS на всех страницах сайта.
    ════════════════════════════════════════════════════════ */
 
 const TRANSLATIONS = {
@@ -99,7 +103,6 @@ const TRANSLATIONS = {
     'db.tier3-lbl':    'напитков',
     'db.tier3-sub':    '52+ бокала (65 + 5)',
 
-    /* Daily */
     'daily.today':     'СЕГОДНЯ',
     'daily.calc':      '🧮 Калькулятор очков',
     'daily.tasks':     '📋 Задания и очки',
@@ -110,7 +113,6 @@ const TRANSLATIONS = {
     'daily.reached':   'Достигнут',
     'daily.need':      'нужно',
 
-    /* Leaderboard */
     'lb.players':      '⚔️ Игроки',
     'lb.clans':        '🛡️ Кланы / Альянсы',
     'lb.server':       '🌍 Статистика сервера',
@@ -219,7 +221,6 @@ const TRANSLATIONS = {
     'db.tier3-lbl':    'drinks',
     'db.tier3-sub':    '52+ glasses (65 + 5)',
 
-    /* Daily */
     'daily.today':     'TODAY',
     'daily.calc':      '🧮 Score Calculator',
     'daily.tasks':     '📋 Tasks & Points',
@@ -230,7 +231,6 @@ const TRANSLATIONS = {
     'daily.reached':   'Reached',
     'daily.need':      'need',
 
-    /* Leaderboard */
     'lb.players':      '⚔️ Players',
     'lb.clans':        '🛡️ Clans / Alliances',
     'lb.server':       '🌍 Server Stats',
@@ -244,6 +244,15 @@ const TRANSLATIONS = {
     'lb.save':         'Save',
     'lb.cancel':       'Cancel',
   },
+
+  /* ════════════════════════════════════════════
+     ИСПРАВЛЕНО: был не обёрнут в vi:{} — все
+     ключи висели снаружи объекта TRANSLATIONS
+     и вызывали SyntaxError/логическую ошибку,
+     из-за которой nav.js тоже не выполнялся
+     (бургер не инициализировался).
+  ════════════════════════════════════════════ */
+  vi: {
     'nav.home':        'Trang chủ',
     'nav.unit-builder':'Unit Builder',
     'nav.army-builder':'Army Builder',
@@ -251,10 +260,10 @@ const TRANSLATIONS = {
     'nav.wiki':        'Wiki',
     'nav.youtubers':   'YouTubers',
     'nav.donate-bar':  '🍺 Donate Bar',
-    'nav.telegram':    '✈ Telegram',
-    'nav.donate-bar':  '🍺 Donate Bar',
     'nav.daily':       '📅 Daily',
     'nav.leaderboard': '🏆 Bảng xếp hạng',
+    'nav.telegram':    '✈ Telegram',
+
     'footer.tools':    'Công cụ',
     'footer.content':  'Nội dung',
     'footer.community':'Cộng đồng',
@@ -337,7 +346,6 @@ const TRANSLATIONS = {
     'db.tier3-lbl':    'đồ uống',
     'db.tier3-sub':    '52+ ly (65 + 5)',
 
-    /* Daily */
     'daily.today':     'HÔM NAY',
     'daily.calc':      '🧮 Máy tính điểm',
     'daily.tasks':     '📋 Nhiệm vụ & Điểm',
@@ -348,7 +356,6 @@ const TRANSLATIONS = {
     'daily.reached':   'Đạt được',
     'daily.need':      'cần',
 
-    /* Leaderboard */
     'lb.players':      '⚔️ Người chơi',
     'lb.clans':        '🛡️ Clan / Liên minh',
     'lb.server':       '🌍 Thống kê server',
@@ -362,6 +369,7 @@ const TRANSLATIONS = {
     'lb.save':         'Lưu',
     'lb.cancel':       'Hủy',
   },
+
 };
 
 /* ════════════════════════════════════════════
@@ -396,7 +404,6 @@ function applyLang() {
     if (val) el.placeholder = val;
   });
 
-  /* Обновляем все lang-кнопки на странице */
   document.querySelectorAll('.lang-btn').forEach(btn => {
     btn.classList.toggle('active', btn.dataset.lang === currentLang);
   });
@@ -410,7 +417,6 @@ function setLang(code) {
   applyLang();
 }
 
-/* Строит переключатель языка (один экземпляр) */
 function buildLangSwitcher() {
   const wrap = document.createElement('div');
   wrap.className = 'lang-switcher';
@@ -424,10 +430,3 @@ function buildLangSwitcher() {
   });
   return wrap;
 }
-
-/*
-  НЕ вызываем applyLang() автоматически здесь.
-  Вызов происходит из nav.js после того, как он вставил
-  весь HTML с data-i18n атрибутами.
-  Это предотвращает двойной перевод.
-*/
