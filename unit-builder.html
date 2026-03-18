@@ -5,62 +5,6 @@
 <title>Unit Builder — Warpath Guide</title>
 <link rel="stylesheet" href="style.css">
 <style>
-/* ── Мобильное меню ── */
-.nav-hamburger {
-  display: none;
-  flex-direction: column;
-  gap: 5px;
-  cursor: pointer;
-  padding: 6px;
-  border: 1px solid var(--border);
-  border-radius: 6px;
-  background: transparent;
-  margin-left: .5rem;
-}
-.nav-hamburger span {
-  display: block;
-  width: 20px;
-  height: 2px;
-  background: var(--text);
-  border-radius: 2px;
-  transition: all .2s;
-}
-.nav-mobile-menu {
-  display: none;
-  position: fixed;
-  top: 56px;
-  left: 0; right: 0;
-  background: rgba(7,8,10,.98);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--border);
-  z-index: 899;
-  padding: .5rem 0;
-}
-.nav-mobile-menu.open { display: block; }
-.nav-mobile-menu a {
-  display: block;
-  padding: .75rem 2rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: .85rem;
-  font-weight: 700;
-  letter-spacing: 1.5px;
-  text-transform: uppercase;
-  color: var(--muted);
-  border-left: 3px solid transparent;
-  transition: all .15s;
-}
-.nav-mobile-menu a:hover,
-.nav-mobile-menu a.active {
-  color: var(--gold2);
-  border-left-color: var(--gold);
-  background: rgba(200,150,28,.05);
-}
-
-@media(max-width:768px) {
-  .nav-links { display: none !important; }
-  .nav-hamburger { display: flex; }
-}
-
 /* ── Builder адаптив ── */
 .builder-layout {
   display: grid;
@@ -68,32 +12,16 @@
   gap: 1.4rem;
   align-items: start;
 }
-
 @media(max-width:900px) {
-  .builder-layout {
-    grid-template-columns: 1fr;
-  }
-  .stat-grid {
-    grid-template-columns: 1fr 1fr !important;
-  }
+  .builder-layout { grid-template-columns: 1fr; }
+  .stat-grid { grid-template-columns: 1fr 1fr !important; }
 }
-
 @media(max-width:480px) {
-  .stat-grid {
-    grid-template-columns: 1fr !important;
-  }
-  .stat-row.full {
-    grid-column: 1 !important;
-  }
-  .bp {
-    padding: 1rem !important;
-  }
-  .page-header .wrap {
-    padding: 0 1rem;
-  }
-  .wrap {
-    padding: 0 1rem;
-  }
+  .stat-grid { grid-template-columns: 1fr !important; }
+  .stat-row.full { grid-column: 1 !important; }
+  .bp { padding: 1rem !important; }
+  .page-header .wrap { padding: 0 1rem; }
+  .wrap { padding: 0 1rem; }
 }
 
 /* ── Таблица юнитов — скролл на мобиле ── */
@@ -103,101 +31,49 @@
   border: 1px solid var(--border);
   border-radius: 4px;
 }
-.u-table-wrap table {
-  min-width: 520px;
-}
-
-/* ── Улучшенный stat-display ── */
-.stat-display {
-  position: relative;
-}
+.u-table-wrap table { min-width: 520px; }
 
 /* ── Кнопки управления ── */
-.builder-controls {
-  display: flex;
-  gap: .55rem;
-  margin-top: 1.1rem;
-  flex-wrap: wrap;
-}
-.builder-controls .btn {
-  flex: 1;
-  min-width: 120px;
-  text-align: center;
-}
+.builder-controls { display: flex; gap: .55rem; margin-top: 1.1rem; flex-wrap: wrap; }
+.builder-controls .btn { flex: 1; min-width: 120px; text-align: center; }
 
-/* ── Unit preview улучшение ── */
+/* ── Unit preview ── */
 .unit-preview {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  height: 140px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 4.5rem;
-  margin-bottom: 1rem;
-  position: relative;
-  overflow: hidden;
-  transition: border-color .2s;
+  background: var(--bg3); border: 1px solid var(--border);
+  height: 140px; display: flex; align-items: center; justify-content: center;
+  font-size: 4.5rem; margin-bottom: 1rem; position: relative;
+  overflow: hidden; transition: border-color .2s;
 }
-.unit-preview:hover {
-  border-color: var(--border2);
-}
+.unit-preview:hover { border-color: var(--border2); }
 .unit-preview::after {
-  content: attr(data-name);
-  position: absolute;
-  bottom: .4rem;
-  left: 0; right: 0;
-  text-align: center;
-  font-family: 'Bebas Neue', sans-serif;
-  font-size: .72rem;
-  letter-spacing: 2px;
-  color: var(--muted);
+  content: attr(data-name); position: absolute; bottom: .4rem;
+  left: 0; right: 0; text-align: center;
+  font-family: 'Bebas Neue', sans-serif; font-size: .72rem;
+  letter-spacing: 2px; color: var(--muted);
 }
 
 /* ── Compare panel ── */
-#cmp-panel {
-  margin-top: .9rem;
-  animation: fadeIn .25s ease;
-}
-@keyframes fadeIn {
-  from { opacity: 0; transform: translateY(8px); }
-  to   { opacity: 1; transform: none; }
-}
+#cmp-panel { margin-top: .9rem; animation: fadeIn .25s ease; }
+@keyframes fadeIn { from{opacity:0;transform:translateY(8px)} to{opacity:1;transform:none} }
 
 /* ── Таблица ── */
 #u-table { width: 100%; border-collapse: collapse; }
 #u-table tr { border-bottom: 1px solid var(--border); cursor: pointer; transition: background .15s; }
 #u-table tr:hover { background: var(--panel); }
 #u-table th {
-  text-align: left;
-  padding: .55rem .7rem;
-  font-family: 'Barlow Condensed', sans-serif;
-  font-size: .68rem;
-  letter-spacing: 1px;
-  text-transform: uppercase;
-  color: var(--muted);
-  white-space: nowrap;
+  text-align: left; padding: .55rem .7rem;
+  font-family: 'Barlow Condensed', sans-serif; font-size: .68rem;
+  letter-spacing: 1px; text-transform: uppercase; color: var(--muted); white-space: nowrap;
 }
 #u-table th:not(:first-child) { text-align: right; }
 
-/* ── Scroll to top кнопка ── */
+/* ── Scroll to top ── */
 .scroll-top {
-  position: fixed;
-  bottom: 1.5rem;
-  right: 1.5rem;
-  width: 40px;
-  height: 40px;
-  background: var(--gold);
-  color: #000;
-  border: none;
-  border-radius: 8px;
-  font-size: 1.1rem;
-  cursor: pointer;
-  display: none;
-  align-items: center;
-  justify-content: center;
-  z-index: 800;
-  transition: opacity .2s;
+  position: fixed; bottom: 1.5rem; right: 1.5rem;
+  width: 40px; height: 40px; background: var(--gold); color: #000;
+  border: none; border-radius: 8px; font-size: 1.1rem; cursor: pointer;
+  display: none; align-items: center; justify-content: center;
+  z-index: 800; transition: opacity .2s;
 }
 .scroll-top.visible { display: flex; }
 .scroll-top:hover { opacity: .85; }
@@ -205,16 +81,12 @@
 </head>
 <body>
 
-<!-- Мобильное меню (вставляется nav.js, но продублируем для страховки) -->
-<div class="nav-mobile-menu" id="mobile-menu">
-  <a href="index.html"        data-i18n="nav.home">Главная</a>
-  <a href="unit-builder.html" data-i18n="nav.unit-builder" class="active">Unit Builder</a>
-  <a href="army-builder.html" data-i18n="nav.army-builder">Army Builder</a>
-  <a href="tier-list.html"    data-i18n="nav.tier-list">Тир-лист</a>
-  <a href="wiki.html"         data-i18n="nav.wiki">Wiki</a>
-  <a href="youtubers.html"    data-i18n="nav.youtubers">YouTubers</a>
-  <a href="donate-bar.html"   data-i18n="nav.donate-bar">Донатный Бар</a>
-</div>
+<!-- ВАЖНО: i18n.js первым! nav.js вставит навигацию сам. -->
+<!-- Дублирующий #mobile-menu удалён — nav.js создаёт своё
+     мобильное меню (#nav-mobile). Два разных меню конфликтовали. -->
+<script src="i18n.js"></script>
+<script src="nav.js"></script>
+<script src="data.js"></script>
 
 <div class="page-header">
   <div class="wrap">
@@ -242,7 +114,6 @@
           <div class="field">
             <div class="field-label">Уровень <em id="lv-val" style="color:var(--gold2)">1</em></div>
             <input class="field-range" type="range" id="sel-level" min="1" max="10" value="1" oninput="rebuild()">
-            <!-- Метки уровней -->
             <div style="display:flex;justify-content:space-between;font-size:.6rem;color:var(--muted);margin-top:.15rem">
               <span>1</span><span>5</span><span>10</span>
             </div>
@@ -273,7 +144,6 @@
               <div id="s-power" style="font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:1px;color:var(--gold2)">—</div>
               <div style="font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px">Сила юнита</div>
             </div>
-            <!-- Тип юнита-бейдж -->
             <div id="s-badge" style="font-size:.7rem;padding:.2rem .6rem;border:1px solid var(--border);border-radius:4px;color:var(--muted);align-self:flex-start;display:none"></div>
           </div>
 
@@ -309,7 +179,6 @@
           <div class="stat-row full" style="grid-column:1/-1"><span class="sn">Стоимость</span><span class="sv" id="sv-cost">—</span></div>
         </div>
 
-        <!-- Compare panel -->
         <div id="cmp-panel" style="display:none">
           <div class="bp" style="margin-top:.9rem">
             <div class="bp-title">Сравнение с сохранённым</div>
@@ -343,39 +212,10 @@
   </div>
 </section>
 
-<!-- Scroll to top -->
 <button class="scroll-top" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
 
-<!-- ВАЖНО: i18n.js первым! -->
-<script src="i18n.js"></script>
-<script src="nav.js"></script>
-<script src="data.js"></script>
 <script>
 let snap = null;
-
-/* ── Hamburger меню ── */
-function initHamburger() {
-  const nav = document.querySelector('.nav');
-  if (!nav) return;
-
-  // Кнопка-бургер
-  const hb = document.createElement('button');
-  hb.className = 'nav-hamburger';
-  hb.setAttribute('aria-label', 'Меню');
-  hb.innerHTML = '<span></span><span></span><span></span>';
-  nav.querySelector('.nav-right').prepend(hb);
-
-  const menu = document.getElementById('mobile-menu');
-  hb.addEventListener('click', () => {
-    menu.classList.toggle('open');
-  });
-  // Закрыть при клике вне
-  document.addEventListener('click', (e) => {
-    if (!nav.contains(e.target) && !menu.contains(e.target)) {
-      menu.classList.remove('open');
-    }
-  });
-}
 
 /* ── Scroll to top ── */
 window.addEventListener('scroll', () => {
@@ -428,7 +268,6 @@ function rebuild() {
   document.getElementById('s-name').textContent  = `${unit.label} · Уровень ${level}`;
   document.getElementById('s-power').textContent = fmt(s.power);
 
-  // Бейдж
   const badge = document.getElementById('s-badge');
   badge.textContent = unit.emoji + ' ' + unit.label;
   badge.style.display = 'block';
@@ -516,7 +355,6 @@ function buildTable() {
 
 document.addEventListener('DOMContentLoaded', () => {
   initShared();
-  initHamburger();
   populateSelects();
   rebuild();
   buildTable();
