@@ -473,6 +473,9 @@
 .config-input::placeholder { color: var(--muted); opacity: .6; }
 
 </style>
+<script src="i18n.js"></script>
+<script src="nav.js"></script>
+<script src="data.js"></script>
 </head>
 <body>
 
@@ -485,7 +488,7 @@
 </div>
 
 <!-- SETUP SCREEN (показывается при первом заходе) -->
-<div id="setup-screen" style="display:none; padding: 1rem;">
+<div id="setup-screen" style="display:block; padding: 1rem;">
   <div class="setup-card">
     <div class="setup-title">Добро пожаловать!</div>
     <div class="setup-sub">Выбери ник и лагерь — они будут видны в чате. Это сохраняется в браузере.</div>
@@ -635,9 +638,6 @@
   </div>
 </div>
 
-<script src="i18n.js"></script>
-<script src="nav.js"></script>
-<script src="data.js"></script>
 <script>
 
 /* ════════════════════════════════════════════
