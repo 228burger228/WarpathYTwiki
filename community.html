@@ -1,0 +1,1026 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Сообщество — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+<style>
+/* ═══════════════════════════════════════════
+   COMMUNITY PAGE
+═══════════════════════════════════════════ */
+.com-page { max-width: 1200px; margin: 0 auto; padding: 2rem 1rem 6rem; }
+
+/* ── SETUP SCREEN ── */
+#setup-screen {
+  max-width: 480px; margin: 4rem auto; padding: 2rem 1rem;
+}
+.setup-card {
+  background: var(--panel);
+  border: 1px solid var(--border2);
+  border-radius: 16px;
+  padding: 2rem 2rem 1.75rem;
+  position: relative;
+  overflow: hidden;
+}
+.setup-card::before {
+  content: '';
+  position: absolute; top: 0; left: 0; right: 0; height: 2px;
+  background: linear-gradient(90deg, var(--gold), var(--orange));
+}
+.setup-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1.8rem; letter-spacing: 3px; color: var(--gold2);
+  margin-bottom: .25rem;
+}
+.setup-sub { font-size: .82rem; color: var(--muted); margin-bottom: 1.75rem; line-height: 1.5; }
+
+.setup-field { margin-bottom: 1.1rem; }
+.setup-label {
+  display: block; font-size: .7rem; color: var(--muted);
+  text-transform: uppercase; letter-spacing: 1px; margin-bottom: .4rem;
+}
+.setup-input {
+  width: 100%; box-sizing: border-box;
+  background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text);
+  font-family: 'Barlow', sans-serif; font-size: .95rem;
+  padding: .65rem 1rem; outline: none;
+  transition: border-color .2s;
+}
+.setup-input:focus { border-color: var(--gold); }
+
+.faction-grid {
+  display: grid; grid-template-columns: repeat(3,1fr); gap: .5rem;
+  margin-top: .4rem;
+}
+.faction-btn {
+  padding: .55rem .5rem; border-radius: 8px;
+  border: 1px solid var(--border); background: var(--bg3);
+  color: var(--muted); font-size: .78rem; font-family: inherit;
+  cursor: pointer; transition: all .18s; text-align: center;
+  line-height: 1.3;
+}
+.faction-btn:hover { border-color: var(--gold); color: var(--text); }
+.faction-btn.sel { border-color: var(--gold2); color: var(--gold2); background: rgba(200,150,28,.1); }
+.faction-btn.sel-red   { border-color: #e57373; color: #e57373; background: rgba(229,115,115,.08); }
+.faction-btn.sel-blue  { border-color: #29b6f6; color: #29b6f6; background: rgba(41,182,246,.08); }
+.faction-btn.sel-gray  { border-color: #9e9e9e; color: #9e9e9e; background: rgba(158,158,158,.08); }
+
+.rank-grid {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: .4rem;
+  margin-top: .4rem;
+}
+.rank-btn {
+  padding: .45rem .5rem; border-radius: 7px;
+  border: 1px solid var(--border); background: var(--bg3);
+  color: var(--muted); font-size: .76rem; font-family: inherit;
+  cursor: pointer; transition: all .18s; text-align: center;
+}
+.rank-btn:hover { border-color: var(--gold); color: var(--text); }
+.rank-btn.sel { border-color: var(--gold2); color: var(--gold2); background: rgba(200,150,28,.1); }
+
+.setup-enter {
+  width: 100%; padding: .75rem; margin-top: .5rem;
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  color: #07080a; font-family: 'Bebas Neue',sans-serif;
+  font-size: 1rem; letter-spacing: 3px; border: none;
+  border-radius: 8px; cursor: pointer;
+  transition: opacity .18s, transform .18s;
+}
+.setup-enter:hover { opacity: .85; transform: translateY(-1px); }
+.setup-enter:disabled { opacity: .4; cursor: not-allowed; transform: none; }
+
+/* ── MAIN LAYOUT ── */
+#main-screen { display: none; }
+.com-layout {
+  display: grid;
+  grid-template-columns: 280px 1fr 260px;
+  gap: 1rem;
+  align-items: start;
+}
+@media(max-width:1000px) { .com-layout { grid-template-columns: 240px 1fr; } .com-communities { display: none; } }
+@media(max-width:680px)  { .com-layout { grid-template-columns: 1fr; } }
+
+/* ── LEFT — MY PROFILE + ONLINE ── */
+.com-panel {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden; position: sticky; top: 76px;
+}
+.cp-head {
+  padding: .7rem 1rem; border-bottom: 1px solid var(--border);
+  font-family: 'Bebas Neue',sans-serif; font-size: .75rem;
+  letter-spacing: 2.5px; color: var(--muted);
+  display: flex; align-items: center; gap: .5rem;
+}
+.cp-head-dot {
+  width: 6px; height: 6px; border-radius: 50%;
+  background: #5dca38; animation: blink 2s infinite;
+  flex-shrink: 0;
+}
+@keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+
+/* My profile card */
+.my-profile {
+  padding: 1.2rem 1rem 1rem;
+  border-bottom: 1px solid var(--border);
+}
+.mp-avatar-row {
+  display: flex; align-items: center; gap: .85rem; margin-bottom: .9rem;
+}
+.mp-avatar {
+  width: 52px; height: 52px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.4rem; flex-shrink: 0;
+  border: 2px solid var(--border2);
+}
+.mp-name { font-weight: 700; font-size: .95rem; color: var(--text); }
+.mp-faction { font-size: .7rem; margin-top: 2px; }
+.mp-rank-badge {
+  display: inline-block; font-size: .62rem; font-weight: 700;
+  padding: 2px 7px; border-radius: 3px; margin-top: 3px;
+  font-family: 'Barlow Condensed', sans-serif; letter-spacing: .5px;
+}
+.mp-unit { font-size: .72rem; color: var(--muted); margin-top: .4rem; }
+.mp-change {
+  font-size: .68rem; color: var(--muted); cursor: pointer;
+  transition: color .15s; text-align: center; margin-top: .4rem;
+  padding-top: .6rem; border-top: 1px solid var(--border);
+}
+.mp-change:hover { color: var(--gold); }
+
+/* Online list */
+.online-list { padding: .5rem 0; max-height: 280px; overflow-y: auto; }
+.online-list::-webkit-scrollbar { width: 3px; }
+.online-list::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+.online-item {
+  display: flex; align-items: center; gap: .65rem;
+  padding: .45rem 1rem; transition: background .12s;
+}
+.online-item:hover { background: rgba(255,255,255,.03); }
+.oi-avatar {
+  width: 30px; height: 30px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .85rem; flex-shrink: 0; border: 1px solid var(--border);
+}
+.oi-name { font-size: .8rem; color: var(--text); font-weight: 500; }
+.oi-faction { font-size: .64rem; color: var(--muted); }
+.oi-dot {
+  margin-left: auto; width: 6px; height: 6px;
+  border-radius: 50%; background: #5dca38; flex-shrink: 0;
+}
+
+/* ── CENTER — CHAT ── */
+.chat-wrap {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 12px; overflow: hidden;
+  display: flex; flex-direction: column; height: 600px;
+}
+.chat-head {
+  padding: .75rem 1.1rem; border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; gap: .75rem; flex-shrink: 0;
+}
+.chat-head-icon { font-size: 1.2rem; }
+.chat-head-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 1rem; letter-spacing: 2px; color: var(--gold2);
+}
+.chat-head-sub { font-size: .68rem; color: var(--muted); margin-top: 1px; }
+.chat-online-count {
+  margin-left: auto;
+  display: flex; align-items: center; gap: .35rem;
+  font-size: .7rem; color: var(--muted);
+}
+.chat-online-count::before {
+  content: ''; display: block; width: 6px; height: 6px;
+  border-radius: 50%; background: #5dca38; animation: blink 2s infinite;
+}
+
+/* Messages area */
+.chat-messages {
+  flex: 1; overflow-y: auto; padding: .85rem 1rem;
+  display: flex; flex-direction: column; gap: .6rem;
+  scroll-behavior: smooth;
+}
+.chat-messages::-webkit-scrollbar { width: 4px; }
+.chat-messages::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+
+/* System message */
+.msg-system {
+  text-align: center; font-size: .7rem; color: var(--muted);
+  padding: .2rem 0;
+}
+.msg-system span {
+  background: rgba(255,255,255,.04); border: 1px solid var(--border);
+  padding: 2px 10px; border-radius: 99px;
+}
+
+/* Chat message */
+.chat-msg {
+  display: flex; gap: .65rem; align-items: flex-start;
+  animation: msgSlide .2s ease;
+}
+@keyframes msgSlide {
+  from { opacity: 0; transform: translateY(4px); }
+  to   { opacity: 1; transform: none; }
+}
+.chat-msg.mine { flex-direction: row-reverse; }
+.cm-avatar {
+  width: 34px; height: 34px; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: .9rem; flex-shrink: 0; border: 1px solid var(--border);
+}
+.cm-body { max-width: 72%; }
+.cm-header {
+  display: flex; align-items: center; gap: .5rem;
+  margin-bottom: .25rem; flex-wrap: wrap;
+}
+.chat-msg.mine .cm-header { flex-direction: row-reverse; }
+.cm-name { font-size: .75rem; font-weight: 700; color: var(--text); }
+.cm-faction-tag {
+  font-size: .6rem; padding: 1px 5px; border-radius: 3px;
+  font-family: 'Barlow Condensed', sans-serif; letter-spacing: .5px;
+}
+.cm-rank-tag {
+  font-size: .6rem; padding: 1px 5px; border-radius: 3px;
+  font-family: 'Barlow Condensed', sans-serif;
+}
+.cm-time { font-size: .62rem; color: var(--muted); margin-left: auto; }
+.chat-msg.mine .cm-time { margin-left: 0; margin-right: auto; }
+.cm-bubble {
+  padding: .6rem .85rem; border-radius: 10px;
+  font-size: .85rem; line-height: 1.6; border: 1px solid var(--border);
+  word-break: break-word;
+}
+.chat-msg:not(.mine) .cm-bubble { background: var(--bg3); color: var(--text); }
+.chat-msg.mine .cm-bubble {
+  background: rgba(200,150,28,.1); color: var(--text);
+  border-color: rgba(200,150,28,.25);
+}
+
+/* Typing indicator */
+.typing-indicator {
+  display: none; padding: .3rem 1rem;
+  font-size: .7rem; color: var(--muted); flex-shrink: 0;
+  font-style: italic;
+}
+.typing-indicator.show { display: block; }
+
+/* Input bar */
+.chat-input-bar {
+  border-top: 1px solid var(--border); padding: .7rem 1rem;
+  display: flex; gap: .55rem; align-items: flex-end; flex-shrink: 0;
+}
+.chat-textarea {
+  flex: 1; background: var(--bg3); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text);
+  font-family: 'Barlow', sans-serif; font-size: .88rem;
+  padding: .6rem .9rem; resize: none; outline: none;
+  transition: border-color .18s; min-height: 40px; max-height: 100px;
+  line-height: 1.5; overflow-y: auto;
+}
+.chat-textarea:focus { border-color: var(--gold); }
+.chat-textarea::placeholder { color: var(--muted); }
+.chat-send {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  border: none; border-radius: 8px; color: #07080a;
+  font-size: 1rem; cursor: pointer; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+  transition: opacity .18s, transform .18s;
+}
+.chat-send:hover:not(:disabled) { opacity: .85; transform: translateY(-1px); }
+.chat-send:disabled { opacity: .3; cursor: not-allowed; transform: none; }
+
+/* ── RIGHT — COMMUNITIES ── */
+.com-communities { position: sticky; top: 76px; }
+.comm-section { margin-bottom: .85rem; }
+.comm-section-title {
+  font-family: 'Bebas Neue', sans-serif; font-size: .72rem;
+  letter-spacing: 2.5px; color: var(--muted); margin-bottom: .5rem;
+  padding: 0 .1rem;
+}
+.comm-card {
+  background: var(--panel); border: 1px solid var(--border);
+  border-radius: 10px; padding: .85rem 1rem; margin-bottom: .5rem;
+  display: flex; align-items: center; gap: .75rem;
+  text-decoration: none; transition: border-color .18s, transform .15s;
+}
+.comm-card:hover { border-color: var(--border2); transform: translateX(2px); }
+.comm-card.tg:hover { border-color: rgba(41,182,246,.5); }
+.comm-card.yt:hover { border-color: rgba(200,40,40,.5); }
+.comm-card.disc:hover { border-color: rgba(88,101,242,.5); }
+.comm-icon {
+  width: 36px; height: 36px; border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.1rem; flex-shrink: 0; border: 1px solid var(--border);
+}
+.comm-card.tg  .comm-icon { background: rgba(41,182,246,.1);  border-color: rgba(41,182,246,.25); }
+.comm-card.yt  .comm-icon { background: rgba(200,40,40,.1);   border-color: rgba(200,40,40,.25); }
+.comm-card.disc .comm-icon { background: rgba(88,101,242,.1); border-color: rgba(88,101,242,.25); }
+.comm-name { font-size: .84rem; font-weight: 600; color: var(--text); }
+.comm-desc { font-size: .68rem; color: var(--muted); margin-top: 1px; }
+.comm-arrow { margin-left: auto; color: var(--muted); font-size: .8rem; }
+
+/* Supabase setup notice */
+.supabase-notice {
+  background: rgba(29,158,117,.08); border: 1px solid rgba(29,158,117,.25);
+  border-radius: 10px; padding: .9rem 1rem; margin-bottom: 1.2rem;
+  font-size: .76rem; color: var(--muted); line-height: 1.6;
+}
+.supabase-notice strong { color: #1d9e75; }
+.supabase-notice code {
+  background: rgba(255,255,255,.07); padding: 1px 5px;
+  border-radius: 3px; font-family: monospace; font-size: .75rem;
+}
+
+/* Demo badge */
+.demo-badge {
+  display: inline-flex; align-items: center; gap: .35rem;
+  background: rgba(200,150,28,.12); border: 1px solid rgba(200,150,28,.3);
+  border-radius: 6px; padding: 3px 10px; font-size: .65rem;
+  color: var(--gold); font-family: 'Barlow Condensed', sans-serif;
+  letter-spacing: 1px; margin-left: auto;
+}
+
+/* Faction colors */
+.f-soviets  { color: #e57373; }
+.f-liberty  { color: #29b6f6; }
+.f-vanguard { color: #9e9e9e; }
+.bg-soviets  { background: rgba(229,115,115,.12); }
+.bg-liberty  { background: rgba(41,182,246,.12); }
+.bg-vanguard { background: rgba(158,158,158,.12); }
+.border-soviets  { border-color: rgba(229,115,115,.3) !important; }
+.border-liberty  { border-color: rgba(41,182,246,.3) !important; }
+.border-vanguard { border-color: rgba(158,158,158,.3) !important; }
+
+/* Rank colors */
+.rank-s { background: rgba(255,208,64,.12);  color: #ffd040; }
+.rank-a { background: rgba(255,152,0,.12);   color: #ff9800; }
+.rank-b { background: rgba(41,182,246,.12);  color: #29b6f6; }
+.rank-c { background: rgba(200,200,200,.08); color: #aaa; }
+
+@media(max-width:680px) {
+  .chat-wrap { height: 500px; }
+  .cm-body { max-width: 85%; }
+}
+</style>
+</head>
+<body>
+<script src="i18n.js"></script>
+<script src="nav.js"></script>
+<script src="data.js"></script>
+
+<div class="page-header">
+  <div class="wrap">
+    <div class="tag">💬 Сообщество</div>
+    <div class="title">WarpathHub Community</div>
+    <p class="sub">Общайся с игроками, делись сборками, находи союзников. Все фракции — одно место.</p>
+  </div>
+</div>
+
+<!-- ═══ SETUP SCREEN ═══ -->
+<div id="setup-screen">
+  <div class="setup-card">
+    <div style="font-size:2rem;margin-bottom:.75rem">⚔️</div>
+    <div class="setup-title">Войти в чат</div>
+    <div class="setup-sub">Выбери никнейм и фракцию. Данные сохраняются в браузере — не нужна регистрация.</div>
+
+    <div class="setup-field">
+      <label class="setup-label">Никнейм *</label>
+      <input class="setup-input" id="inp-nick" placeholder="Commander777" maxlength="20" autocomplete="off">
+    </div>
+
+    <div class="setup-field">
+      <label class="setup-label">Фракция</label>
+      <div class="faction-grid">
+        <button class="faction-btn sel-red" data-faction="Советы" onclick="selFaction(this)">
+          🔴 Советы
+        </button>
+        <button class="faction-btn sel-blue" data-faction="Либерти" onclick="selFaction(this)">
+          🔵 Либерти
+        </button>
+        <button class="faction-btn sel-gray" data-faction="Авангард" onclick="selFaction(this)">
+          ⚫ Авангард
+        </button>
+      </div>
+    </div>
+
+    <div class="setup-field">
+      <label class="setup-label">Ранг</label>
+      <div class="rank-grid">
+        <button class="rank-btn" data-rank="S" onclick="selRank(this)">⭐ S-тир</button>
+        <button class="rank-btn" data-rank="A" onclick="selRank(this)">🔥 A-тир</button>
+        <button class="rank-btn" data-rank="B" onclick="selRank(this)">⚔️ B-тир</button>
+        <button class="rank-btn" data-rank="C" onclick="selRank(this)">🪖 Новичок</button>
+      </div>
+    </div>
+
+    <div class="setup-field">
+      <label class="setup-label">Любимый юнит (необязательно)</label>
+      <select class="setup-input" id="inp-unit" style="cursor:pointer;appearance:none">
+        <option value="">— Не выбрано —</option>
+        <option value="🛡️ Тяжёлый танк">🛡️ Тяжёлый танк</option>
+        <option value="🦣 SH Танк">🦣 SH Танк</option>
+        <option value="🎯 Истребитель танков">🎯 Истребитель танков</option>
+        <option value="🚀 Ракеты">🚀 Ракеты</option>
+        <option value="💥 Гаубица">💥 Гаубица</option>
+        <option value="✈️ Истребитель">✈️ Истребитель</option>
+        <option value="🚁 Вертолёт">🚁 Вертолёт</option>
+        <option value="🚙 Средний танк">🚙 Средний танк</option>
+        <option value="🪖 Пехота">🪖 Пехота</option>
+      </select>
+    </div>
+
+    <button class="setup-enter" id="btn-enter" onclick="enterChat()" disabled>
+      ВОЙТИ В ЧАТ →
+    </button>
+    <div id="setup-error" style="font-size:.72rem;color:#e04848;margin-top:.5rem;text-align:center"></div>
+  </div>
+</div>
+
+<!-- ═══ MAIN SCREEN ═══ -->
+<div id="main-screen">
+  <div class="com-page">
+
+    <!-- Supabase setup notice (видна пока не настроен) -->
+    <div class="supabase-notice" id="supabase-notice">
+      <strong>⚡ Режим демо</strong> — сообщения видны только тебе в этой вкладке. Для реального чата нужно подключить Supabase:
+      создай проект на <strong>supabase.com</strong> → скопируй <code>URL</code> и <code>anon key</code> → вставь ниже.
+      <div style="margin-top:.6rem;display:flex;gap:.5rem;flex-wrap:wrap;align-items:center">
+        <input id="sb-url" placeholder="https://xxxx.supabase.co" style="flex:1;min-width:200px;background:rgba(255,255,255,.05);border:1px solid rgba(29,158,117,.3);border-radius:6px;color:var(--text);font-size:.75rem;padding:.35rem .65rem;outline:none;font-family:monospace">
+        <input id="sb-key" placeholder="eyJhbGci..." style="flex:2;min-width:220px;background:rgba(255,255,255,.05);border:1px solid rgba(29,158,117,.3);border-radius:6px;color:var(--text);font-size:.75rem;padding:.35rem .65rem;outline:none;font-family:monospace">
+        <button onclick="connectSupabase()" style="background:rgba(29,158,117,.15);border:1px solid rgba(29,158,117,.4);color:#1d9e75;padding:.35rem .85rem;border-radius:6px;cursor:pointer;font-size:.75rem;font-family:inherit;white-space:nowrap">
+          Подключить
+        </button>
+      </div>
+    </div>
+
+    <div class="com-layout">
+
+      <!-- ─── LEFT: Profile + Online ─── -->
+      <div>
+        <div class="com-panel">
+          <div class="cp-head">
+            <div class="cp-head-dot"></div>
+            МОЙ ПРОФИЛЬ
+          </div>
+          <div class="my-profile">
+            <div class="mp-avatar-row">
+              <div class="mp-avatar" id="my-avatar-big">⚔️</div>
+              <div>
+                <div class="mp-name" id="my-name-display">—</div>
+                <div class="mp-faction" id="my-faction-display">—</div>
+                <div><span class="mp-rank-badge" id="my-rank-badge">—</span></div>
+              </div>
+            </div>
+            <div class="mp-unit" id="my-unit-display"></div>
+            <div class="mp-change" onclick="document.getElementById('setup-screen').style.display='block';document.getElementById('main-screen').style.display='none'">
+              ✏️ Изменить профиль
+            </div>
+          </div>
+          <div class="cp-head" style="border-top:1px solid var(--border)">
+            <div class="cp-head-dot"></div>
+            <span>ОНЛАЙН</span>
+            <span style="margin-left:auto;font-size:.65rem" id="online-count">1</span>
+          </div>
+          <div class="online-list" id="online-list"></div>
+        </div>
+      </div>
+
+      <!-- ─── CENTER: Chat ─── -->
+      <div>
+        <div class="chat-wrap">
+          <div class="chat-head">
+            <div class="chat-head-icon">💬</div>
+            <div>
+              <div class="chat-head-title">GENERAL CHAT</div>
+              <div class="chat-head-sub">WarpathHub · Все фракции</div>
+            </div>
+            <div class="chat-online-count" id="chat-online-badge">1 онлайн</div>
+            <div class="demo-badge" id="mode-badge">DEMO</div>
+          </div>
+
+          <div class="chat-messages" id="chat-messages"></div>
+          <div class="typing-indicator" id="typing-indicator">кто-то печатает...</div>
+
+          <div class="chat-input-bar">
+            <textarea
+              class="chat-textarea"
+              id="chat-input"
+              placeholder="Написать сообщение... (Enter — отправить)"
+              rows="1"
+              maxlength="500"
+            ></textarea>
+            <button class="chat-send" id="chat-send-btn">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                <path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/>
+              </svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- ─── RIGHT: Communities ─── -->
+      <div class="com-communities">
+        <div class="comm-section">
+          <div class="comm-section-title">📡 НАШИ КАНАЛЫ</div>
+          <a class="comm-card tg" href="https://t.me/WarpathHub" target="_blank" rel="noopener">
+            <div class="comm-icon">✈</div>
+            <div>
+              <div class="comm-name" style="color:#29b6f6">WarpathHub</div>
+              <div class="comm-desc">Telegram · 155 участников</div>
+            </div>
+            <div class="comm-arrow">›</div>
+          </a>
+          <a class="comm-card yt" href="https://www.youtube.com/@burgerdom6/videos" target="_blank" rel="noopener">
+            <div class="comm-icon">▶</div>
+            <div>
+              <div class="comm-name" style="color:#f55">Бургер</div>
+              <div class="comm-desc">YouTube · Гайды и нарезки</div>
+            </div>
+            <div class="comm-arrow">›</div>
+          </a>
+          <a class="comm-card yt" href="https://www.youtube.com/@ClanGothic" target="_blank" rel="noopener">
+            <div class="comm-icon">▶</div>
+            <div>
+              <div class="comm-name" style="color:#f55">ClanGothic</div>
+              <div class="comm-desc">YouTube · 27.5K · Официальный партнёр</div>
+            </div>
+            <div class="comm-arrow">›</div>
+          </a>
+        </div>
+
+        <div class="comm-section">
+          <div class="comm-section-title">🌍 ДРУГИЕ СООБЩЕСТВА</div>
+          <a class="comm-card tg" href="https://t.me/warpath_ru" target="_blank" rel="noopener">
+            <div class="comm-icon">✈</div>
+            <div>
+              <div class="comm-name">Warpath RU</div>
+              <div class="comm-desc">Официальный TG-канал</div>
+            </div>
+            <div class="comm-arrow">›</div>
+          </a>
+          <a class="comm-card disc" href="https://discord.gg/warpath" target="_blank" rel="noopener">
+            <div class="comm-icon" style="font-size:.9rem">⚡</div>
+            <div>
+              <div class="comm-name" style="color:#7b8bff">Discord Warpath</div>
+              <div class="comm-desc">Официальный Discord</div>
+            </div>
+            <div class="comm-arrow">›</div>
+          </a>
+        </div>
+
+        <div class="comm-section">
+          <div class="comm-section-title">⚔️ БЛОГЕРЫ</div>
+          <a class="comm-card" href="youtubers.html" style="border-color:rgba(200,150,28,.2)">
+            <div class="comm-icon" style="background:rgba(200,150,28,.1);border-color:rgba(200,150,28,.25)">👥</div>
+            <div>
+              <div class="comm-name">Все блогеры →</div>
+              <div class="comm-desc">5 авторов сообщества</div>
+            </div>
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<script>
+/* ════════════════════════════════════════════
+   ПРОФИЛЬ ИГРОКА
+════════════════════════════════════════════ */
+const PROFILE_KEY = 'wh_profile_v2';
+
+let profile = JSON.parse(localStorage.getItem(PROFILE_KEY) || 'null');
+let selectedFaction = profile?.faction || 'Советы';
+let selectedRank    = profile?.rank    || 'B';
+
+/* Суперлёгкий hash для аватар-эмодзи */
+function avatarEmoji(faction) {
+  return faction === 'Советы' ? '🔴' : faction === 'Либерти' ? '🔵' : '⚫';
+}
+function factionClass(faction) {
+  return faction === 'Советы' ? 'soviets' : faction === 'Либерти' ? 'liberty' : 'vanguard';
+}
+function rankClass(rank) {
+  return { S:'rank-s', A:'rank-a', B:'rank-b', C:'rank-c' }[rank] || 'rank-c';
+}
+function rankLabel(rank) {
+  return { S:'⭐ S-тир', A:'🔥 A-тир', B:'⚔️ B-тир', C:'🪖 Новичок' }[rank] || rank;
+}
+function fmtTime(ts) {
+  const d = new Date(ts);
+  return d.getHours().toString().padStart(2,'0') + ':' + d.getMinutes().toString().padStart(2,'0');
+}
+function escHtml(s) {
+  return (s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+}
+
+/* Выбор фракции */
+function selFaction(btn) {
+  document.querySelectorAll('.faction-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selectedFaction = btn.dataset.faction;
+  checkSetupReady();
+}
+
+/* Выбор ранга */
+function selRank(btn) {
+  document.querySelectorAll('.rank-btn').forEach(b => b.classList.remove('sel'));
+  btn.classList.add('sel');
+  selectedRank = btn.dataset.rank;
+}
+
+/* Проверка готовности формы */
+document.getElementById('inp-nick').addEventListener('input', checkSetupReady);
+function checkSetupReady() {
+  const nick = document.getElementById('inp-nick').value.trim();
+  document.getElementById('btn-enter').disabled = nick.length < 2;
+}
+
+/* Восстановить состояние кнопок */
+if (profile) {
+  document.querySelectorAll('.faction-btn').forEach(b => {
+    if (b.dataset.faction === profile.faction) b.classList.add('sel');
+    else b.classList.remove('sel');
+  });
+  document.querySelectorAll('.rank-btn').forEach(b => {
+    if (b.dataset.rank === profile.rank) b.classList.add('sel');
+    else b.classList.remove('sel');
+  });
+  selectedFaction = profile.faction;
+  selectedRank    = profile.rank;
+  document.getElementById('inp-nick').value = profile.nick;
+  document.getElementById('inp-unit').value = profile.unit || '';
+  checkSetupReady();
+}
+
+/* ════════════════════════════════════════════
+   ВХОД В ЧАТ
+════════════════════════════════════════════ */
+function enterChat() {
+  const nick = document.getElementById('inp-nick').value.trim();
+  if (nick.length < 2) {
+    document.getElementById('setup-error').textContent = 'Никнейм минимум 2 символа';
+    return;
+  }
+  if (nick.length > 20) {
+    document.getElementById('setup-error').textContent = 'Никнейм максимум 20 символов';
+    return;
+  }
+
+  profile = {
+    nick,
+    faction:  selectedFaction,
+    rank:     selectedRank,
+    unit:     document.getElementById('inp-unit').value,
+    joinedAt: Date.now(),
+  };
+  localStorage.setItem(PROFILE_KEY, JSON.stringify(profile));
+
+  document.getElementById('setup-screen').style.display = 'none';
+  document.getElementById('main-screen').style.display  = 'block';
+
+  renderMyProfile();
+  renderOnlineList();
+  initChat();
+}
+
+/* Автовход если профиль уже есть */
+if (profile) {
+  document.addEventListener('DOMContentLoaded', () => {
+    document.getElementById('setup-screen').style.display = 'none';
+    document.getElementById('main-screen').style.display  = 'block';
+    renderMyProfile();
+    renderOnlineList();
+    initChat();
+  });
+}
+
+/* ════════════════════════════════════════════
+   МОЙ ПРОФИЛЬ
+════════════════════════════════════════════ */
+function renderMyProfile() {
+  if (!profile) return;
+  const fc = factionClass(profile.faction);
+  document.getElementById('my-avatar-big').textContent = avatarEmoji(profile.faction);
+  document.getElementById('my-avatar-big').className = `mp-avatar bg-${fc} border-${fc}`;
+  document.getElementById('my-name-display').textContent = profile.nick;
+  document.getElementById('my-faction-display').innerHTML =
+    `<span class="f-${fc}">${profile.faction}</span>`;
+  const rb = document.getElementById('my-rank-badge');
+  rb.textContent = rankLabel(profile.rank);
+  rb.className = `mp-rank-badge ${rankClass(profile.rank)}`;
+  if (profile.unit) {
+    document.getElementById('my-unit-display').textContent = `Любимый юнит: ${profile.unit}`;
+  }
+}
+
+/* ════════════════════════════════════════════
+   СПИСОК ОНЛАЙН (демо — только я)
+════════════════════════════════════════════ */
+const DEMO_ONLINE = [
+  { nick: 'ClanGothic_Admin', faction: 'Авангард', rank: 'S' },
+  { nick: 'е6ака',            faction: 'Советы',   rank: 'A' },
+  { nick: 'CommanderIvan',    faction: 'Либерти',  rank: 'B' },
+];
+
+function renderOnlineList() {
+  if (!profile) return;
+  const list = document.getElementById('online-list');
+
+  /* Свой профиль + демо пользователи */
+  const allOnline = [
+    { nick: profile.nick, faction: profile.faction, rank: profile.rank, isMe: true },
+    ...DEMO_ONLINE,
+  ];
+
+  document.getElementById('online-count').textContent = allOnline.length;
+  document.getElementById('chat-online-badge').textContent = `${allOnline.length} онлайн`;
+
+  list.innerHTML = allOnline.map(u => {
+    const fc = factionClass(u.faction);
+    return `<div class="online-item">
+      <div class="oi-avatar bg-${fc}" style="font-size:.8rem">${avatarEmoji(u.faction)}</div>
+      <div>
+        <div class="oi-name">${escHtml(u.nick)}${u.isMe ? ' <span style="font-size:.6rem;color:var(--muted)">(ты)</span>' : ''}</div>
+        <div class="oi-faction f-${fc}" style="font-size:.64rem">${u.faction}</div>
+      </div>
+      <div class="oi-dot"></div>
+    </div>`;
+  }).join('');
+}
+
+/* ════════════════════════════════════════════
+   ЧАТ — CORE
+════════════════════════════════════════════ */
+let messages = [];        /* локальный буфер */
+let supabase  = null;     /* null = demo mode */
+let channel   = null;
+
+/* Демо-сообщения для атмосферы */
+const DEMO_MSGS = [
+  { nick: 'ClanGothic_Admin', faction: 'Авангард', rank: 'S',
+    text: 'Всем привет! Добро пожаловать в чат WarpathHub 🏰', ts: Date.now() - 300000 },
+  { nick: 'е6ака', faction: 'Советы', rank: 'A',
+    text: 'Привет! Кто-нибудь уже тестировал Хеймекера на SH? Интересно насколько он лучше Джексона против Авангарда', ts: Date.now() - 240000 },
+  { nick: 'CommanderIvan', faction: 'Либерти', rank: 'B',
+    text: 'я пробовал — на тяжёлых бьёт хорошо, но Джексон универсальнее по-моему', ts: Date.now() - 180000 },
+  { nick: 'е6ака', faction: 'Советы', rank: 'A',
+    text: 'согласен, Джексон до сих пор топ для большинства сборок ⚔️', ts: Date.now() - 120000 },
+];
+
+function initChat() {
+  /* Загружаем демо сообщения */
+  messages = [...DEMO_MSGS];
+  renderAllMessages();
+
+  /* Автовысота textarea */
+  const ta = document.getElementById('chat-input');
+  ta.addEventListener('input', () => {
+    ta.style.height = 'auto';
+    ta.style.height = Math.min(ta.scrollHeight, 100) + 'px';
+  });
+
+  /* Enter = отправить, Shift+Enter = новая строка */
+  ta.addEventListener('keydown', e => {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
+      sendMessage();
+    }
+  });
+
+  document.getElementById('chat-send-btn').addEventListener('click', sendMessage);
+
+  /* Если Supabase уже настроен — пробуем подключиться */
+  const sbUrl = localStorage.getItem('sb_url');
+  const sbKey = localStorage.getItem('sb_key');
+  if (sbUrl && sbKey) {
+    document.getElementById('sb-url').value = sbUrl;
+    document.getElementById('sb-key').value = sbKey;
+    connectSupabase(true);
+  }
+}
+
+/* ════════════════════════════════════════════
+   SUPABASE ПОДКЛЮЧЕНИЕ
+════════════════════════════════════════════ */
+async function connectSupabase(silent = false) {
+  const url = document.getElementById('sb-url').value.trim();
+  const key = document.getElementById('sb-key').value.trim();
+
+  if (!url || !key) {
+    if (!silent) alert('Введи URL и ключ Supabase');
+    return;
+  }
+
+  /* Динамически загружаем Supabase SDK */
+  if (!window.supabaseLib) {
+    try {
+      await loadScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/dist/umd/supabase.min.js');
+      window.supabaseLib = window.supabase;
+    } catch (e) {
+      if (!silent) alert('Не удалось загрузить Supabase SDK');
+      return;
+    }
+  }
+
+  try {
+    supabase = window.supabaseLib.createClient(url, key);
+
+    /* Тест подключения */
+    const { error } = await supabase.from('messages').select('id').limit(1);
+    if (error && error.code !== 'PGRST116') throw error;
+
+    localStorage.setItem('sb_url', url);
+    localStorage.setItem('sb_key', key);
+
+    /* Скрываем notice */
+    document.getElementById('supabase-notice').style.display = 'none';
+    document.getElementById('mode-badge').textContent = '🟢 LIVE';
+    document.getElementById('mode-badge').style.background = 'rgba(93,202,56,.12)';
+    document.getElementById('mode-badge').style.borderColor = 'rgba(93,202,56,.3)';
+    document.getElementById('mode-badge').style.color = '#5dca38';
+
+    await loadHistory();
+    subscribeRealtime();
+
+    addSystemMsg('✅ Подключено к Supabase — чат в реальном времени!');
+  } catch (e) {
+    console.error(e);
+    if (!silent) alert('Ошибка подключения: ' + e.message + '\n\nПроверь URL и ключ, а также что таблица messages существует.');
+  }
+}
+
+function loadScript(src) {
+  return new Promise((res, rej) => {
+    const s = document.createElement('script');
+    s.src = src; s.onload = res; s.onerror = rej;
+    document.head.appendChild(s);
+  });
+}
+
+/* ════════════════════════════════════════════
+   SUPABASE — ЗАГРУЗКА ИСТОРИИ
+════════════════════════════════════════════ */
+async function loadHistory() {
+  if (!supabase) return;
+  const { data, error } = await supabase
+    .from('messages')
+    .select('*')
+    .order('created_at', { ascending: true })
+    .limit(50);
+
+  if (error) { console.error(error); return; }
+
+  messages = data.map(row => ({
+    nick:    row.nick,
+    faction: row.faction,
+    rank:    row.rank,
+    text:    row.text,
+    ts:      new Date(row.created_at).getTime(),
+    id:      row.id,
+  }));
+  renderAllMessages();
+}
+
+/* ════════════════════════════════════════════
+   SUPABASE REALTIME
+════════════════════════════════════════════ */
+function subscribeRealtime() {
+  if (!supabase) return;
+
+  channel = supabase
+    .channel('warpath-chat')
+    .on('postgres_changes', {
+      event:  'INSERT',
+      schema: 'public',
+      table:  'messages',
+    }, payload => {
+      const row = payload.new;
+      /* Не добавляем если это наше только что отправленное */
+      const exists = messages.some(m => m.id === row.id);
+      if (!exists) {
+        messages.push({
+          nick:    row.nick,
+          faction: row.faction,
+          rank:    row.rank,
+          text:    row.text,
+          ts:      new Date(row.created_at).getTime(),
+          id:      row.id,
+        });
+        appendMessage(messages[messages.length - 1]);
+        scrollToBottom();
+      }
+    })
+    .subscribe();
+}
+
+/* ════════════════════════════════════════════
+   ОТПРАВКА СООБЩЕНИЯ
+════════════════════════════════════════════ */
+async function sendMessage() {
+  if (!profile) return;
+  const ta   = document.getElementById('chat-input');
+  const text = ta.value.trim();
+  if (!text) return;
+
+  ta.value = '';
+  ta.style.height = 'auto';
+
+  const msg = {
+    nick:    profile.nick,
+    faction: profile.faction,
+    rank:    profile.rank,
+    text,
+    ts:      Date.now(),
+  };
+
+  if (supabase) {
+    /* Сохраняем в БД — realtime вернёт нам же */
+    const { error } = await supabase.from('messages').insert({
+      nick:    msg.nick,
+      faction: msg.faction,
+      rank:    msg.rank,
+      text:    msg.text,
+    });
+    if (error) { console.error(error); addSystemMsg('❌ Ошибка отправки: ' + error.message); return; }
+    /* Сразу показываем своё сообщение */
+    messages.push(msg);
+    appendMessage(msg);
+  } else {
+    /* Demo mode */
+    messages.push(msg);
+    appendMessage(msg);
+  }
+
+  scrollToBottom();
+  ta.focus();
+}
+
+/* ════════════════════════════════════════════
+   РЕНДЕР СООБЩЕНИЙ
+════════════════════════════════════════════ */
+function renderAllMessages() {
+  const el = document.getElementById('chat-messages');
+  el.innerHTML = '';
+
+  addSystemMsg('👋 Добро пожаловать в WarpathHub Community!');
+  messages.forEach(m => appendMessage(m, false));
+  scrollToBottom();
+}
+
+function appendMessage(msg, scroll = true) {
+  const el     = document.getElementById('chat-messages');
+  const isMe   = profile && msg.nick === profile.nick;
+  const fc     = factionClass(msg.faction || 'Советы');
+  const rk     = rankClass(msg.rank || 'C');
+
+  const div = document.createElement('div');
+  div.className = 'chat-msg' + (isMe ? ' mine' : '');
+  div.innerHTML = `
+    <div class="cm-avatar bg-${fc}">${avatarEmoji(msg.faction || 'Советы')}</div>
+    <div class="cm-body">
+      <div class="cm-header">
+        <span class="cm-name">${escHtml(msg.nick)}</span>
+        <span class="cm-faction-tag bg-${fc} f-${fc}">${escHtml(msg.faction || '')}</span>
+        <span class="cm-rank-tag ${rk}">${rankLabel(msg.rank || 'C')}</span>
+        <span class="cm-time">${fmtTime(msg.ts)}</span>
+      </div>
+      <div class="cm-bubble">${escHtml(msg.text).replace(/\n/g,'<br>')}</div>
+    </div>`;
+
+  el.appendChild(div);
+  if (scroll) scrollToBottom();
+}
+
+function addSystemMsg(text) {
+  const el  = document.getElementById('chat-messages');
+  const div = document.createElement('div');
+  div.className = 'msg-system';
+  div.innerHTML = `<span>${text}</span>`;
+  el.appendChild(div);
+}
+
+function scrollToBottom() {
+  const el = document.getElementById('chat-messages');
+  el.scrollTop = el.scrollHeight;
+}
+
+/* ════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════ */
+document.addEventListener('DOMContentLoaded', () => {
+  if (typeof initShared === 'function') initShared();
+
+  /* Если профиль не загружен — показываем setup */
+  if (!profile) {
+    document.getElementById('setup-screen').style.display = 'block';
+    document.getElementById('main-screen').style.display  = 'none';
+  }
+});
+</script>
+</body>
+</html>
