@@ -1,13 +1,5 @@
 /* nav.js — shared nav + ticker + footer
    ТРЕБУЕТ: i18n.js подключён ДО этого файла
-
-   ИСПРАВЛЕНО:
-   1. Убраны дублирующие стили .nav-hamburger из nav.js —
-      они конфликтовали со стилями в style.css по специфичности
-      и делали бургер прозрачным/невидимым.
-      Теперь все стили бургера только в style.css.
-   2. Убраны дублирующие медиа-запросы которые уже есть в style.css.
-   3. Глобальные mobile-fixes перенесены в style.css (уже там есть).
 */
 (function () {
 
@@ -23,6 +15,7 @@
     <li><a href="wiki.html"         data-i18n="nav.wiki"></a></li>
     <li><a href="daily.html"        data-i18n="nav.daily"></a></li>
     <li><a href="leaderboard.html"  data-i18n="nav.leaderboard"></a></li>
+    <li><a href="community.html"    data-i18n="nav.community"></a></li>
     <li><a href="ai-chat.html" class="nav-ai-link" data-i18n="nav.ai-chat"></a></li>
   </ul>
   <div class="nav-right">
@@ -50,6 +43,7 @@
     <a href="donate-bar.html"   data-i18n="nav.donate-bar"></a>
     <a href="daily.html"        data-i18n="nav.daily"></a>
     <a href="leaderboard.html"  data-i18n="nav.leaderboard"></a>
+    <a href="community.html"    data-i18n="nav.community"></a>
     <a href="ai-chat.html"      data-i18n="nav.ai-chat" class="nav-mobile-ai"></a>
     <a href="https://t.me/WarpathHub" target="_blank" class="nav-mobile-tg">✈ Telegram</a>
   </nav>
@@ -84,6 +78,7 @@
         <li onclick="location.href='donate-bar.html'"   data-i18n="nav.donate-bar"></li>
         <li onclick="location.href='daily.html'"        data-i18n="nav.daily"></li>
         <li onclick="location.href='leaderboard.html'"  data-i18n="nav.leaderboard"></li>
+        <li onclick="location.href='community.html'"    data-i18n="nav.community"></li>
         <li onclick="location.href='ai-chat.html'"      data-i18n="nav.ai-chat"></li>
       </ul>
     </div>
