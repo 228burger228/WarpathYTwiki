@@ -140,7 +140,7 @@ const GAME_INFO = {
 };
 
 /* ── ПОЛНАЯ БАЗА ЮНИТОВ ──────────────────── */
-const UNIT_TYPES = [
+const UNIT_TYPES_FULL = [
 
   /* ═══ ПЕХОТА ═══ */
   {
@@ -1018,8 +1018,8 @@ function initShared() {
    для Claude на основе всех данных выше.
    Используется в ai-chat.html.               */
 function buildAIContext() {
-  const units = UNIT_TYPES_BUILDER.map(u => {
-    const full = UNIT_TYPES.find(x => x.id === u.id);
+  const units = UNIT_TYPES.map(u => {
+    const full = UNIT_TYPES_FULL.find(x => x.id === u.id);
     if (!full) return `${u.label}: базовый юнит`;
     return `${full.emoji} ${full.label} (${full.tier}-тир): роль=${full.role}, сильные стороны=${full.strengths?.join(', ')}, слабости=${full.weaknesses?.join(', ')}, контрит=${full.counters?.join(', ')}, контрится=${full.counteredBy?.join(', ')}`;
   }).join('\n');
