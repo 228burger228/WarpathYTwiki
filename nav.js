@@ -23,6 +23,7 @@
     <li><a href="wiki.html"         data-i18n="nav.wiki"></a></li>
     <li><a href="daily.html"        data-i18n="nav.daily"></a></li>
     <li><a href="leaderboard.html"  data-i18n="nav.leaderboard"></a></li>
+    <li><a href="ai-chat.html" class="nav-ai-link" data-i18n="nav.ai-chat"></a></li>
   </ul>
   <div class="nav-right">
     <a href="https://t.me/WarpathHub" target="_blank" class="nav-tg nav-tg-btn">✈ Telegram</a>
@@ -49,6 +50,7 @@
     <a href="donate-bar.html"   data-i18n="nav.donate-bar"></a>
     <a href="daily.html"        data-i18n="nav.daily"></a>
     <a href="leaderboard.html"  data-i18n="nav.leaderboard"></a>
+    <a href="ai-chat.html"      data-i18n="nav.ai-chat" class="nav-mobile-ai"></a>
     <a href="https://t.me/WarpathHub" target="_blank" class="nav-mobile-tg">✈ Telegram</a>
   </nav>
   <div class="nav-mobile-lang" id="nav-mobile-lang"></div>
@@ -82,6 +84,7 @@
         <li onclick="location.href='donate-bar.html'"   data-i18n="nav.donate-bar"></li>
         <li onclick="location.href='daily.html'"        data-i18n="nav.daily"></li>
         <li onclick="location.href='leaderboard.html'"  data-i18n="nav.leaderboard"></li>
+        <li onclick="location.href='ai-chat.html'"      data-i18n="nav.ai-chat"></li>
       </ul>
     </div>
     <div class="footer-col">
