@@ -266,18 +266,18 @@ function initLogin(){
   g('btn-login').addEventListener('click',tryLogin);
   g('login-pass').addEventListener('keydown',function(ev){if(ev.key==='Enter')tryLogin();});
   setTimeout(function(){g('login-pass').focus();},100);
-  if(sessionStorage.getItem(AK)==='1'){showAdmin();}
+  /* Всегда запрашиваем пароль при открытии страницы */
 }
 function tryLogin(){
   if((g('login-pass').value||'').trim()===PWD){
-    sessionStorage.setItem(AK,'1');showAdmin();
+    showAdmin();
   }else{
     g('login-err').textContent='❌ Неверный пароль';
     g('login-pass').value='';g('login-pass').focus();
     setTimeout(function(){g('login-err').textContent='';},2000);
   }
 }
-function logout(){sessionStorage.removeItem(AK);location.reload();}
+function logout(){location.reload();}
 
 function showAdmin(){
   g('login-screen').style.display='none';
@@ -442,8 +442,8 @@ async function saveEditProfile(){
     }
 
     var upd={nick:nick,server_cat:cat,server_num:srv,rank:rank,updated_at:new Date().toISOString()};
-    /* email — только если колонка есть */
-    if(email!==null)upd.email=email; else upd.email=null;
+    /* email — включаем всегда после fix_schema.sql */
+    upd.email=email||null;
 
     var res=await sb.from('profiles').update(upd).eq('id',epId);
     if(res.error)throw res.error;
