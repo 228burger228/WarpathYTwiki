@@ -63,6 +63,7 @@
 .msg-meta{display:flex;align-items:center;gap:.35rem;margin-bottom:.2rem;flex-wrap:wrap}
 .msg.own .msg-meta{flex-direction:row-reverse}
 .msg-nick{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;color:var(--text)}
+.msg-nick-tag{font-size:.62rem;padding:1px 5px;border-radius:3px;background:rgba(200,150,28,.12);color:var(--gold);border:1px solid rgba(200,150,28,.25);font-family:'Barlow Condensed',sans-serif;font-weight:700;letter-spacing:.3px}
 .msg-tag{font-size:.58rem;padding:1px 4px;border-radius:3px;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px}
 .sc1{background:rgba(255,80,80,.12);color:#f07070;border:1px solid rgba(255,80,80,.25)}
 .sc2{background:rgba(255,160,0,.1);color:#ffaa40;border:1px solid rgba(255,160,0,.2)}
@@ -185,6 +186,7 @@
         </div>
         <div class="hbtns">
           <button class="hbtn blue" onclick="location.href='index.html'">🏠 Главная</button>
+          <button class="hbtn" id="btn-refresh-chat" title="Обновить сообщения">🔄</button>
           <button class="hbtn" id="btn-profile">👤 Профиль</button>
           <button class="hbtn red" onclick="location.href='admin.html'">🛡 Админ</button>
         </div>
@@ -397,6 +399,14 @@ function startChat(){
     else showSetup(true);
   };
 
+  /* Кнопка обновления чата */
+  g('btn-refresh-chat').onclick=function(){
+    var btn=g('btn-refresh-chat');
+    btn.textContent='⏳';btn.disabled=true;
+    loadMsgs();
+    setTimeout(function(){btn.textContent='🔄';btn.disabled=false;},1000);
+  };
+
   var ta=g('chat-inp'),ctr=g('char-cnt');
   ta.addEventListener('input',function(){
     var l=ta.value.length;ctr.textContent=l+' / 500';
@@ -454,9 +464,11 @@ function addMsg(m,scroll){
   var d=document.createElement('div');
   d.className='msg'+(own?' own':'')+(isG?' guest':'');
   d.dataset.mid=m.id;
+  var nt=m.nick_tag||'';
   d.innerHTML=
     '<div class="msg-av '+av+'" title="'+e(m.nick)+'">'+ico+'</div>'+
     '<div class="msg-body"><div class="msg-meta">'+
+    (nt?'<span class="msg-nick-tag">'+e(nt)+'</span>':'')+
     '<span class="msg-nick">'+e(m.nick)+'</span>'+
     '<span class="msg-tag '+sc+'">'+e(tag)+'</span>'+
     (!isG?'<span class="msg-tag r'+(m.rank||'C')+'">'+(m.rank||'C')+'</span>':'')+
@@ -475,6 +487,7 @@ function sendMsg(){
   isSnd=true;g('btn-send').disabled=true;
   sb.from('messages').insert({
     profile_id:prof.id,nick:prof.nick,
+    nick_tag:prof.nick_tag||null,
     server_cat:prof.server_cat||'4',server_num:prof.server_num||null,
     rank:prof.rank||'C',text:txt
   }).then(function(res){
