@@ -59,6 +59,7 @@
   .bl-card:hover  { border-color: var(--gold); }
   .bl-card.offl   { border-color: rgba(232,255,71,0.3); }
   .bl-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(232,255,71,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
+  .bl-avatar-img { object-fit: cover; border: 1px solid var(--border); }
   .bl-name  { font-size: 0.88rem; font-weight: 700; color: var(--text); }
   .bl-spec  { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
   .bl-subs  { font-size: 0.68rem; color: var(--gold); margin-top: 2px; }
@@ -354,13 +355,33 @@ document.addEventListener('DOMContentLoaded', () => {
       const a = document.createElement('a');
       a.className = 'bl-card' + (y.approved ? ' offl' : '');
       a.href = y.yt; a.target = '_blank'; a.rel = 'noopener';
-      a.innerHTML = `
-        <div class="bl-avatar">${y.emoji}</div>
-        <div>
-          <div class="bl-name">${y.name}${y.approved ? ' ✓' : ''}</div>
-          <div class="bl-spec">${y.spec}</div>
-          <div class="bl-subs">${y.subs} подп.</div>
-        </div>`;
+
+      /* Аватарка — фото если есть, иначе эмодзи */
+      const avWrap = document.createElement('div');
+      if (y.avatar) {
+        const img = document.createElement('img');
+        img.src = y.avatar;
+        img.alt = y.name;
+        img.className = 'bl-avatar bl-avatar-img';
+        img.onerror = function() {
+          const em = document.createElement('div');
+          em.className = 'bl-avatar';
+          em.textContent = y.emoji;
+          this.parentNode.replaceChild(em, this);
+        };
+        avWrap.appendChild(img);
+      } else {
+        avWrap.className = 'bl-avatar';
+        avWrap.textContent = y.emoji;
+      }
+
+      const info = document.createElement('div');
+      info.innerHTML = `<div class="bl-name">${y.name}${y.approved ? ' ✓' : ''}</div>
+        <div class="bl-spec">${y.spec}</div>
+        <div class="bl-subs">${y.subs} подп.</div>`;
+
+      a.appendChild(avWrap);
+      a.appendChild(info);
       strip.appendChild(a);
     });
   }
