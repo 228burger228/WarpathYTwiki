@@ -3,645 +3,542 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Админ-панель — Warpath Guide</title>
+<title>Админ — Warpath Guide</title>
 <link rel="stylesheet" href="style.css">
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<!-- НЕ подключаем nav.js — страница скрытая -->
 <style>
-body { padding-top: 0 !important; }
+body{padding-top:0!important}
+.login-wrap{display:flex;align-items:center;justify-content:center;min-height:100vh;padding:1rem;background:var(--bg)}
+.login-card{background:var(--panel);border:1px solid var(--border2);border-radius:14px;padding:2.5rem 2rem;width:100%;max-width:360px;text-align:center}
+.login-logo{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:3px;color:var(--muted);margin-bottom:1.5rem}
+.login-logo span{color:var(--gold2)}
+.login-title{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;letter-spacing:2px;color:var(--text);margin-bottom:.3rem}
+.login-sub{font-size:.8rem;color:var(--muted);margin-bottom:1.8rem}
+.login-inp{width:100%;box-sizing:border-box;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:1rem;padding:.7rem 1rem;outline:none;transition:border-color .18s;margin-bottom:.8rem;text-align:center;letter-spacing:3px}
+.login-inp:focus{border-color:var(--gold)}
+.login-err{font-size:.75rem;color:#e04848;min-height:1.1rem;margin-bottom:.5rem}
 
-.admin-page { max-width: 1000px; margin: 0 auto; padding: 2rem 1rem 5rem; }
+.ap{max-width:1060px;margin:0 auto;padding:1.5rem 1rem 5rem}
+.ap-head{display:flex;align-items:center;gap:1rem;padding-bottom:1.3rem;border-bottom:1px solid var(--border);margin-bottom:1.4rem;flex-wrap:wrap}
+.ap-logo{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:3px;color:var(--gold2)}
+.ap-logo span{color:var(--orange)}
+.ap-tag{font-size:.72rem;color:var(--muted)}
+.ap-acts{margin-left:auto;display:flex;gap:.4rem;flex-wrap:wrap}
+.abtn{padding:.42rem .9rem;border-radius:7px;font-size:.76rem;cursor:pointer;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px;border:1px solid var(--border);background:var(--panel);color:var(--muted);transition:all .15s;white-space:nowrap}
+.abtn:hover{color:var(--gold);border-color:var(--gold)}
+.abtn.blue{color:#5bb8f5;border-color:rgba(91,184,245,.3)}.abtn.blue:hover{background:rgba(41,182,246,.1)}
+.abtn.red:hover{color:#e04848;border-color:#e04848}
 
-/* ── Login ── */
-.login-wrap {
-  display: flex; align-items: center; justify-content: center;
-  min-height: 100vh; padding: 1rem;
-}
-.login-card {
-  background: var(--panel); border: 1px solid var(--border2);
-  border-radius: 14px; padding: 2.5rem 2rem; width: 100%; max-width: 380px;
-}
-.login-logo {
-  font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 3px;
-  color: var(--muted); margin-bottom: 1.5rem; text-align: center;
-}
-.login-logo span { color: var(--gold2); }
-.login-title {
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; letter-spacing: 2px;
-  color: var(--text); margin-bottom: .3rem; text-align: center;
-}
-.login-sub { font-size: .8rem; color: var(--muted); text-align: center; margin-bottom: 1.8rem; }
-.login-input {
-  width: 100%; box-sizing: border-box;
-  background: rgba(255,255,255,.05); border: 1px solid var(--border);
-  border-radius: 8px; color: var(--text); font-family: inherit; font-size: 1rem;
-  padding: .7rem 1rem; outline: none; transition: border-color .18s; margin-bottom: .8rem;
-  text-align: center; letter-spacing: 3px;
-}
-.login-input:focus { border-color: var(--gold); }
-.login-err { font-size: .75rem; color: #e04848; text-align: center; min-height: 1.1rem; margin-bottom: .5rem; }
+.stats{display:grid;grid-template-columns:repeat(5,1fr);gap:.65rem;margin-bottom:1.3rem}
+@media(max-width:700px){.stats{grid-template-columns:repeat(3,1fr)}}
+.sbox{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:.8rem 1rem}
+.sv{font-family:'Bebas Neue',sans-serif;font-size:1.8rem;color:var(--gold2);letter-spacing:1px;line-height:1}
+.sl{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-top:.2rem}
 
-/* ── Header ── */
-.admin-header {
-  display: flex; align-items: center; gap: 1rem;
-  padding: 1rem 0 1.5rem; border-bottom: 1px solid var(--border);
-  margin-bottom: 1.5rem; flex-wrap: wrap;
-}
-.admin-logo {
-  font-family: 'Bebas Neue', sans-serif; font-size: 1.3rem; letter-spacing: 3px; color: var(--gold2);
-}
-.admin-logo span { color: var(--orange); }
-.admin-tagline { font-size: .75rem; color: var(--muted); }
-.admin-actions { margin-left: auto; display: flex; gap: .5rem; flex-wrap: wrap; }
-.abtn {
-  padding: .45rem 1rem; border-radius: 7px; font-size: .78rem; cursor: pointer;
-  font-family: 'Barlow Condensed', sans-serif; letter-spacing: .5px;
-  border: 1px solid var(--border); background: var(--panel); color: var(--muted);
-  transition: all .15s; white-space: nowrap;
-}
-.abtn:hover { color: var(--gold); border-color: var(--gold); }
-.abtn.primary { background: rgba(200,150,28,.12); border-color: rgba(200,150,28,.35); color: var(--gold2); }
-.abtn.primary:hover { background: rgba(200,150,28,.22); }
-.abtn.danger { }
-.abtn.danger:hover { color: #e04848; border-color: #e04848; }
-.abtn.chat { color: #5bb8f5; border-color: rgba(91,184,245,.3); }
-.abtn.chat:hover { background: rgba(41,182,246,.1); }
+.chart-box{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem;margin-bottom:1.2rem}
+.chart-lbl{font-family:'Bebas Neue',sans-serif;font-size:.72rem;letter-spacing:2px;color:var(--muted);margin-bottom:.9rem}
+.chart-bars{display:flex;gap:3px;align-items:flex-end;height:72px}
+.bar{flex:1;background:rgba(200,150,28,.25);border-radius:2px 2px 0 0;min-width:6px;transition:background .15s;cursor:default;position:relative}
+.bar:hover{background:rgba(200,150,28,.55)}
+.bar-tip{display:none;position:absolute;bottom:105%;left:50%;transform:translateX(-50%);background:var(--bg2);border:1px solid var(--border);border-radius:5px;padding:2px 6px;font-size:.63rem;color:var(--text);white-space:nowrap;z-index:10}
+.bar:hover .bar-tip{display:block}
+.chart-xlbl{display:flex;gap:3px;margin-top:3px}
+.xl{flex:1;font-size:.52rem;color:var(--muted);text-align:center;overflow:hidden}
 
-/* ── Tabs ── */
-.admin-tabs {
-  display: flex; gap: .4rem; margin-bottom: 1.5rem;
-  background: var(--panel); border: 1px solid var(--border);
-  border-radius: 10px; padding: .35rem; flex-wrap: wrap;
-}
-.atab {
-  padding: .5rem 1.1rem; border-radius: 7px; cursor: pointer;
-  font-family: 'Bebas Neue', sans-serif; font-size: .9rem; letter-spacing: 1.5px;
-  color: var(--muted); border: 1px solid transparent; transition: all .18s;
-}
-.atab:hover { color: var(--gold); }
-.atab.active { background: rgba(200,150,28,.12); border-color: rgba(200,150,28,.3); color: var(--gold2); }
+.tabs{display:flex;gap:.35rem;margin-bottom:1.3rem;background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:.3rem;flex-wrap:wrap}
+.tab{padding:.48rem 1rem;border-radius:7px;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:1.5px;color:var(--muted);border:1px solid transparent;transition:all .18s}
+.tab:hover{color:var(--gold)}.tab.on{background:rgba(200,150,28,.12);border-color:rgba(200,150,28,.3);color:var(--gold2)}
 
-/* ── Stats ── */
-.stats-grid {
-  display: grid; grid-template-columns: repeat(5,1fr); gap: .7rem; margin-bottom: 1.5rem;
-}
-@media(max-width:700px){ .stats-grid { grid-template-columns: repeat(3,1fr); } }
-.stat-box { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: .85rem 1rem; }
-.stat-box-val { font-family: 'Bebas Neue', sans-serif; font-size: 1.8rem; color: var(--gold2); letter-spacing: 1px; line-height: 1; }
-.stat-box-lbl { font-size: .62rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; margin-top: .25rem; }
+.toolbar{display:flex;gap:.55rem;margin-bottom:.9rem;flex-wrap:wrap;align-items:center}
+.tsearch{flex:1;min-width:160px;background:var(--panel);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:inherit;font-size:.84rem;padding:.48rem .8rem;outline:none;transition:border-color .18s}
+.tsearch:focus{border-color:var(--gold)}.tsearch::placeholder{color:var(--muted)}
+.tsel{background:var(--panel);border:1px solid var(--border);border-radius:7px;color:var(--text);font-family:inherit;font-size:.8rem;padding:.48rem .65rem;outline:none;cursor:pointer}
 
-/* ── Toolbar ── */
-.toolbar {
-  display: flex; gap: .6rem; margin-bottom: 1rem; flex-wrap: wrap; align-items: center;
-}
-.tsearch {
-  flex: 1; min-width: 180px;
-  background: var(--panel); border: 1px solid var(--border); border-radius: 7px;
-  color: var(--text); font-family: inherit; font-size: .85rem;
-  padding: .5rem .85rem; outline: none; transition: border-color .18s;
-}
-.tsearch:focus { border-color: var(--gold); }
-.tsearch::placeholder { color: var(--muted); }
-.tfilter {
-  background: var(--panel); border: 1px solid var(--border); border-radius: 7px;
-  color: var(--text); font-family: inherit; font-size: .82rem;
-  padding: .5rem .7rem; outline: none; cursor: pointer;
-}
+.tbl-wrap{overflow-x:auto;max-height:480px;overflow-y:auto;border:1px solid var(--border);border-radius:8px}
+.tbl-wrap::-webkit-scrollbar{width:3px}.tbl-wrap::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
+table{width:100%;border-collapse:collapse;font-size:.81rem}
+th{font-family:'Bebas Neue',sans-serif;font-size:.7rem;letter-spacing:1.5px;color:var(--muted);padding:.5rem .8rem;text-align:left;border-bottom:1px solid var(--border);white-space:nowrap}
+td{padding:.52rem .8rem;border-bottom:1px solid rgba(255,255,255,.04);vertical-align:middle}
+tr:hover td{background:rgba(255,255,255,.02)}
+.td-nick{font-family:'Barlow Condensed',sans-serif;font-weight:700;color:var(--text)}
+.td-id{font-family:monospace;font-size:.68rem;color:var(--muted)}
+.td-txt{color:var(--dim);max-width:300px;word-break:break-word}
+.td-t{font-size:.68rem;color:var(--muted);white-space:nowrap}
+.td-acts{display:flex;gap:.28rem;flex-wrap:nowrap}
+.act{padding:.18rem .5rem;border-radius:5px;font-size:.68rem;cursor:pointer;border:1px solid var(--border);background:transparent;color:var(--muted);transition:all .15s;font-family:inherit;white-space:nowrap}
+.act.del:hover{color:#e04848;border-color:#e04848;background:rgba(228,72,72,.08)}
+.act.ban:hover{color:#ffaa40;border-color:#ffaa40;background:rgba(255,170,64,.08)}
+.act.edit:hover{color:var(--gold);border-color:var(--gold);background:rgba(200,150,28,.08)}
 
-/* ── Messages table ── */
-.msg-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-.msg-table th {
-  font-family: 'Bebas Neue', sans-serif; font-size: .72rem; letter-spacing: 1.5px;
-  color: var(--muted); padding: .5rem .8rem; text-align: left;
-  border-bottom: 1px solid var(--border); cursor: pointer; user-select: none;
-}
-.msg-table th:hover { color: var(--gold); }
-.msg-table td { padding: .55rem .8rem; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: top; }
-.msg-table tr:hover td { background: rgba(255,255,255,.02); }
-.msg-nick-cell { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; color: var(--text); white-space: nowrap; }
-.msg-id-cell   { font-family: monospace; font-size: .68rem; color: var(--muted); }
-.msg-text-cell { color: var(--dim); max-width: 320px; word-break: break-word; }
-.msg-time-cell { font-size: .7rem; color: var(--muted); white-space: nowrap; }
-.msg-act-cell  { display: flex; gap: .3rem; white-space: nowrap; }
-.act-btn {
-  padding: .2rem .55rem; border-radius: 5px; font-size: .7rem; cursor: pointer;
-  border: 1px solid var(--border); background: transparent; color: var(--muted);
-  transition: all .15s; font-family: inherit;
-}
-.act-btn.del:hover { color: #e04848; border-color: #e04848; background: rgba(228,72,72,.08); }
-.act-btn.ban:hover { color: #ffaa40; border-color: #ffaa40; background: rgba(255,170,64,.08); }
+.ban-row{display:flex;align-items:center;gap:.9rem;padding:.62rem 1rem;border-bottom:1px solid rgba(255,255,255,.04);flex-wrap:wrap}
+.ban-nick{font-family:'Barlow Condensed',sans-serif;font-weight:700;color:#ffaa40;font-size:.88rem}
+.ban-pid{font-family:monospace;font-size:.65rem;color:var(--muted)}
+.ban-rsn{font-size:.76rem;color:var(--muted);flex:1}
+.ban-dt{font-size:.68rem;color:var(--muted);white-space:nowrap}
 
-.table-wrap { overflow-x: auto; max-height: 500px; overflow-y: auto; border: 1px solid var(--border); border-radius: 8px; }
-.table-wrap::-webkit-scrollbar { width: 3px; }
-.table-wrap::-webkit-scrollbar-thumb { background: var(--gold); border-radius: 2px; }
+.empty-row{text-align:center;padding:2.5rem;color:var(--muted);font-size:.82rem}
 
-/* ── Profiles table ── */
-.prof-table { width: 100%; border-collapse: collapse; font-size: .82rem; }
-.prof-table th { font-family: 'Bebas Neue', sans-serif; font-size: .72rem; letter-spacing: 1.5px; color: var(--muted); padding: .5rem .8rem; text-align: left; border-bottom: 1px solid var(--border); }
-.prof-table td { padding: .5rem .8rem; border-bottom: 1px solid rgba(255,255,255,.04); vertical-align: middle; }
-.prof-table tr:hover td { background: rgba(255,255,255,.02); }
+/* ── Edit Profile Modal ── */
+.ep-overlay{position:fixed;inset:0;z-index:4000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:1rem}
+.ep-modal{background:var(--bg3);border:1px solid var(--border2);border-radius:14px;padding:1.8rem;width:100%;max-width:460px;max-height:90vh;overflow-y:auto}
+.ep-title{font-family:'Bebas Neue',sans-serif;font-size:1.4rem;letter-spacing:2px;color:var(--gold2);margin-bottom:.2rem}
+.ep-sub{font-size:.78rem;color:var(--muted);margin-bottom:1.3rem;line-height:1.5}
+.ep-id{font-family:monospace;font-size:.72rem;color:var(--muted);background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:.2rem .6rem;display:inline-block;margin-bottom:1.1rem}
+.ep-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.38rem}
+.ep-inp{width:100%;box-sizing:border-box;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:.9rem;padding:.55rem .88rem;outline:none;transition:border-color .18s;margin-bottom:.9rem}
+.ep-inp:focus{border-color:var(--gold)}
+.ep-row{display:grid;grid-template-columns:1fr 1fr;gap:.7rem}
+.ep-sel{width:100%;box-sizing:border-box;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:.88rem;padding:.55rem .88rem;outline:none;margin-bottom:.9rem;cursor:pointer}
+.ep-sel:focus{border-color:var(--gold)}
+.ep-err{font-size:.73rem;color:#e04848;min-height:1rem;margin-bottom:.4rem}
 
-/* ── Bans ── */
-.ban-row {
-  display: flex; align-items: center; gap: 1rem;
-  padding: .65rem 1rem; border-bottom: 1px solid rgba(255,255,255,.04);
-  flex-wrap: wrap;
-}
-.ban-nick { font-family: 'Barlow Condensed', sans-serif; font-weight: 700; color: #ffaa40; font-size: .88rem; }
-.ban-reason { font-size: .78rem; color: var(--muted); flex: 1; }
-.ban-date   { font-size: .7rem; color: var(--muted); white-space: nowrap; }
-
-/* ── Chart (ASCII-style) ── */
-.activity-chart { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.2rem; margin-bottom: 1.2rem; }
-.chart-title { font-family: 'Bebas Neue', sans-serif; font-size: .78rem; letter-spacing: 2px; color: var(--muted); margin-bottom: 1rem; }
-.chart-bars { display: flex; gap: 4px; align-items: flex-end; height: 80px; }
-.chart-bar { flex: 1; background: rgba(200,150,28,.25); border-radius: 2px 2px 0 0; min-width: 8px; transition: background .15s; cursor: default; position: relative; }
-.chart-bar:hover { background: rgba(200,150,28,.55); }
-.chart-bar-tip {
-  display: none; position: absolute; bottom: 105%; left: 50%; transform: translateX(-50%);
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 5px;
-  padding: 2px 6px; font-size: .65rem; color: var(--text); white-space: nowrap; z-index: 10;
-}
-.chart-bar:hover .chart-bar-tip { display: block; }
-.chart-labels { display: flex; gap: 4px; margin-top: 4px; }
-.chart-lbl { flex: 1; font-size: .55rem; color: var(--muted); text-align: center; overflow: hidden; }
-
-/* ── Empty ── */
-.admin-empty { text-align: center; padding: 2.5rem; color: var(--muted); font-size: .82rem; }
-
-.badge {
-  font-size: .6rem; padding: 1px 5px; border-radius: 3px;
-  font-family: 'Bebas Neue', sans-serif; letter-spacing: .5px;
-}
-.badge-cat1{background:rgba(255,80,80,.12);color:#f07070;}
-.badge-cat2{background:rgba(255,160,0,.1);color:#ffaa40;}
-.badge-cat3{background:rgba(80,180,255,.1);color:#60b8ff;}
-.badge-cat4{background:rgba(80,200,80,.1);color:#50cc60;}
-.badge-S{background:rgba(255,208,64,.12);color:#ffd040;}
-.badge-A{background:rgba(128,204,96,.1);color:#80cc60;}
-.badge-B{background:rgba(96,168,240,.1);color:#60a8f0;}
-.badge-C{background:rgba(90,94,106,.12);color:#8a8e9a;}
+.bdg{font-size:.6rem;padding:1px 5px;border-radius:3px;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px}
+.bc1{background:rgba(255,80,80,.12);color:#f07070}
+.bc2{background:rgba(255,160,0,.1);color:#ffaa40}
+.bc3{background:rgba(80,180,255,.1);color:#60b8ff}
+.bc4{background:rgba(80,200,80,.1);color:#50cc60}
+.bS{background:rgba(255,208,64,.12);color:#ffd040}
+.bA{background:rgba(128,204,96,.1);color:#80cc60}
+.bB{background:rgba(96,168,240,.1);color:#60a8f0}
+.bC{background:rgba(90,94,106,.12);color:#8a8e9a}
 </style>
 </head>
 <body>
 
-<!-- ══ LOGIN ══ -->
+<!-- LOGIN -->
 <div id="login-screen" class="login-wrap">
   <div class="login-card">
     <div class="login-logo">⊕ WARPATH <span>GUIDE</span></div>
     <div class="login-title">Админ-панель</div>
     <div class="login-sub">Только для администратора сайта</div>
-    <input class="login-input" id="login-pass" type="password" placeholder="••••••••" maxlength="50">
+    <input class="login-inp" id="login-pass" type="password" placeholder="••••••••" maxlength="60">
     <div class="login-err" id="login-err"></div>
     <button class="btn btn-primary" id="btn-login" style="width:100%;font-size:.88rem">Войти →</button>
   </div>
 </div>
 
-<!-- ══ ADMIN CONTENT ══ -->
-<div id="admin-screen" style="display:none">
-  <div class="admin-page">
+<!-- EDIT PROFILE MODAL -->
+<div id="ep-overlay" class="ep-overlay" style="display:none">
+  <div class="ep-modal">
+    <div class="ep-title">✏️ Редактировать профиль</div>
+    <div class="ep-sub">Изменения сохраняются в базе Supabase и сразу видны пользователю.</div>
+    <div class="ep-id" id="ep-pid">—</div>
 
-    <div class="admin-header">
+    <label class="ep-lbl">Ник</label>
+    <input class="ep-inp" id="ep-nick" placeholder="Ник игрока" maxlength="20">
+
+    <label class="ep-lbl">Email</label>
+    <input class="ep-inp" id="ep-email" type="email" placeholder="email@example.com">
+
+    <div class="ep-row">
       <div>
-        <div class="admin-logo">⊕ WARPATH <span>GUIDE</span> — ADMIN</div>
-        <div class="admin-tagline" id="admin-tagline">Загрузка данных...</div>
+        <label class="ep-lbl">Категория сервера</label>
+        <select class="ep-sel" id="ep-cat">
+          <option value="1">⚔️ I — Воины (С1–111)</option>
+          <option value="2">🛡 II — Ветераны (С112–157)</option>
+          <option value="3">🔰 III — Опытные (С158–173)</option>
+          <option value="4">🆕 IV — Новые (С174–199)</option>
+        </select>
       </div>
-      <div class="admin-actions">
-        <button class="abtn" id="btn-refresh">↺ Обновить</button>
-        <button class="abtn chat" onclick="location.href='community.html'">💬 Чат</button>
-        <button class="abtn chat" onclick="location.href='index.html'">🏠 Главная</button>
-        <button class="abtn danger" id="btn-logout">Выйти</button>
+      <div>
+        <label class="ep-lbl">Номер сервера</label>
+        <input class="ep-inp" id="ep-srv" type="number" placeholder="56" min="1" max="199">
+      </div>
+    </div>
+
+    <label class="ep-lbl">Ранг</label>
+    <select class="ep-sel" id="ep-rank">
+      <option value="C">C — Новичок</option>
+      <option value="B">B — Средний</option>
+      <option value="A">A — Опытный</option>
+      <option value="S">S — Топ</option>
+    </select>
+
+    <div class="ep-err" id="ep-err"></div>
+    <div style="display:flex;gap:.6rem">
+      <button class="btn btn-primary" id="ep-save" style="flex:1;font-size:.86rem">💾 Сохранить</button>
+      <button class="abtn" id="ep-cancel" style="padding:.55rem 1.2rem">Отмена</button>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN PANEL -->
+<div id="admin-screen" style="display:none">
+  <div class="ap">
+    <div class="ap-head">
+      <div>
+        <div class="ap-logo">⊕ WARPATH <span>GUIDE</span> — ADMIN</div>
+        <div class="ap-tag" id="ap-tag">Загрузка...</div>
+      </div>
+      <div class="ap-acts">
+        <button class="abtn" id="btn-ref">↺ Обновить</button>
+        <button class="abtn blue" onclick="location.href='community.html'">💬 Чат</button>
+        <button class="abtn blue" onclick="location.href='index.html'">🏠 Главная</button>
+        <button class="abtn red" id="btn-logout">Выйти</button>
       </div>
     </div>
 
     <!-- Stats -->
-    <div class="stats-grid" id="stats-grid">
-      <div class="stat-box"><div class="stat-box-val" id="st-msgs">—</div><div class="stat-box-lbl">Сообщений</div></div>
-      <div class="stat-box"><div class="stat-box-val" id="st-users">—</div><div class="stat-box-lbl">Профилей</div></div>
-      <div class="stat-box"><div class="stat-box-val" id="st-bans">—</div><div class="stat-box-lbl">Банов</div></div>
-      <div class="stat-box"><div class="stat-box-val" id="st-today">—</div><div class="stat-box-lbl">Сегодня</div></div>
-      <div class="stat-box"><div class="stat-box-val" id="st-active">—</div><div class="stat-box-lbl">Активных (20м)</div></div>
+    <div class="stats">
+      <div class="sbox"><div class="sv" id="st-m">—</div><div class="sl">Сообщений</div></div>
+      <div class="sbox"><div class="sv" id="st-u">—</div><div class="sl">Профилей</div></div>
+      <div class="sbox"><div class="sv" id="st-b">—</div><div class="sl">Банов</div></div>
+      <div class="sbox"><div class="sv" id="st-td">—</div><div class="sl">Сегодня</div></div>
+      <div class="sbox"><div class="sv" id="st-ac">—</div><div class="sl">Активных (20м)</div></div>
     </div>
 
-    <!-- Activity chart -->
-    <div class="activity-chart">
-      <div class="chart-title">АКТИВНОСТЬ — последние 14 дней</div>
+    <!-- Chart -->
+    <div class="chart-box">
+      <div class="chart-lbl">АКТИВНОСТЬ — 14 ДНЕЙ</div>
       <div class="chart-bars" id="chart-bars"></div>
-      <div class="chart-labels" id="chart-labels"></div>
+      <div class="chart-xlbl" id="chart-xlbl"></div>
     </div>
 
     <!-- Tabs -->
-    <div class="admin-tabs">
-      <div class="atab active" data-tab="messages">💬 Сообщения</div>
-      <div class="atab" data-tab="profiles">👤 Профили</div>
-      <div class="atab" data-tab="bans">🚫 Баны</div>
+    <div class="tabs">
+      <div class="tab on" data-tab="msgs">💬 Сообщения</div>
+      <div class="tab" data-tab="profs">👤 Профили</div>
+      <div class="tab" data-tab="bans">🚫 Баны</div>
     </div>
 
-    <!-- ── Tab: Messages ── -->
-    <div id="tab-messages" class="tab-panel">
+    <!-- Messages tab -->
+    <div id="tab-msgs">
       <div class="toolbar">
-        <input class="tsearch" id="msg-search" placeholder="🔍 Поиск по нику или тексту...">
-        <select class="tfilter" id="msg-filter-cat">
+        <input class="tsearch" id="ms-q" placeholder="🔍 Поиск по нику или тексту...">
+        <select class="tsel" id="ms-cat">
           <option value="">Все категории</option>
-          <option value="1">⚔️ К1 (С1–111)</option>
-          <option value="2">🛡 К2 (С112–157)</option>
-          <option value="3">🔰 К3 (С158–173)</option>
-          <option value="4">🆕 К4 (С174–199)</option>
+          <option value="1">⚔️ К1</option><option value="2">🛡 К2</option>
+          <option value="3">🔰 К3</option><option value="4">🆕 К4</option>
         </select>
-        <button class="abtn" id="btn-load-more">Загрузить ещё</button>
-        <button class="abtn danger" id="btn-clear-chat">🗑 Очистить чат</button>
+        <button class="abtn" id="btn-more">+ Ещё 200</button>
+        <button class="abtn red" id="btn-clr">🗑 Очистить чат</button>
       </div>
-      <div class="table-wrap">
-        <table class="msg-table">
-          <thead>
-            <tr>
-              <th>Ник</th>
-              <th>ID профиля</th>
-              <th>Катег.</th>
-              <th>Сообщение</th>
-              <th>Время</th>
-              <th>Действия</th>
-            </tr>
-          </thead>
-          <tbody id="msgs-tbody"></tbody>
-        </table>
+      <div class="tbl-wrap">
+        <table><thead><tr>
+          <th>Ник</th><th>ID профиля</th><th>Кат.</th><th>Сообщение</th><th>Время</th><th>Действия</th>
+        </tr></thead><tbody id="ms-tbody"></tbody></table>
       </div>
-      <div class="admin-empty" id="msgs-empty" style="display:none">Нет сообщений</div>
+      <div class="empty-row" id="ms-empty" style="display:none">Нет сообщений</div>
     </div>
 
-    <!-- ── Tab: Profiles ── -->
-    <div id="tab-profiles" class="tab-panel" style="display:none">
+    <!-- Profiles tab -->
+    <div id="tab-profs" style="display:none">
       <div class="toolbar">
-        <input class="tsearch" id="prof-search" placeholder="🔍 Поиск по нику или ID...">
-        <button class="abtn" id="btn-reload-profs">↺ Обновить</button>
+        <input class="tsearch" id="pr-q" placeholder="🔍 Поиск по нику или ID...">
+        <button class="abtn" id="btn-ref-pr">↺ Обновить</button>
       </div>
-      <div class="table-wrap">
-        <table class="prof-table">
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Ник</th>
-              <th>Категория</th>
-              <th>Сервер</th>
-              <th>Ранг</th>
-              <th>Email</th>
-              <th>Регистрация</th>
-              <th>Действия</th>
-            </tr>
-          </thead>
-          <tbody id="profs-tbody"></tbody>
-        </table>
+      <div class="tbl-wrap">
+        <table><thead><tr>
+          <th>ID</th><th>Ник</th><th>Кат.</th><th>Сервер</th><th>Ранг</th><th>Email</th><th>Дата</th><th>Действия</th>
+        </tr></thead><tbody id="pr-tbody"></tbody></table>
       </div>
-      <div class="admin-empty" id="profs-empty" style="display:none">Нет профилей</div>
+      <div class="empty-row" id="pr-empty" style="display:none">Нет профилей</div>
     </div>
 
-    <!-- ── Tab: Bans ── -->
-    <div id="tab-bans" class="tab-panel" style="display:none">
+    <!-- Bans tab -->
+    <div id="tab-bans" style="display:none">
       <div class="toolbar">
-        <input class="tsearch" id="ban-search" placeholder="🔍 Поиск по нику...">
-        <button class="abtn" id="btn-reload-bans">↺ Обновить</button>
+        <input class="tsearch" id="bn-q" placeholder="🔍 Поиск по нику...">
+        <button class="abtn" id="btn-ref-bn">↺ Обновить</button>
       </div>
       <div id="bans-list"></div>
-      <div class="admin-empty" id="bans-empty" style="display:none">Банов нет</div>
+      <div class="empty-row" id="bn-empty" style="display:none">Банов нет</div>
     </div>
-
   </div>
 </div>
 
 <script>
 (function(){
 'use strict';
+var SB_URL='https://vxqupaymregfruldersy.supabase.co';
+var SB_KEY='sb_publishable_QXFONPIbprV584KNEeLDtQ_qXvNSSc2';
+var PWD='warpaCDKthMicrosotf2026admin';
+var AK='wg_adm_v1';
 
-var SB_URL   = 'https://vxqupaymregfruldersy.supabase.co';
-var SB_KEY   = 'sb_publishable_QXFONPIbprV584KNEeLDtQ_qXvNSSc2';
-var ADMIN_PWD = 'warpaCDKthMicrosotf2026admin'; /* ← смени на свой */
-var AUTH_KEY  = 'wg_admin_v1';
+var sb=null,allM=[],allP=[],allB=[],mlim=200,epId=null;
 
-var sb = null;
-var allMsgs  = [];
-var allProfs = [];
-var allBans  = [];
-var msgsLimit = 200;
-
-/* ── Utils ── */
-function esc(s){
-  return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
-}
-function $(id){ return document.getElementById(id); }
-function dateStr(ts){
-  var d=new Date(ts);
-  return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit'})+
-    ' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});
-}
+function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function g(id){return document.getElementById(id);}
+function dt(ts){var d=new Date(ts);return d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit',year:'2-digit'})+' '+d.toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});}
 
 /* ── Login ── */
 function initLogin(){
-  $('btn-login').addEventListener('click', tryLogin);
-  $('login-pass').addEventListener('keydown',function(e){ if(e.key==='Enter') tryLogin(); });
-  setTimeout(function(){ $('login-pass').focus(); }, 100);
-
-  /* Проверяем сессию */
-  if(sessionStorage.getItem(AUTH_KEY)==='1'){
-    showAdmin();
-  }
+  g('btn-login').addEventListener('click',tryLogin);
+  g('login-pass').addEventListener('keydown',function(ev){if(ev.key==='Enter')tryLogin();});
+  setTimeout(function(){g('login-pass').focus();},100);
+  if(sessionStorage.getItem(AK)==='1'){showAdmin();}
 }
-
 function tryLogin(){
-  var pwd=($('login-pass').value||'').trim();
-  if(pwd===ADMIN_PWD){
-    sessionStorage.setItem(AUTH_KEY,'1');
-    showAdmin();
-  } else {
-    $('login-err').textContent='❌ Неверный пароль';
-    $('login-pass').value='';
-    $('login-pass').focus();
-    setTimeout(function(){ $('login-err').textContent=''; },2000);
+  if((g('login-pass').value||'').trim()===PWD){
+    sessionStorage.setItem(AK,'1');showAdmin();
+  }else{
+    g('login-err').textContent='❌ Неверный пароль';
+    g('login-pass').value='';g('login-pass').focus();
+    setTimeout(function(){g('login-err').textContent='';},2000);
   }
 }
-
-function logout(){
-  sessionStorage.removeItem(AUTH_KEY);
-  location.reload();
-}
+function logout(){sessionStorage.removeItem(AK);location.reload();}
 
 function showAdmin(){
-  $('login-screen').style.display='none';
-  $('admin-screen').style.display='block';
+  g('login-screen').style.display='none';
+  g('admin-screen').style.display='block';
   sb=window.supabase.createClient(SB_URL,SB_KEY);
   loadAll();
 }
 
-/* ── Load all data ── */
-function loadAll(){
-  loadStats();
-  loadMsgs();
-  loadProfs();
-  loadBans();
-}
+/* ── Load ── */
+function loadAll(){loadStats();loadMsgs();loadProfs();loadBans();}
 
 async function loadStats(){
   try{
-    var[msgsRes,profsRes,bansRes,todayRes,activeRes]=await Promise.all([
+    var[mr,ur,br,tr,ar]=await Promise.all([
       sb.from('messages').select('id',{count:'exact',head:true}),
       sb.from('profiles').select('id',{count:'exact',head:true}),
       sb.from('bans').select('id',{count:'exact',head:true}),
-      sb.from('messages').select('id',{count:'exact',head:true})
-        .gte('created_at',new Date(Date.now()-86400000).toISOString()),
-      sb.from('messages').select('profile_id',{count:'exact',head:true})
-        .gte('created_at',new Date(Date.now()-20*60*1000).toISOString()),
+      sb.from('messages').select('id',{count:'exact',head:true}).gte('created_at',new Date(Date.now()-86400000).toISOString()),
+      sb.from('messages').select('profile_id',{count:'exact',head:true}).gte('created_at',new Date(Date.now()-20*60*1000).toISOString()),
     ]);
-    $('st-msgs').textContent   = msgsRes.count  || 0;
-    $('st-users').textContent  = profsRes.count || 0;
-    $('st-bans').textContent   = bansRes.count  || 0;
-    $('st-today').textContent  = todayRes.count || 0;
-    $('st-active').textContent = activeRes.count|| 0;
-    $('admin-tagline').textContent='Warpath Guide · Данные обновлены '+new Date().toLocaleTimeString('ru-RU');
-    loadActivityChart();
-  }catch(e){ console.error(e); }
+    g('st-m').textContent=mr.count||0;g('st-u').textContent=ur.count||0;g('st-b').textContent=br.count||0;
+    g('st-td').textContent=tr.count||0;g('st-ac').textContent=ar.count||0;
+    g('ap-tag').textContent='Обновлено: '+new Date().toLocaleTimeString('ru-RU');
+    loadChart();
+  }catch(ex){console.error(ex);}
 }
 
-async function loadActivityChart(){
-  var days=14, now=Date.now();
-  var since=new Date(now-days*86400000).toISOString();
-  var res=await sb.from('messages').select('created_at').gte('created_at',since);
-  if(res.error||!res.data) return;
-
-  /* Группируем по дням */
-  var buckets={};
+async function loadChart(){
+  var days=14,now=Date.now();
+  var res=await sb.from('messages').select('created_at').gte('created_at',new Date(now-days*86400000).toISOString());
+  if(res.error||!res.data)return;
+  var bk={};
   for(var i=0;i<days;i++){
     var d=new Date(now-(days-1-i)*86400000);
-    var key=d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'});
-    buckets[key]=0;
+    var k=d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'});
+    bk[k]=0;
   }
-  res.data.forEach(function(m){
-    var d=new Date(m.created_at);
-    var key=d.toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'});
-    if(buckets[key]!==undefined) buckets[key]++;
-  });
-
-  var keys=Object.keys(buckets);
-  var vals=keys.map(function(k){ return buckets[k]; });
-  var maxVal=Math.max.apply(null,vals)||1;
-
-  $('chart-bars').innerHTML=vals.map(function(v,i){
-    var pct=Math.round((v/maxVal)*100)||2;
-    return '<div class="chart-bar" style="height:'+pct+'%"><div class="chart-bar-tip">'+keys[i]+': '+v+'</div></div>';
-  }).join('');
-  $('chart-labels').innerHTML=keys.map(function(k){
-    return '<div class="chart-lbl">'+k+'</div>';
-  }).join('');
+  res.data.forEach(function(m){var k=new Date(m.created_at).toLocaleDateString('ru-RU',{day:'2-digit',month:'2-digit'});if(bk[k]!==undefined)bk[k]++;});
+  var ks=Object.keys(bk),vs=ks.map(function(k){return bk[k];});
+  var mx=Math.max.apply(null,vs)||1;
+  g('chart-bars').innerHTML=vs.map(function(v,i){var p=Math.round(v/mx*100)||2;return '<div class="bar" style="height:'+p+'%"><div class="bar-tip">'+ks[i]+': '+v+'</div></div>';}).join('');
+  g('chart-xlbl').innerHTML=ks.map(function(k){return '<div class="xl">'+k+'</div>';}).join('');
 }
 
-/* ── Messages ── */
 async function loadMsgs(){
-  var res=await sb.from('messages').select('*').order('created_at',{ascending:false}).limit(msgsLimit);
-  if(res.error){ console.error(res.error); return; }
-  allMsgs=res.data||[];
-  renderMsgs();
+  var res=await sb.from('messages').select('*').order('created_at',{ascending:false}).limit(mlim);
+  if(res.error){console.error(res.error);return;}
+  allM=res.data||[];renderMsgs();
 }
 
 function renderMsgs(){
-  var q=($('msg-search').value||'').toLowerCase();
-  var cat=$('msg-filter-cat').value;
-  var list=allMsgs.filter(function(m){
-    var matchQ=!q||(m.nick||'').toLowerCase().includes(q)||(m.text||'').toLowerCase().includes(q);
-    var matchC=!cat||m.server_cat===cat;
-    return matchQ&&matchC;
+  var q=(g('ms-q').value||'').toLowerCase(),cat=g('ms-cat').value;
+  var list=allM.filter(function(m){
+    return(!q||(m.nick||'').toLowerCase().includes(q)||(m.text||'').toLowerCase().includes(q))&&(!cat||m.server_cat===cat);
   });
-
-  var tbody=$('msgs-tbody');
-  $('msgs-empty').style.display=list.length?'none':'block';
-
-  if(!list.length){ tbody.innerHTML=''; return; }
-
-  tbody.innerHTML=list.map(function(m){
+  var tb=g('ms-tbody');
+  g('ms-empty').style.display=list.length?'none':'block';
+  if(!list.length){tb.innerHTML='';return;}
+  tb.innerHTML=list.map(function(m){
     var cat=m.server_cat||'4';
     return '<tr>'+
-      '<td class="msg-nick-cell">'+esc(m.nick)+'</td>'+
-      '<td class="msg-id-cell">'+esc(m.profile_id||'—')+'</td>'+
-      '<td><span class="badge badge-cat'+cat+'">К'+cat+'</span></td>'+
-      '<td class="msg-text-cell">'+esc(m.text)+'</td>'+
-      '<td class="msg-time-cell">'+dateStr(m.created_at)+'</td>'+
-      '<td class="msg-act-cell">'+
-        '<button class="act-btn del" data-id="'+m.id+'">🗑</button>'+
-        '<button class="act-btn ban" data-nick="'+esc(m.nick)+'" data-pid="'+esc(m.profile_id||'')+'">🚫</button>'+
-      '</td>'+
-    '</tr>';
+      '<td class="td-nick">'+e(m.nick)+'</td>'+
+      '<td class="td-id">'+e(m.profile_id||'—')+'</td>'+
+      '<td><span class="bdg bc'+cat+'">К'+cat+'</span></td>'+
+      '<td class="td-txt">'+e(m.text)+'</td>'+
+      '<td class="td-t">'+dt(m.created_at)+'</td>'+
+      '<td class="td-acts">'+
+        '<button class="act del" data-id="'+m.id+'">🗑</button>'+
+        '<button class="act ban" data-nick="'+e(m.nick)+'" data-pid="'+e(m.profile_id||'')+'">🚫</button>'+
+      '</td></tr>';
   }).join('');
-
-  tbody.querySelectorAll('.act-btn.del').forEach(function(btn){
-    btn.addEventListener('click',function(){ deleteMsg(btn.dataset.id); });
-  });
-  tbody.querySelectorAll('.act-btn.ban').forEach(function(btn){
-    btn.addEventListener('click',function(){ banUser(btn.dataset.nick,btn.dataset.pid); });
-  });
+  tb.querySelectorAll('.act.del').forEach(function(b){b.addEventListener('click',function(){delMsg(b.dataset.id);});});
+  tb.querySelectorAll('.act.ban').forEach(function(b){b.addEventListener('click',function(){banUser(b.dataset.nick,b.dataset.pid);});});
 }
 
-async function deleteMsg(id){
-  if(!confirm('Удалить сообщение?')) return;
-  var res=await sb.from('messages').delete().eq('id',id);
-  if(res.error){ alert('Ошибка: '+res.error.message); return; }
-  allMsgs=allMsgs.filter(function(m){ return String(m.id)!==String(id); });
-  renderMsgs();
-  loadStats();
+async function delMsg(id){
+  if(!confirm('Удалить сообщение?'))return;
+  var r=await sb.from('messages').delete().eq('id',id);
+  if(r.error){alert('Ошибка: '+r.error.message);return;}
+  allM=allM.filter(function(m){return String(m.id)!==String(id);});
+  renderMsgs();loadStats();
 }
 
 async function clearChat(){
-  if(!confirm('Удалить ВСЕ сообщения?')) return;
-  if(!confirm('Подтверди: удалить всё?')) return;
-  var res=await sb.from('messages').delete().neq('id',0);
-  if(res.error){ alert('Ошибка: '+res.error.message); return; }
-  allMsgs=[];
-  renderMsgs();
-  loadStats();
-  loadActivityChart();
+  if(!confirm('Удалить ВСЕ сообщения?'))return;
+  if(!confirm('Подтверди: удалить всё?'))return;
+  var r=await sb.from('messages').delete().neq('id',0);
+  if(r.error){alert('Ошибка: '+r.error.message);return;}
+  allM=[];renderMsgs();loadStats();
 }
 
 /* ── Profiles ── */
 async function loadProfs(){
   var res=await sb.from('profiles').select('*').order('created_at',{ascending:false});
-  if(res.error){ console.error(res.error); return; }
-  allProfs=res.data||[];
-  renderProfs();
+  if(res.error){console.error(res.error);return;}
+  allP=res.data||[];renderProfs();
 }
 
 function renderProfs(){
-  var q=($('prof-search').value||'').toLowerCase();
-  var list=allProfs.filter(function(p){
-    return !q||(p.nick||'').toLowerCase().includes(q)||(p.id||'').toLowerCase().includes(q);
-  });
-
-  var tbody=$('profs-tbody');
-  $('profs-empty').style.display=list.length?'none':'block';
-  if(!list.length){ tbody.innerHTML=''; return; }
-
-  tbody.innerHTML=list.map(function(p){
-    var cat=p.server_cat||'4';
-    var rank=p.rank||'C';
+  var q=(g('pr-q').value||'').toLowerCase();
+  var list=allP.filter(function(p){return!q||(p.nick||'').toLowerCase().includes(q)||(p.id||'').toLowerCase().includes(q);});
+  var tb=g('pr-tbody');
+  g('pr-empty').style.display=list.length?'none':'block';
+  if(!list.length){tb.innerHTML='';return;}
+  tb.innerHTML=list.map(function(p){
+    var cat=p.server_cat||'4',rk=p.rank||'C';
     return '<tr>'+
-      '<td style="font-family:monospace;font-size:.72rem;color:var(--muted)">'+esc(p.id)+'</td>'+
-      '<td style="font-family:\'Barlow Condensed\',sans-serif;font-weight:700">'+esc(p.nick)+'</td>'+
-      '<td><span class="badge badge-cat'+cat+'">К'+cat+'</span></td>'+
-      '<td style="color:var(--dim);font-size:.8rem">'+(p.server_num?'С'+p.server_num:'—')+'</td>'+
-      '<td><span class="badge badge-'+rank+'">'+rank+'</span></td>'+
-      '<td style="font-size:.75rem;color:var(--muted)">'+(p.email?esc(p.email):'—')+'</td>'+
-      '<td style="font-size:.72rem;color:var(--muted)">'+dateStr(p.created_at)+'</td>'+
-      '<td style="display:flex;gap:.3rem">'+
-        '<button class="act-btn" data-pid="'+esc(p.id)+'" data-email="'+esc(p.email||'')+'">✉ Email</button>'+
-        '<button class="act-btn ban" data-nick="'+esc(p.nick)+'" data-pid="'+esc(p.id)+'">🚫 Бан</button>'+
-        '</td>'+
-    '</tr>';
+      '<td class="td-id">'+e(p.id)+'</td>'+
+      '<td class="td-nick">'+e(p.nick)+'</td>'+
+      '<td><span class="bdg bc'+cat+'">К'+cat+'</span></td>'+
+      '<td style="font-size:.8rem;color:var(--dim)">'+(p.server_num?'С'+p.server_num:'—')+'</td>'+
+      '<td><span class="bdg b'+rk+'">'+rk+'</span></td>'+
+      '<td style="font-size:.74rem;color:var(--muted)">'+(p.email?'<span style="color:var(--gold)">'+e(p.email)+'</span>':'<span style="opacity:.4">—</span>')+'</td>'+
+      '<td class="td-t">'+dt(p.created_at)+'</td>'+
+      '<td class="td-acts">'+
+        '<button class="act edit" data-id="'+e(p.id)+'">✏️ Ред.</button>'+
+        '<button class="act ban" data-nick="'+e(p.nick)+'" data-pid="'+e(p.id)+'">🚫</button>'+
+      '</td></tr>';
   }).join('');
-
-  tbody.querySelectorAll('.act-btn:not(.ban)').forEach(function(btn){
-    btn.addEventListener('click',function(){ editProfileEmail(btn.dataset.pid, btn.dataset.email); });
-  });
-  tbody.querySelectorAll('.act-btn.ban').forEach(function(btn){
-    btn.addEventListener('click',function(){ banUser(btn.dataset.nick,btn.dataset.pid); });
-  });
+  tb.querySelectorAll('.act.edit').forEach(function(b){b.addEventListener('click',function(){openEditProfile(b.dataset.id);});});
+  tb.querySelectorAll('.act.ban').forEach(function(b){b.addEventListener('click',function(){banUser(b.dataset.nick,b.dataset.pid);});});
 }
 
-async function editProfileEmail(profileId, currentEmail){
-  var newEmail = prompt('Email для профиля ' + profileId + '\n(пусто = удалить)', currentEmail || '');
-  if(newEmail === null) return;
-  newEmail = newEmail.trim() || null;
-  var res = await sb.from('profiles').update({ email: newEmail }).eq('id', profileId);
-  if(res.error){ alert('Ошибка: ' + res.error.message); return; }
-  allProfs = allProfs.map(function(p){
-    return p.id === profileId ? Object.assign({}, p, { email: newEmail }) : p;
-  });
-  renderProfs();
-  alert(newEmail ? '\u2713 Email: ' + newEmail : '\u2713 Email удалён');
+/* ── Edit Profile Modal ── */
+function openEditProfile(pid){
+  var p=allP.find(function(x){return x.id===pid;});
+  if(!p)return;
+  epId=pid;
+  g('ep-pid').textContent='ID: '+p.id;
+  g('ep-nick').value=p.nick||'';
+  g('ep-email').value=p.email||'';
+  g('ep-cat').value=p.server_cat||'4';
+  g('ep-srv').value=p.server_num||'';
+  g('ep-rank').value=p.rank||'C';
+  g('ep-err').textContent='';
+  g('ep-overlay').style.display='flex';
+  setTimeout(function(){g('ep-nick').focus();},100);
 }
 
+function closeEditProfile(){g('ep-overlay').style.display='none';epId=null;}
+
+async function saveEditProfile(){
+  if(!epId)return;
+  var nick=(g('ep-nick').value||'').trim();
+  var email=(g('ep-email').value||'').trim()||null;
+  var cat=g('ep-cat').value;
+  var srv=parseInt(g('ep-srv').value||'')||null;
+  var rank=g('ep-rank').value;
+  var err=g('ep-err');
+
+  if(nick.length<2){err.textContent='Ник минимум 2 символа';return;}
+  if(nick.length>20){err.textContent='Ник не более 20 символов';return;}
+
+  err.textContent='⏳ Сохраняем...';
+  g('ep-save').disabled=true;
+
+  try{
+    /* Проверка уникальности ника */
+    var chk=await sb.from('profiles').select('id').eq('nick',nick);
+    if(chk.data&&chk.data.length>0){
+      if(chk.data.find(function(r){return r.id!==epId;})){err.textContent='❌ Ник уже занят';g('ep-save').disabled=false;return;}
+    }
+
+    var upd={nick:nick,server_cat:cat,server_num:srv,rank:rank,updated_at:new Date().toISOString()};
+    /* email — только если колонка есть */
+    if(email!==null)upd.email=email; else upd.email=null;
+
+    var res=await sb.from('profiles').update(upd).eq('id',epId);
+    if(res.error)throw res.error;
+
+    /* Обновляем локальный массив */
+    allP=allP.map(function(p){
+      return p.id===epId?Object.assign({},p,{nick:nick,email:email,server_cat:cat,server_num:srv,rank:rank}):p;
+    });
+    closeEditProfile();
+    renderProfs();
+    loadStats();
+  }catch(ex){
+    console.error(ex);
+    err.textContent='❌ Ошибка: '+(ex.message||'попробуй ещё раз');
+  }
+  g('ep-save').disabled=false;
 }
 
 /* ── Bans ── */
 async function loadBans(){
   var res=await sb.from('bans').select('*').order('banned_at',{ascending:false});
-  if(res.error){ console.error(res.error); return; }
-  allBans=res.data||[];
-  renderBans();
+  if(res.error){console.error(res.error);return;}
+  allB=res.data||[];renderBans();
 }
 
 function renderBans(){
-  var q=($('ban-search').value||'').toLowerCase();
-  var list=allBans.filter(function(b){ return !q||(b.nick||'').toLowerCase().includes(q); });
-
-  var el=$('bans-list');
-  $('bans-empty').style.display=list.length?'none':'block';
-  if(!list.length){ el.innerHTML=''; return; }
-
+  var q=(g('bn-q').value||'').toLowerCase();
+  var list=allB.filter(function(b){return!q||(b.nick||'').toLowerCase().includes(q);});
+  var el=g('bans-list');
+  g('bn-empty').style.display=list.length?'none':'block';
+  if(!list.length){el.innerHTML='';return;}
   el.innerHTML=list.map(function(b){
     return '<div class="ban-row">'+
-      '<div class="ban-nick">🚫 '+esc(b.nick||'—')+'</div>'+
-      '<div style="font-family:monospace;font-size:.68rem;color:var(--muted)">'+esc(b.profile_id||'—')+'</div>'+
-      '<div class="ban-reason">'+(b.reason?esc(b.reason):'Без причины')+'</div>'+
-      '<div class="ban-date">'+dateStr(b.banned_at)+'</div>'+
-      '<button class="act-btn" data-bid="'+b.id+'" data-nick="'+esc(b.nick)+'" style="white-space:nowrap">↩ Разбан</button>'+
+      '<div class="ban-nick">🚫 '+e(b.nick||'—')+'</div>'+
+      '<div class="ban-pid">'+e(b.profile_id||'—')+'</div>'+
+      '<div class="ban-rsn">'+(b.reason?e(b.reason):'Без причины')+'</div>'+
+      '<div class="ban-dt">'+dt(b.banned_at)+'</div>'+
+      '<button class="act" data-bid="'+b.id+'" data-nick="'+e(b.nick||'')+'" style="white-space:nowrap">↩ Разбан</button>'+
     '</div>';
   }).join('');
-
-  el.querySelectorAll('.act-btn').forEach(function(btn){
-    btn.addEventListener('click',function(){ unbanUser(btn.dataset.bid,btn.dataset.nick); });
-  });
+  el.querySelectorAll('.act').forEach(function(b){b.addEventListener('click',function(){unban(b.dataset.bid,b.dataset.nick);});});
 }
 
-async function banUser(nick,profileId){
-  var reason=prompt('Причина бана для '+nick+':\n(оставь пустым — без причины)');
-  if(reason===null) return;
-  await sb.from('bans').insert({nick:nick,profile_id:profileId||null,reason:reason||null});
+async function banUser(nick,pid){
+  var reason=prompt('Причина бана для '+nick+':\n(пусто = без причины)');
+  if(reason===null)return;
+  await sb.from('bans').insert({nick:nick,profile_id:pid||null,reason:reason||null});
   if(confirm('Удалить все сообщения '+nick+'?')){
     await sb.from('messages').delete().eq('nick',nick);
-    allMsgs=allMsgs.filter(function(m){ return m.nick!==nick; });
+    allM=allM.filter(function(m){return m.nick!==nick;});
     renderMsgs();
   }
-  loadBans();
-  loadStats();
+  loadBans();loadStats();
   alert('✓ '+nick+' заблокирован');
 }
 
-async function unbanUser(banId,nick){
-  if(!confirm('Снять бан с '+nick+'?')) return;
-  await sb.from('bans').delete().eq('id',banId);
-  allBans=allBans.filter(function(b){ return String(b.id)!==String(banId); });
-  renderBans();
-  loadStats();
+async function unban(bid,nick){
+  if(!confirm('Снять бан с '+nick+'?'))return;
+  await sb.from('bans').delete().eq('id',bid);
+  allB=allB.filter(function(b){return String(b.id)!==String(bid);});
+  renderBans();loadStats();
 }
 
 /* ── Tabs ── */
 function initTabs(){
-  document.querySelectorAll('.atab').forEach(function(tab){
-    tab.addEventListener('click',function(){
-      document.querySelectorAll('.atab').forEach(function(t){ t.classList.remove('active'); });
-      document.querySelectorAll('.tab-panel').forEach(function(p){ p.style.display='none'; });
-      tab.classList.add('active');
-      $('tab-'+tab.dataset.tab).style.display='block';
+  document.querySelectorAll('.tab').forEach(function(t){
+    t.addEventListener('click',function(){
+      document.querySelectorAll('.tab').forEach(function(x){x.classList.remove('on');});
+      ['tab-msgs','tab-profs','tab-bans'].forEach(function(id){g(id).style.display='none';});
+      t.classList.add('on');
+      g('tab-'+t.dataset.tab).style.display='block';
     });
   });
 }
 
-/* ── Events ── */
-function initEvents(){
-  $('btn-logout').addEventListener('click',logout);
-  $('btn-refresh').addEventListener('click',loadAll);
-  $('btn-clear-chat').addEventListener('click',clearChat);
-  $('btn-load-more').addEventListener('click',function(){ msgsLimit+=200; loadMsgs(); });
-  $('btn-reload-profs').addEventListener('click',loadProfs);
-  $('btn-reload-bans').addEventListener('click',loadBans);
-  $('msg-search').addEventListener('input',renderMsgs);
-  $('msg-filter-cat').addEventListener('change',renderMsgs);
-  $('prof-search').addEventListener('input',renderProfs);
-  $('ban-search').addEventListener('input',renderBans);
-}
-
 /* ── Init ── */
 document.addEventListener('DOMContentLoaded',function(){
-  initLogin();
-  initTabs();
-  initEvents();
+  initLogin();initTabs();
+  document.addEventListener('click',function(ev){
+    if(ev.target&&ev.target.id==='ep-overlay')closeEditProfile();
+  });
+  g('btn-logout').addEventListener('click',logout);
+  g('btn-ref').addEventListener('click',loadAll);
+  g('btn-clr').addEventListener('click',clearChat);
+  g('btn-more').addEventListener('click',function(){mlim+=200;loadMsgs();});
+  g('btn-ref-pr').addEventListener('click',loadProfs);
+  g('btn-ref-bn').addEventListener('click',loadBans);
+  g('ms-q').addEventListener('input',renderMsgs);
+  g('ms-cat').addEventListener('change',renderMsgs);
+  g('pr-q').addEventListener('input',renderProfs);
+  g('bn-q').addEventListener('input',renderBans);
+  g('ep-save').addEventListener('click',saveEditProfile);
+  g('ep-cancel').addEventListener('click',closeEditProfile);
+  g('ep-nick').addEventListener('keydown',function(ev){if(ev.key==='Enter')saveEditProfile();});
 });
-
 })();
 </script>
 </body>
