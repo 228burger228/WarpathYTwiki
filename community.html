@@ -342,19 +342,19 @@ async function savePro(){
       if(takenByOther){err.textContent='❌ Ник уже занят — выбери другой';g('btn-save').disabled=false;return;}
     }
     var now=new Date().toISOString();
-    /* Строим объект только с существующими полями */
+    /* Базовые поля без email — email сохраняем отдельным запросом */
     var data={nick:nick,server_cat:selCat,server_num:srv,rank:selRnk,updated_at:now};
-    /* email — добавляем только если пользователь ввёл значение */
-    if(email) data.email=email;
     if(isEdit&&prof){
       var u=await sb.from('profiles').update(data).eq('id',prof.id);
       if(u.error)throw u.error;
+      if(email){ try{await sb.from('profiles').update({email:email}).eq('id',prof.id);}catch(ex2){console.warn('email col missing',ex2);} }
       Object.assign(prof,{nick:nick,email:email,server_cat:selCat,server_num:srv,rank:selRnk});
     }else{
       var nid=gid();
       var ins=await sb.from('profiles').insert(Object.assign({id:nid,created_at:now},data));
       if(ins.error)throw ins.error;
       prof={id:nid,nick:nick,email:email,server_cat:selCat,server_num:srv,rank:selRnk};
+      if(email){ try{await sb.from('profiles').update({email:email}).eq('id',nid);}catch(ex2){console.warn('email col missing',ex2);} }
     }
     isGuest=false;
     localStorage.setItem(PKEY,JSON.stringify(prof));
