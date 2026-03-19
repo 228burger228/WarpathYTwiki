@@ -84,9 +84,7 @@
 <!-- ВАЖНО: i18n.js первым! nav.js вставит навигацию сам. -->
 <!-- Дублирующий #mobile-menu удалён — nav.js создаёт своё
      мобильное меню (#nav-mobile). Два разных меню конфликтовали. -->
-<script src="i18n.js"></script>
-<script src="nav.js"></script>
-<script src="data.js"></script>
+
 
 <div class="page-header">
   <div class="wrap">
@@ -213,7 +211,9 @@
 </section>
 
 <button class="scroll-top" id="scroll-top-btn" onclick="window.scrollTo({top:0,behavior:'smooth'})" title="Наверх">↑</button>
-
+<script src="i18n.js"></script>
+<script src="nav.js"></script>
+<script src="data.js"></script>
 <script>
 let snap = null;
 
