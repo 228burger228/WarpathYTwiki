@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Обратная связь — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+<script src="i18n.js"></script>
+<script src="nav.js"></script>
+<script src="data.js"></script>
+<style>
+.fb-page { max-width: 780px; margin: 0 auto; padding: 2rem 1rem 5rem; }
+
+.fb-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 2rem; }
+@media(max-width:600px){ .fb-cards{grid-template-columns:1fr;} }
+.fb-type-card {
+  background: var(--panel); border: 2px solid var(--border);
+  border-radius: 12px; padding: 1.2rem; cursor: pointer;
+  transition: all .2s; user-select: none; text-align: center;
+}
+.fb-type-card:hover  { border-color: var(--border2); }
+.fb-type-card.active { border-color: var(--gold); background: rgba(200,150,28,.07); }
+.fb-type-icon { font-size: 2rem; margin-bottom: .5rem; }
+.fb-type-title { font-family: 'Bebas Neue', sans-serif; font-size: 1rem; letter-spacing: 1.5px; color: var(--text); margin-bottom: .25rem; }
+.fb-type-sub   { font-size: .72rem; color: var(--muted); line-height: 1.5; }
+
+.fb-form { background: var(--panel); border: 1px solid var(--border); border-radius: 14px; padding: 1.8rem; }
+.fb-label { font-size: .68rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; display: block; margin-bottom: .4rem; margin-top: .9rem; }
+.fb-label:first-child { margin-top: 0; }
+.fb-input, .fb-select {
+  width: 100%; box-sizing: border-box;
+  background: rgba(255,255,255,.05); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-family: inherit; font-size: .9rem;
+  padding: .6rem .9rem; outline: none; transition: border-color .18s;
+}
+.fb-input:focus, .fb-select:focus { border-color: var(--gold); }
+.fb-input::placeholder { color: var(--muted); }
+.fb-row { display: grid; grid-template-columns: 1fr 1fr; gap: .8rem; }
+@media(max-width:500px){ .fb-row{grid-template-columns:1fr;} }
+.fb-textarea {
+  width: 100%; box-sizing: border-box;
+  background: rgba(255,255,255,.05); border: 1px solid var(--border);
+  border-radius: 8px; color: var(--text); font-family: inherit; font-size: .9rem;
+  padding: .6rem .9rem; outline: none; resize: vertical; min-height: 120px;
+  transition: border-color .18s;
+}
+.fb-textarea:focus { border-color: var(--gold); }
+.fb-textarea::placeholder { color: var(--muted); }
+
+.fb-submit {
+  margin-top: 1.3rem; width: 100%;
+}
+.fb-hint { font-size: .72rem; color: var(--muted); margin-top: .4rem; line-height: 1.5; }
+
+.fb-success {
+  display: none;
+  background: rgba(93,202,56,.07); border: 1px solid rgba(93,202,56,.25);
+  border-radius: 12px; padding: 2rem; text-align: center; margin-top: 1.5rem;
+}
+.fb-success-icon { font-size: 2.5rem; margin-bottom: .75rem; }
+.fb-success-title { font-family: 'Bebas Neue', sans-serif; font-size: 1.4rem; letter-spacing: 2px; color: #5dca38; margin-bottom: .4rem; }
+.fb-success-sub   { font-size: .82rem; color: var(--muted); line-height: 1.6; }
+
+.info-cards { display: grid; grid-template-columns: repeat(3,1fr); gap: .8rem; margin-bottom: 2rem; }
+@media(max-width:600px){ .info-cards{grid-template-columns:1fr;} }
+.info-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1rem; text-align: center; }
+.info-card-icon  { font-size: 1.6rem; margin-bottom: .4rem; }
+.info-card-title { font-family: 'Bebas Neue', sans-serif; font-size: .88rem; letter-spacing: 1.5px; color: var(--text); margin-bottom: .2rem; }
+.info-card-sub   { font-size: .7rem; color: var(--muted); line-height: 1.5; }
+</style>
+</head>
+<body>
+
+<div class="page-header">
+  <div class="wrap">
+    <div class="tag">📝 Обратная связь</div>
+    <div class="title">Помоги улучшить сайт</div>
+    <p class="sub">Нашёл баг, есть идея или хочешь добавить данные? Напиши — рассмотрим каждое обращение.</p>
+  </div>
+</div>
+
+<div class="fb-page">
+
+  <!-- Что можно отправить -->
+  <div class="info-cards">
+    <div class="info-card">
+      <div class="info-card-icon">🐛</div>
+      <div class="info-card-title">Баги</div>
+      <div class="info-card-sub">Что-то не работает, отображается неправильно или ломается</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">💡</div>
+      <div class="info-card-title">Идеи</div>
+      <div class="info-card-sub">Новые функции, страницы, инструменты или улучшения</div>
+    </div>
+    <div class="info-card">
+      <div class="info-card-icon">📊</div>
+      <div class="info-card-title">Данные</div>
+      <div class="info-card-sub">Офицеры, механики, статы юнитов — добавим в wiki и data.js</div>
+    </div>
+  </div>
+
+  <!-- Тип обращения -->
+  <div class="fb-cards" id="type-cards">
+    <div class="fb-type-card active" data-type="bug">
+      <div class="fb-type-icon">🐛</div>
+      <div class="fb-type-title">Нашёл баг</div>
+      <div class="fb-type-sub">Что-то работает не так как должно</div>
+    </div>
+    <div class="fb-type-card" data-type="idea">
+      <div class="fb-type-icon">💡</div>
+      <div class="fb-type-title">Идея / улучшение</div>
+      <div class="fb-type-sub">Хочу предложить новую функцию или изменение</div>
+    </div>
+    <div class="fb-type-card" data-type="data">
+      <div class="fb-type-icon">📊</div>
+      <div class="fb-type-title">Добавить данные</div>
+      <div class="fb-type-sub">Офицеры, механики, статы, патч-ноуты</div>
+    </div>
+    <div class="fb-type-card" data-type="other">
+      <div class="fb-type-icon">💬</div>
+      <div class="fb-type-title">Другое</div>
+      <div class="fb-type-sub">Вопрос, благодарность или что-то ещё</div>
+    </div>
+  </div>
+
+  <!-- Форма -->
+  <div class="fb-form" id="fb-form-wrap">
+    <form id="fb-form" action="https://formspree.io/f/mdawyvrk" method="POST">
+      <input type="hidden" name="type" id="f-type" value="bug">
+
+      <div class="fb-row">
+        <div>
+          <label class="fb-label">Ник (необязательно)</label>
+          <input class="fb-input" name="nick" placeholder="Твой ник в игре">
+        </div>
+        <div>
+          <label class="fb-label">Email для ответа (необязательно)</label>
+          <input class="fb-input" name="email" type="email" placeholder="your@email.com">
+        </div>
+      </div>
+
+      <div id="page-row">
+        <label class="fb-label">Страница сайта (если баг)</label>
+        <select class="fb-select" name="page">
+          <option value="">— Выбери страницу —</option>
+          <option>Главная (index.html)</option>
+          <option>Unit Builder</option>
+          <option>Army Builder</option>
+          <option>Тир-лист</option>
+          <option>Wiki</option>
+          <option>Daily Arms Race</option>
+          <option>Лидерборд</option>
+          <option>Чат сообщества</option>
+          <option>Донатный Бар</option>
+          <option>YouTubers</option>
+          <option>ИИ-помощник</option>
+          <option>Весь сайт</option>
+        </select>
+      </div>
+
+      <label class="fb-label" id="msg-label">Описание</label>
+      <textarea class="fb-textarea" name="message" id="fb-textarea"
+        placeholder="Опиши подробно что произошло, что хочешь добавить или предложить..."
+        required></textarea>
+
+      <div class="fb-hint">
+        Отправляя форму ты соглашаешься что мы можем использовать эту информацию для улучшения сайта.
+        Если оставил email — ответим в течение 1–3 дней.
+      </div>
+
+      <button type="submit" class="btn btn-primary fb-submit">Отправить →</button>
+    </form>
+
+    <div class="fb-success" id="fb-success">
+      <div class="fb-success-icon">✅</div>
+      <div class="fb-success-title">Спасибо!</div>
+      <div class="fb-success-sub">
+        Твоё обращение получено. Мы рассматриваем каждое сообщение.<br>
+        Если оставил email — ответим в ближайшее время.
+      </div>
+      <div style="margin-top:1.2rem;display:flex;gap:.7rem;justify-content:center;flex-wrap:wrap">
+        <a href="community.html" class="btn btn-outline">💬 Вернуться в чат</a>
+        <a href="index.html"     class="btn btn-outline">🏠 Главная</a>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+(function(){
+
+/* Тип обращения */
+var activeType='bug';
+document.querySelectorAll('.fb-type-card').forEach(function(card){
+  card.addEventListener('click',function(){
+    document.querySelectorAll('.fb-type-card').forEach(function(c){ c.classList.remove('active'); });
+    card.classList.add('active');
+    activeType=card.dataset.type;
+    document.getElementById('f-type').value=activeType;
+
+    /* Меняем placeholder под тип */
+    var ta=document.getElementById('fb-textarea');
+    var lbl=document.getElementById('msg-label');
+    var pr={
+      bug:  'Опиши что происходит: на какой странице, какой браузер, что ожидал и что получил...',
+      idea: 'Опиши идею: что хочешь добавить, как это должно работать, зачем это нужно...',
+      data: 'Укажи какие данные добавить: название офицера/юнита, патч, источник информации...',
+      other:'Напиши что хочешь...'
+    };
+    var lb={bug:'Описание бага',idea:'Описание идеи',data:'Какие данные добавить',other:'Сообщение'};
+    ta.placeholder=pr[activeType]||pr.other;
+    lbl.textContent=lb[activeType]||lb.other;
+
+    /* Показываем/скрываем поле страницы */
+    document.getElementById('page-row').style.display=activeType==='bug'?'block':'none';
+  });
+});
+
+/* Отправка через Formspree */
+document.getElementById('fb-form').addEventListener('submit',function(e){
+  e.preventDefault();
+  var form=e.target;
+  var btn=form.querySelector('button[type=submit]');
+  btn.disabled=true;
+  btn.textContent='Отправляем...';
+
+  fetch(form.action,{
+    method:'POST',
+    body:new FormData(form),
+    headers:{'Accept':'application/json'}
+  }).then(function(res){
+    if(res.ok){
+      form.style.display='none';
+      document.getElementById('fb-success').style.display='block';
+    } else {
+      btn.disabled=false;
+      btn.textContent='Отправить →';
+      alert('Ошибка отправки. Попробуй ещё раз.');
+    }
+  }).catch(function(){
+    btn.disabled=false;
+    btn.textContent='Отправить →';
+    alert('Ошибка сети. Проверь подключение.');
+  });
+});
+
+})();
+</script>
+</body>
+</html>
