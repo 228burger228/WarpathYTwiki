@@ -51,8 +51,8 @@ const YOUTUBERS = [
     tg: 'https://t.me/WarpathHub',
     donate: 'https://t.me/donatebar_bot?start=ebaka',
     latestVideos: [
-      { title: 'День рождения Warpath — раздача скинов и подарков', url: 'https://www.youtube.com/@e6aka56' },
-      { title: 'Лучшие F2P сборки на истребитель 2026', url: 'https://www.youtube.com/@e6aka56' },
+      { title: 'Видео е6ака', url: 'https://youtu.be/S3QI9rnPSTM' },
+      { title: 'Видео е6ака 2', url: 'https://youtu.be/6XVNFdndgyo' },
     ],
   },
   {
@@ -70,8 +70,8 @@ const YOUTUBERS = [
     tg: 'https://t.me/WarpathHub',
     donate: 'https://t.me/donatebar_bot?start=ehson',
     latestVideos: [
-      { title: 'Какой МБТ самый лучший? | Warpath: Ace Shooter', url: 'https://www.youtube.com/@ItsEhson' },
-      { title: 'Лучшая F2P сборка для сноса баз!', url: 'https://www.youtube.com/@ItsEhson' },
+      { title: 'Видео Ehson', url: 'https://youtu.be/V6xFWFjCOrI' },
+      { title: 'Видео Ehson 2', url: 'https://youtu.be/kCTdPzztNGI' },
     ],
   },
   {
@@ -89,8 +89,8 @@ const YOUTUBERS = [
     tg: 'https://t.me/WarpathHub',
     donate: 'https://t.me/donatebar_bot?start=clangothic',
     latestVideos: [
-      { title: 'Обзор патча 13.5 — наконец-то это добавляют в игру', url: 'https://www.youtube.com/@ClanGothic' },
-      { title: 'Фулл офицеры или нет — ошибки. Часть 16', url: 'https://www.youtube.com/@ClanGothic' },
+      { title: 'Видео ClanGothic', url: 'https://youtu.be/yZHSys9NgU8' },
+      { title: 'Видео ClanGothic 2', url: 'https://youtu.be/w47c4SkscDQ' },
     ],
   },
   {
@@ -108,8 +108,8 @@ const YOUTUBERS = [
     tg: 'https://t.me/WarpathHub',
     donate: 'https://ko-fi.com/vnwarpath',
     latestVideos: [
-      { title: '70% of Warpath Players Are Using the WRONG META', url: 'https://www.youtube.com/@VNwarpath1' },
-      { title: 'MUST WATCH To Save Money!', url: 'https://www.youtube.com/@VNwarpath1' },
+      { title: 'Видео VN Warpath', url: 'https://youtu.be/PTn77IVXbE0' },
+      { title: 'Видео VN Warpath 2', url: 'https://youtu.be/QMIfClwBZ7g' },
     ],
   },
 ];
