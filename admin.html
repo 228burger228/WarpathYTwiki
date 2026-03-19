@@ -113,7 +113,8 @@ tr:hover td{background:rgba(255,255,255,.02)}
     <div class="login-sub">Только для администратора сайта</div>
     <input class="login-inp" id="login-pass" type="password" placeholder="••••••••" maxlength="60">
     <div class="login-err" id="login-err"></div>
-    <button class="btn btn-primary" id="btn-login" style="width:100%;font-size:.88rem">Войти →</button>
+    <button class="btn btn-primary" id="btn-login" style="width:100%;font-size:.88rem;margin-bottom:.6rem">Войти →</button>
+    <button onclick="location.href='index.html'" style="width:100%;background:none;border:1px solid var(--border);border-radius:8px;color:var(--muted);font-family:inherit;font-size:.82rem;padding:.6rem;cursor:pointer;transition:all .15s" onmouseover="this.style.borderColor='var(--border2)';this.style.color='var(--text)'" onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--muted)'">← Вернуться на главную</button>
   </div>
 </div>
 
@@ -144,6 +145,13 @@ tr:hover td{background:rgba(255,255,255,.02)}
         <label class="ep-lbl">Номер сервера</label>
         <input class="ep-inp" id="ep-srv" type="number" placeholder="56" min="1" max="199">
       </div>
+    </div>
+
+    <label class="ep-lbl">Приписка к нику (тег)</label>
+    <input class="ep-inp" id="ep-tag" placeholder="Напр. [Союз] или ★ или С22" maxlength="15"
+      style="margin-bottom:.3rem">
+    <div style="font-size:.65rem;color:var(--muted);margin-bottom:.9rem">
+      Будет показана перед ником. Например: <span style="color:var(--gold2)">[Союз]</span> Commander777
     </div>
 
     <label class="ep-lbl">Ранг</label>
@@ -409,6 +417,7 @@ function openEditProfile(pid){
   g('ep-pid').textContent='ID: '+p.id;
   g('ep-nick').value=p.nick||'';
   g('ep-email').value=p.email||'';
+  g('ep-tag').value=p.nick_tag||'';
   g('ep-cat').value=p.server_cat||'4';
   g('ep-srv').value=p.server_num||'';
   g('ep-rank').value=p.rank||'C';
@@ -423,6 +432,7 @@ async function saveEditProfile(){
   if(!epId)return;
   var nick=(g('ep-nick').value||'').trim();
   var email=(g('ep-email').value||'').trim()||null;
+  var nickTag=(g('ep-tag').value||'').trim()||null;
   var cat=g('ep-cat').value;
   var srv=parseInt(g('ep-srv').value||'')||null;
   var rank=g('ep-rank').value;
@@ -441,18 +451,35 @@ async function saveEditProfile(){
       if(chk.data.find(function(r){return r.id!==epId;})){err.textContent='❌ Ник уже занят';g('ep-save').disabled=false;return;}
     }
 
-    /* Сохраняем все поля включая email в одном запросе */
+    /* Шаг 1: сохраняем основные поля (без email) */
     var upd={nick:nick,server_cat:cat,server_num:srv,rank:rank,updated_at:new Date().toISOString()};
-    /* email включаем только если колонка существует в схеме */
-    if(email!==undefined) upd.email=email||null;
+    if(nickTag!==undefined) upd.nick_tag=nickTag;
     var res=await sb.from('profiles').update(upd).eq('id',epId);
     if(res.error)throw res.error;
 
+    /* Шаг 2: пробуем сохранить email отдельно.
+       Если колонки нет — падаем тихо, основные данные уже сохранены */
+    var emailSaved=false;
+    if(email!==undefined){
+      var res2=await sb.from('profiles').update({email:email||null}).eq('id',epId);
+      if(res2.error){
+        console.warn('email не сохранён (нет колонки?):', res2.error.message);
+        err.textContent='⚠️ Сохранено (кроме email — нужно обновить схему БД)';
+      } else {
+        emailSaved=true;
+      }
+    }
+
     /* Обновляем локальный массив */
     allP=allP.map(function(p){
-      return p.id===epId?Object.assign({},p,{nick:nick,email:email,server_cat:cat,server_num:srv,rank:rank}):p;
+      return p.id===epId?Object.assign({},p,{nick:nick,email:emailSaved?email:p.email,nick_tag:nickTag,server_cat:cat,server_num:srv,rank:rank}):p;
     });
-    closeEditProfile();
+    if(emailSaved||email===undefined){
+      closeEditProfile();
+    } else {
+      /* email не сохранился — но остальное OK, закрываем всё равно */
+      setTimeout(function(){closeEditProfile();},1500);
+    }
     renderProfs();
     loadStats();
   }catch(ex){
