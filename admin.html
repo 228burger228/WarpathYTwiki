@@ -441,13 +441,12 @@ async function saveEditProfile(){
       if(chk.data.find(function(r){return r.id!==epId;})){err.textContent='❌ Ник уже занят';g('ep-save').disabled=false;return;}
     }
 
-    /* Сохраняем базовые поля без email */
+    /* Сохраняем все поля включая email в одном запросе */
     var upd={nick:nick,server_cat:cat,server_num:srv,rank:rank,updated_at:new Date().toISOString()};
+    /* email включаем только если колонка существует в схеме */
+    if(email!==undefined) upd.email=email||null;
     var res=await sb.from('profiles').update(upd).eq('id',epId);
     if(res.error)throw res.error;
-    /* email сохраняем отдельно — защита от ошибки кэша схемы */
-    try{await sb.from('profiles').update({email:email||null}).eq('id',epId);}
-    catch(ex2){console.warn('email column not in schema cache yet',ex2);}
 
     /* Обновляем локальный массив */
     allP=allP.map(function(p){
