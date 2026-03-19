@@ -335,14 +335,17 @@ async function savePro(){
   try{
     var chk=await sb.from('profiles').select('id').eq('nick',nick);
     if(chk.data&&chk.data.length>0){
-      var myId=prof&&prof.id;
-      if(chk.data.find(function(r){return r.id!==myId;})){err.textContent='❌ Ник уже занят';g('btn-save').disabled=false;return;}
+      /* При создании нового профиля (isEdit=false) prof ещё null —
+         ник занят только если запись принадлежит ДРУГОМУ пользователю */
+      var myId=isEdit&&prof?prof.id:null;
+      var takenByOther=chk.data.find(function(r){return r.id!==myId;});
+      if(takenByOther){err.textContent='❌ Ник уже занят — выбери другой';g('btn-save').disabled=false;return;}
     }
     var now=new Date().toISOString();
     /* Строим объект только с существующими полями */
     var data={nick:nick,server_cat:selCat,server_num:srv,rank:selRnk,updated_at:now};
-    /* email добавляем только если не null — защита от отсутствия колонки */
-    if(email!==null) data.email=email;
+    /* email — добавляем только если пользователь ввёл значение */
+    if(email) data.email=email;
     if(isEdit&&prof){
       var u=await sb.from('profiles').update(data).eq('id',prof.id);
       if(u.error)throw u.error;
