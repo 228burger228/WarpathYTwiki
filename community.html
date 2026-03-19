@@ -10,162 +10,108 @@
 <script src="nav.js"></script>
 <script src="data.js"></script>
 <style>
+.page-header{margin-top:86px}
+.comm-wrap{max-width:980px;margin:0 auto;padding:2rem 1rem 5rem;display:grid;grid-template-columns:1fr 270px;gap:1.3rem;align-items:start}
+@media(max-width:760px){.comm-wrap{grid-template-columns:1fr}.comm-sidebar{display:none}}
 
-/* ── FIX: отступ под nav(56px) + ticker(30px) ── */
-.page-header { margin-top: 86px; }
+.overlay{position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.82);display:flex;align-items:center;justify-content:center;padding:1rem}
+.modal{background:var(--bg3);border:1px solid var(--border2);border-radius:14px;padding:2rem;width:100%;max-width:480px;max-height:90vh;overflow-y:auto}
+.m-title{font-family:'Bebas Neue',sans-serif;font-size:1.6rem;letter-spacing:2px;color:var(--gold2);margin-bottom:.2rem}
+.m-sub{font-size:.82rem;color:var(--muted);margin-bottom:1.5rem;line-height:1.6}
+.f-lbl{font-size:.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;display:block;margin-bottom:.38rem}
+.f-inp{width:100%;box-sizing:border-box;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:8px;color:var(--text);font-family:inherit;font-size:.9rem;padding:.58rem .9rem;outline:none;transition:border-color .18s;margin-bottom:.95rem}
+.f-inp:focus{border-color:var(--gold)}
+.f-hint{font-size:.68rem;color:var(--muted);margin-top:-.6rem;margin-bottom:.9rem;line-height:1.5}
+.f-err{font-size:.75rem;color:#e04848;min-height:1.1rem;margin-bottom:.4rem}
 
-.comm-wrap {
-  max-width: 980px; margin: 0 auto; padding: 2rem 1rem 5rem;
-  display: grid; grid-template-columns: 1fr 270px; gap: 1.3rem; align-items: start;
-}
-@media(max-width:760px){
-  .comm-wrap { grid-template-columns: 1fr; }
-  .comm-sidebar { display: none; }
-}
+.scat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:.95rem}
+.scat-opt{border:1px solid var(--border);border-radius:8px;padding:.55rem .3rem;text-align:center;cursor:pointer;transition:all .15s;user-select:none}
+.scat-opt:hover{border-color:var(--border2)}.scat-opt.sel{border-color:var(--gold);background:rgba(200,150,28,.1)}
+.scat-num{font-family:'Bebas Neue',sans-serif;font-size:1rem;color:var(--gold2);line-height:1}
+.scat-rng{font-size:.55rem;color:var(--muted);margin-top:.2rem;line-height:1.3}
+.scat-opt.sel .scat-rng{color:var(--gold)}
 
-/* ── Setup overlay ── */
-.setup-overlay {
-  position: fixed; inset: 0; z-index: 2000;
-  background: rgba(0,0,0,.82);
-  display: flex; align-items: center; justify-content: center; padding: 1rem;
-}
-.setup-card {
-  background: var(--bg3); border: 1px solid var(--border2);
-  border-radius: 14px; padding: 2rem; width: 100%; max-width: 480px;
-  max-height: 90vh; overflow-y: auto;
-}
-.setup-title { font-family:'Bebas Neue',sans-serif; font-size:1.7rem; letter-spacing:2px; color:var(--gold2); margin-bottom:.2rem; }
-.setup-sub   { font-size:.82rem; color:var(--muted); margin-bottom:1.5rem; line-height:1.6; }
-.form-label  { font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; display:block; margin-bottom:.4rem; }
-.form-input  {
-  width:100%; box-sizing:border-box; background:rgba(255,255,255,.05);
-  border:1px solid var(--border); border-radius:8px; color:var(--text);
-  font-family:inherit; font-size:.92rem; padding:.6rem .95rem; outline:none;
-  transition:border-color .18s; margin-bottom:1rem;
-}
-.form-input:focus { border-color:var(--gold); }
-.form-hint { font-size:.68rem; color:var(--muted); margin-top:-.7rem; margin-bottom:.9rem; }
+.rank-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:.4rem;margin-bottom:1.2rem}
+.rank-opt{border:1px solid var(--border);border-radius:7px;padding:.42rem .25rem;text-align:center;cursor:pointer;font-family:'Bebas Neue',sans-serif;font-size:.88rem;letter-spacing:1px;color:var(--muted);transition:all .15s;user-select:none}
+.rank-opt:hover{border-color:var(--border2);color:var(--text)}.rank-opt.sel{border-color:var(--gold);background:rgba(200,150,28,.1);color:var(--gold2)}
+.rank-sub{font-size:.54rem;font-family:'Barlow',sans-serif;letter-spacing:0;color:var(--muted);display:block}
 
-.scat-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.4rem; margin-bottom:1rem; }
-.scat-opt { border:1px solid var(--border); border-radius:8px; padding:.6rem .3rem; text-align:center; cursor:pointer; transition:all .15s; user-select:none; }
-.scat-opt:hover { border-color:var(--border2); }
-.scat-opt.sel   { border-color:var(--gold); background:rgba(200,150,28,.1); }
-.scat-num { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; color:var(--gold2); line-height:1; }
-.scat-rng { font-size:.56rem; color:var(--muted); margin-top:.2rem; line-height:1.3; }
-.scat-opt.sel .scat-rng { color:var(--gold); }
+.id-b{display:inline-flex;align-items:center;gap:.4rem;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:6px;padding:.22rem .65rem;font-family:monospace;font-size:.74rem;color:var(--muted);margin-bottom:.95rem}
+.id-b b{color:var(--gold2)}
+.hr{height:1px;background:var(--border);margin:1rem 0}
+.sml{font-size:.72rem;color:var(--muted);cursor:pointer;text-decoration:underline;text-decoration-color:rgba(90,94,106,.4)}
+.sml:hover{color:var(--gold)}
 
-.rank-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:.4rem; margin-bottom:1.2rem; }
-.rank-opt { border:1px solid var(--border); border-radius:7px; padding:.45rem .25rem; text-align:center; cursor:pointer; font-family:'Bebas Neue',sans-serif; font-size:.9rem; letter-spacing:1px; color:var(--muted); transition:all .15s; user-select:none; }
-.rank-opt:hover { border-color:var(--border2); color:var(--text); }
-.rank-opt.sel   { border-color:var(--gold); background:rgba(200,150,28,.1); color:var(--gold2); }
-.rank-sub { font-size:.55rem; font-family:'Barlow',sans-serif; letter-spacing:0; color:var(--muted); display:block; }
+.chat-card{background:var(--panel);border:1px solid var(--border);border-radius:14px;display:flex;flex-direction:column;overflow:hidden}
+.chat-head{padding:.85rem 1.2rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:.6rem;flex-shrink:0;flex-wrap:wrap}
+.ch-left{display:flex;flex-direction:column;gap:.12rem;min-width:0}
+.ch-title{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;color:var(--gold2)}
+.ch-status{font-size:.68rem;color:var(--muted);display:flex;align-items:center;gap:.35rem}
+.pulse{width:6px;height:6px;border-radius:50%;background:#5dca38;animation:pu 2s infinite;flex-shrink:0}
+@keyframes pu{0%,100%{opacity:1}50%{opacity:.3}}
+.hbtns{margin-left:auto;display:flex;gap:.3rem;flex-wrap:wrap}
+.hbtn{font-size:.67rem;color:var(--muted);cursor:pointer;border:1px solid var(--border);border-radius:5px;padding:.2rem .55rem;transition:all .15s;background:none;font-family:'Barlow Condensed',sans-serif;white-space:nowrap}
+.hbtn:hover{color:var(--gold);border-color:var(--gold)}
+.hbtn.blue{color:#5bb8f5;border-color:rgba(91,184,245,.3)}.hbtn.blue:hover{background:rgba(41,182,246,.1)}
+.hbtn.red{color:#e57373;border-color:rgba(229,115,115,.3)}.hbtn.red:hover{background:rgba(229,115,115,.1)}
 
-.id-badge { display:inline-flex; align-items:center; gap:.4rem; background:rgba(255,255,255,.05); border:1px solid var(--border); border-radius:6px; padding:.25rem .7rem; font-family:monospace; font-size:.75rem; color:var(--muted); margin-bottom:1rem; }
-.id-badge b { color:var(--gold2); }
-.form-err { font-size:.75rem; color:#e04848; min-height:1.1rem; margin-bottom:.4rem; }
+.chat-msgs{height:480px;overflow-y:auto;padding:.9rem 1.1rem;display:flex;flex-direction:column;gap:.5rem;scroll-behavior:smooth}
+@media(max-width:760px){.chat-msgs{height:350px}}
+.chat-msgs::-webkit-scrollbar{width:3px}.chat-msgs::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px}
 
-/* ── Chat card ── */
-.chat-card { background:var(--panel); border:1px solid var(--border); border-radius:14px; display:flex; flex-direction:column; overflow:hidden; }
-.chat-head { padding:.85rem 1.2rem; border-bottom:1px solid var(--border); display:flex; align-items:center; gap:.7rem; flex-shrink:0; flex-wrap:wrap; }
-.chat-head-left { display:flex; flex-direction:column; gap:.12rem; }
-.chat-head-title { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:2px; color:var(--gold2); }
-.chat-online { font-size:.68rem; color:var(--muted); display:flex; align-items:center; gap:.35rem; }
-.online-pulse { width:6px; height:6px; border-radius:50%; background:#5dca38; animation:opulse 2s infinite; flex-shrink:0; }
-@keyframes opulse{0%,100%{opacity:1}50%{opacity:.3}}
-.head-actions { margin-left:auto; display:flex; gap:.35rem; flex-wrap:wrap; }
-.head-btn { font-size:.68rem; color:var(--muted); cursor:pointer; border:1px solid var(--border); border-radius:5px; padding:.22rem .6rem; transition:all .15s; background:none; font-family:'Barlow Condensed',sans-serif; letter-spacing:.3px; white-space:nowrap; }
-.head-btn:hover { color:var(--gold); border-color:var(--gold); }
-.head-btn.blue  { color:#5bb8f5; border-color:rgba(91,184,245,.3); }
-.head-btn.blue:hover { background:rgba(41,182,246,.1); }
-.head-btn.red   { color:#f07070; border-color:rgba(200,80,80,.3); }
-.head-btn.red:hover { background:rgba(200,80,80,.1); }
+.empty{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.5rem;text-align:center;color:var(--muted)}
+.empty-i{font-size:2.5rem;opacity:.3}.empty p{font-size:.8rem}
 
-.chat-messages { height:480px; overflow-y:auto; padding:.9rem 1.1rem; display:flex; flex-direction:column; gap:.5rem; scroll-behavior:smooth; }
-@media(max-width:760px){ .chat-messages{height:350px;} }
-.chat-messages::-webkit-scrollbar{width:3px;}
-.chat-messages::-webkit-scrollbar-thumb{background:var(--gold);border-radius:2px;}
+.msg{display:flex;gap:.6rem;align-items:flex-end;animation:mi .18s ease}
+@keyframes mi{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
+.msg.own{flex-direction:row-reverse}
+.msg-av{width:32px;height:32px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:13px;flex-shrink:0;border:1px solid var(--border)}
+.c1{background:rgba(255,80,80,.1)}.c2{background:rgba(255,160,0,.1)}.c3{background:rgba(80,180,255,.1)}.c4{background:rgba(80,200,80,.1)}.cg{background:rgba(255,255,255,.06)}
+.msg-body{max-width:76%}
+.msg.own .msg-body{display:flex;flex-direction:column;align-items:flex-end}
+.msg-meta{display:flex;align-items:center;gap:.35rem;margin-bottom:.2rem;flex-wrap:wrap}
+.msg.own .msg-meta{flex-direction:row-reverse}
+.msg-nick{font-family:'Barlow Condensed',sans-serif;font-size:.8rem;font-weight:700;color:var(--text)}
+.msg-tag{font-size:.58rem;padding:1px 4px;border-radius:3px;font-family:'Bebas Neue',sans-serif;letter-spacing:.5px}
+.sc1{background:rgba(255,80,80,.12);color:#f07070;border:1px solid rgba(255,80,80,.25)}
+.sc2{background:rgba(255,160,0,.1);color:#ffaa40;border:1px solid rgba(255,160,0,.2)}
+.sc3{background:rgba(80,180,255,.1);color:#60b8ff;border:1px solid rgba(80,180,255,.2)}
+.sc4{background:rgba(80,200,80,.1);color:#50cc60;border:1px solid rgba(80,200,80,.2)}
+.scg{background:rgba(255,255,255,.06);color:var(--muted);border:1px solid var(--border)}
+.rS{background:rgba(255,208,64,.12);color:#ffd040;border:1px solid rgba(255,208,64,.3)}
+.rA{background:rgba(128,204,96,.1);color:#80cc60;border:1px solid rgba(128,204,96,.25)}
+.rB{background:rgba(96,168,240,.1);color:#60a8f0;border:1px solid rgba(96,168,240,.25)}
+.rC{background:rgba(90,94,106,.12);color:#8a8e9a;border:1px solid rgba(90,94,106,.25)}
+.msg-time{font-size:.6rem;color:var(--muted)}
+.msg-bbl{font-size:.86rem;color:var(--text);line-height:1.55;background:rgba(255,255,255,.04);border:1px solid var(--border);border-radius:10px;border-bottom-left-radius:3px;padding:.5rem .8rem;word-break:break-word}
+.msg.own .msg-bbl{background:rgba(200,150,28,.09);border-color:rgba(200,150,28,.2);border-radius:10px;border-bottom-right-radius:3px}
+.msg.guest .msg-bbl{border-style:dashed;opacity:.88}
 
-.chat-empty { flex:1; display:flex; flex-direction:column; align-items:center; justify-content:center; gap:.5rem; text-align:center; color:var(--muted); }
-.chat-empty-ico { font-size:2.5rem; opacity:.3; }
-.chat-empty p { font-size:.8rem; }
+.inp-row{border-top:1px solid var(--border);padding:.75rem 1.1rem;display:flex;gap:.5rem;align-items:flex-end;flex-shrink:0}
+.chat-ta{flex:1;background:rgba(255,255,255,.05);border:1px solid var(--border);border-radius:9px;color:var(--text);font-family:inherit;font-size:.88rem;padding:.6rem .9rem;resize:none;outline:none;transition:border-color .18s;min-height:40px;max-height:100px;line-height:1.5;overflow-y:auto}
+.chat-ta:focus{border-color:var(--gold)}.chat-ta::placeholder{color:var(--muted)}
+.snd-btn{width:42px;height:42px;background:linear-gradient(135deg,var(--gold),var(--orange));border:none;border-radius:9px;color:#07080a;cursor:pointer;display:flex;align-items:center;justify-content:center;flex-shrink:0;transition:opacity .18s,transform .18s}
+.snd-btn:hover:not(:disabled){opacity:.85;transform:translateY(-1px)}.snd-btn:disabled{opacity:.3;cursor:not-allowed}
+.chat-foot{display:flex;justify-content:space-between;padding:0 1.1rem .5rem;font-size:.63rem;color:var(--muted);flex-shrink:0}
 
-.cmsg { display:flex; gap:.6rem; align-items:flex-end; animation:msgin .18s ease; }
-@keyframes msgin{from{opacity:0;transform:translateY(4px)}to{opacity:1;transform:none}}
-.cmsg.own { flex-direction:row-reverse; }
-.cmsg-av { width:32px; height:32px; border-radius:8px; display:flex; align-items:center; justify-content:center; font-size:13px; flex-shrink:0; border:1px solid var(--border); }
-.cat1{background:rgba(255,80,80,.1);}  .cat2{background:rgba(255,160,0,.1);}
-.cat3{background:rgba(80,180,255,.1);} .cat4{background:rgba(80,200,80,.1);}
-.cmsg-body { max-width:76%; }
-.cmsg.own .cmsg-body { display:flex; flex-direction:column; align-items:flex-end; }
-.cmsg-meta { display:flex; align-items:center; gap:.35rem; margin-bottom:.2rem; flex-wrap:wrap; }
-.cmsg.own .cmsg-meta { flex-direction:row-reverse; }
-.cmsg-nick { font-family:'Barlow Condensed',sans-serif; font-size:.8rem; font-weight:700; color:var(--text); }
-.cmsg-scat,.cmsg-rank { font-size:.58rem; padding:1px 4px; border-radius:3px; font-family:'Bebas Neue',sans-serif; letter-spacing:.5px; }
-.sc1{background:rgba(255,80,80,.12);color:#f07070;border:1px solid rgba(255,80,80,.25);}
-.sc2{background:rgba(255,160,0,.1);color:#ffaa40;border:1px solid rgba(255,160,0,.2);}
-.sc3{background:rgba(80,180,255,.1);color:#60b8ff;border:1px solid rgba(80,180,255,.2);}
-.sc4{background:rgba(80,200,80,.1);color:#50cc60;border:1px solid rgba(80,200,80,.2);}
-.rS{background:rgba(255,208,64,.12);color:#ffd040;border:1px solid rgba(255,208,64,.3);}
-.rA{background:rgba(128,204,96,.1);color:#80cc60;border:1px solid rgba(128,204,96,.25);}
-.rB{background:rgba(96,168,240,.1);color:#60a8f0;border:1px solid rgba(96,168,240,.25);}
-.rC{background:rgba(90,94,106,.12);color:#8a8e9a;border:1px solid rgba(90,94,106,.25);}
-.cmsg-time { font-size:.6rem; color:var(--muted); }
-.cmsg-bubble { font-size:.86rem; color:var(--text); line-height:1.55; background:rgba(255,255,255,.04); border:1px solid var(--border); border-radius:10px; border-bottom-left-radius:3px; padding:.5rem .8rem; word-break:break-word; }
-.cmsg.own .cmsg-bubble { background:rgba(200,150,28,.09); border-color:rgba(200,150,28,.2); border-radius:10px; border-bottom-right-radius:3px; }
+.side-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;margin-bottom:1rem}
+.side-hd{padding:.6rem 1rem;border-bottom:1px solid var(--border);font-family:'Bebas Neue',sans-serif;font-size:.72rem;letter-spacing:2.5px;color:var(--muted);background:rgba(255,255,255,.02);display:flex;align-items:center;justify-content:space-between}
+.side-cnt{font-family:'Barlow Condensed',sans-serif;font-size:.88rem;font-weight:700;color:var(--gold2)}
+.ol-list{padding:.35rem 0;max-height:190px;overflow-y:auto}
+.ou{display:flex;align-items:center;gap:.5rem;padding:.28rem .9rem;font-size:.75rem}
+.ou-dot{width:5px;height:5px;border-radius:50%;background:#5dca38;flex-shrink:0}
+.ou-nick{color:var(--text);font-weight:600;font-size:.77rem}.ou-meta{font-size:.62rem;color:var(--muted)}
 
-.chat-input-row { border-top:1px solid var(--border); padding:.75rem 1.1rem; display:flex; gap:.5rem; align-items:flex-end; flex-shrink:0; }
-.chat-ta { flex:1; background:rgba(255,255,255,.05); border:1px solid var(--border); border-radius:9px; color:var(--text); font-family:inherit; font-size:.88rem; padding:.6rem .9rem; resize:none; outline:none; transition:border-color .18s; min-height:40px; max-height:100px; line-height:1.5; overflow-y:auto; }
-.chat-ta:focus { border-color:var(--gold); }
-.chat-ta::placeholder { color:var(--muted); }
-.send-btn { width:42px; height:42px; background:linear-gradient(135deg,var(--gold),var(--orange)); border:none; border-radius:9px; color:#07080a; cursor:pointer; display:flex; align-items:center; justify-content:center; flex-shrink:0; transition:opacity .18s,transform .18s; }
-.send-btn:hover:not(:disabled){opacity:.85;transform:translateY(-1px);}
-.send-btn:disabled{opacity:.3;cursor:not-allowed;}
-.chat-foot { display:flex; justify-content:space-between; padding:0 1.1rem .5rem; font-size:.63rem; color:var(--muted); flex-shrink:0; }
+.prof-side{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;margin-bottom:1rem}
+.ps-nick{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:1.5px;color:var(--gold2);margin-bottom:.2rem}
+.ps-meta{font-size:.72rem;color:var(--muted);line-height:1.6}
+.ps-id{font-family:monospace;font-size:.65rem;color:var(--muted);margin-top:.3rem}
 
-/* ── Sidebar ── */
-.side-card { background:var(--panel); border:1px solid var(--border); border-radius:12px; overflow:hidden; margin-bottom:1rem; }
-.side-head { padding:.6rem 1rem; border-bottom:1px solid var(--border); font-family:'Bebas Neue',sans-serif; font-size:.72rem; letter-spacing:2.5px; color:var(--muted); background:rgba(255,255,255,.02); display:flex; align-items:center; justify-content:space-between; }
-.side-count { font-family:'Barlow Condensed',sans-serif; font-size:.88rem; font-weight:700; color:var(--gold2); }
-.online-list { padding:.35rem 0; max-height:190px; overflow-y:auto; }
-.ou { display:flex; align-items:center; gap:.5rem; padding:.28rem .9rem; font-size:.75rem; }
-.ou-dot  { width:5px; height:5px; border-radius:50%; background:#5dca38; flex-shrink:0; }
-.ou-nick { color:var(--text); font-weight:600; font-size:.77rem; }
-.ou-meta { font-size:.62rem; color:var(--muted); }
-.profile-side { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:.9rem 1rem; margin-bottom:1rem; }
-.profile-side-nick { font-family:'Bebas Neue',sans-serif; font-size:1.1rem; letter-spacing:1.5px; color:var(--gold2); margin-bottom:.2rem; }
-.profile-side-meta { font-size:.72rem; color:var(--muted); line-height:1.6; }
-.profile-side-id   { font-family:monospace; font-size:.65rem; color:var(--muted); margin-top:.3rem; }
-.rules-card { background:var(--panel); border:1px solid var(--border); border-radius:12px; padding:.9rem 1rem; margin-bottom:1rem; }
-.rules-title { font-family:'Bebas Neue',sans-serif; font-size:.72rem; letter-spacing:2px; color:var(--text); margin-bottom:.55rem; }
-.rules-list  { list-style:none; padding:0; margin:0; }
-.rules-list li { font-size:.75rem; color:var(--muted); padding:.15rem 0; display:flex; gap:.4rem; line-height:1.5; }
-.rules-list li::before { content:'›'; color:var(--gold); flex-shrink:0; }
-
-/* ── Feedback section ── */
-.feedback-section { max-width:980px; margin:0 auto; padding:0 1rem 4rem; }
-.feedback-card { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:1.8rem; }
-.feedback-title { font-family:'Bebas Neue',sans-serif; font-size:1.5rem; letter-spacing:2px; color:var(--gold2); margin-bottom:.3rem; }
-.feedback-sub   { font-size:.82rem; color:var(--muted); margin-bottom:1.5rem; line-height:1.6; }
-.fb-grid { display:grid; grid-template-columns:1fr 1fr; gap:.9rem; }
-@media(max-width:600px){ .fb-grid{grid-template-columns:1fr;} }
-.fb-label { font-size:.68rem; color:var(--muted); text-transform:uppercase; letter-spacing:.5px; display:block; margin-bottom:.35rem; }
-.fb-input,.fb-select {
-  width:100%; box-sizing:border-box; background:rgba(255,255,255,.05);
-  border:1px solid var(--border); border-radius:8px; color:var(--text);
-  font-family:inherit; font-size:.88rem; padding:.6rem .9rem; outline:none;
-  transition:border-color .18s;
-}
-.fb-input:focus,.fb-select:focus { border-color:var(--gold); }
-.fb-input::placeholder { color:var(--muted); }
-.fb-textarea {
-  width:100%; box-sizing:border-box; background:rgba(255,255,255,.05);
-  border:1px solid var(--border); border-radius:8px; color:var(--text);
-  font-family:inherit; font-size:.88rem; padding:.6rem .9rem; outline:none;
-  resize:vertical; min-height:110px; transition:border-color .18s; margin-top:.9rem;
-}
-.fb-textarea:focus { border-color:var(--gold); }
-.fb-textarea::placeholder { color:var(--muted); }
-.fb-success { display:none; background:rgba(93,202,56,.08); border:1px solid rgba(93,202,56,.25); border-radius:10px; padding:1rem; font-size:.85rem; color:#5dca38; text-align:center; margin-top:1rem; }
+.rules-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:.9rem 1rem;margin-bottom:1rem}
+.rules-title{font-family:'Bebas Neue',sans-serif;font-size:.72rem;letter-spacing:2px;color:var(--text);margin-bottom:.55rem}
+.rules-list{list-style:none;padding:0;margin:0}
+.rules-list li{font-size:.75rem;color:var(--muted);padding:.15rem 0;display:flex;gap:.4rem;line-height:1.5}
+.rules-list li::before{content:'›';color:var(--gold);flex-shrink:0}
 </style>
 </head>
 <body>
@@ -178,36 +124,35 @@
   </div>
 </div>
 
-<!-- ══ SETUP OVERLAY ══ -->
-<div id="setup-overlay" class="setup-overlay" style="display:none">
-  <div class="setup-card">
-    <div class="setup-title" id="setup-title">Добро пожаловать!</div>
-    <div class="setup-sub"   id="setup-sub">Создай профиль — ник уникален глобально.</div>
+<!-- SETUP OVERLAY -->
+<div id="ov-setup" class="overlay" style="display:none">
+  <div class="modal">
+    <div class="m-title" id="m-title">Добро пожаловать!</div>
+    <div class="m-sub"   id="m-sub">Создай профиль — ник уникален глобально.</div>
 
     <div id="id-row" style="display:none">
-      <label class="form-label">Твой ID</label>
-      <div class="id-badge"><b id="show-id">—</b></div>
+      <div class="f-lbl">Твой ID</div>
+      <div class="id-b" style="margin-bottom:.95rem"><b id="show-id">—</b></div>
     </div>
 
-    <label class="form-label">Ник (2–20 символов, уникальный)</label>
-    <input class="form-input" id="inp-nick" placeholder="Напр. Commander777" maxlength="20">
+    <label class="f-lbl">Ник (2–20 символов)</label>
+    <input class="f-inp" id="inp-nick" placeholder="Напр. Commander777" maxlength="20">
 
-    <label class="form-label">Email (необязательно)</label>
-    <input class="form-input" id="inp-email" type="email" placeholder="для восстановления профиля">
-    <div class="form-hint">Нужен только чтобы восстановить профиль если сменишь браузер</div>
+    <label class="f-lbl">Email (необязательно — для восстановления)</label>
+    <input class="f-inp" id="inp-email" type="email" placeholder="your@email.com">
 
-    <label class="form-label">Категория сервера</label>
+    <label class="f-lbl">Категория сервера</label>
     <div class="scat-grid" id="scat-grid">
-      <div class="scat-opt" data-cat="1"><div class="scat-num">⚔️ I</div><div class="scat-rng">Воины<br>С1–С111</div></div>
-      <div class="scat-opt" data-cat="2"><div class="scat-num">🛡 II</div><div class="scat-rng">Ветераны<br>С112–С157</div></div>
-      <div class="scat-opt" data-cat="3"><div class="scat-num">🔰 III</div><div class="scat-rng">Опытные<br>С158–С173</div></div>
-      <div class="scat-opt sel" data-cat="4"><div class="scat-num">🆕 IV</div><div class="scat-rng">Новые<br>С174–С199</div></div>
+      <div class="scat-opt" data-cat="1"><div class="scat-num">⚔️ I</div><div class="scat-rng">Воины<br>С1–111</div></div>
+      <div class="scat-opt" data-cat="2"><div class="scat-num">🛡 II</div><div class="scat-rng">Ветераны<br>С112–157</div></div>
+      <div class="scat-opt" data-cat="3"><div class="scat-num">🔰 III</div><div class="scat-rng">Опытные<br>С158–173</div></div>
+      <div class="scat-opt sel" data-cat="4"><div class="scat-num">🆕 IV</div><div class="scat-rng">Новые<br>С174–199</div></div>
     </div>
 
-    <label class="form-label">Номер сервера (необязательно)</label>
-    <input class="form-input" id="inp-server" type="number" placeholder="Напр. 56" min="1" max="199">
+    <label class="f-lbl">Номер сервера (необязательно)</label>
+    <input class="f-inp" id="inp-server" type="number" placeholder="Напр. 56" min="1" max="199">
 
-    <label class="form-label">Ранг в игре</label>
+    <label class="f-lbl">Ранг в игре</label>
     <div class="rank-grid" id="rank-grid">
       <div class="rank-opt sel" data-r="C">C<span class="rank-sub">Новичок</span></div>
       <div class="rank-opt"     data-r="B">B<span class="rank-sub">Средний</span></div>
@@ -215,78 +160,86 @@
       <div class="rank-opt"     data-r="S">S<span class="rank-sub">Топ</span></div>
     </div>
 
-    <div class="form-err" id="setup-err"></div>
+    <div class="f-err" id="setup-err"></div>
     <button class="btn btn-primary" id="btn-save" style="width:100%;font-size:.88rem">Войти в чат →</button>
 
-    <!-- Восстановление по email -->
-    <div id="restore-row" style="margin-top:1rem;padding-top:1rem;border-top:1px solid var(--border);display:none">
-      <div style="font-size:.72rem;color:var(--muted);margin-bottom:.5rem">Уже регистрировался? Восстановить профиль по email:</div>
-      <div style="display:flex;gap:.4rem">
-        <input class="form-input" id="inp-restore-email" type="email" placeholder="твой email" style="margin-bottom:0;flex:1">
-        <button class="btn btn-outline" id="btn-restore" style="font-size:.78rem;white-space:nowrap">Найти</button>
-      </div>
-      <div class="form-err" id="restore-err"></div>
+    <div class="hr"></div>
+    <div style="text-align:center;margin-bottom:.5rem">
+      <span class="sml" id="btn-guest">👁 Войти как гость (без сохранения)</span>
     </div>
-    <div style="text-align:center;margin-top:.75rem">
-      <span style="font-size:.72rem;color:var(--muted);cursor:pointer;text-decoration:underline;text-decoration-color:rgba(90,94,106,.4)" id="toggle-restore">
-        Уже был аккаунт?
-      </span>
+    <div style="text-align:center">
+      <span class="sml" id="toggle-restore">↩ Восстановить по email</span>
+    </div>
+
+    <div id="restore-block" style="display:none;margin-top:.8rem">
+      <div class="hr"></div>
+      <label class="f-lbl">Твой email</label>
+      <div style="display:flex;gap:.4rem">
+        <input class="f-inp" id="inp-restore" type="email" placeholder="your@email.com" style="margin-bottom:0;flex:1">
+        <button class="btn btn-outline" id="btn-restore" style="font-size:.78rem;white-space:nowrap;padding:.55rem .8rem">Найти</button>
+      </div>
+      <div class="f-err" id="restore-err"></div>
     </div>
   </div>
 </div>
 
-<!-- ══ CHAT SCREEN ══ -->
+<!-- GUEST OVERLAY -->
+<div id="ov-guest" class="overlay" style="display:none">
+  <div class="modal" style="max-width:380px">
+    <div class="m-title">Режим гостя</div>
+    <div class="m-sub">Можешь читать и писать, но профиль не сохранится после закрытия страницы.</div>
+    <label class="f-lbl">Гостевой ник</label>
+    <input class="f-inp" id="guest-nick" placeholder="Напр. Гость_777" maxlength="20">
+    <div class="f-err" id="guest-err"></div>
+    <button class="btn btn-primary" id="btn-guest-enter" style="width:100%;font-size:.88rem;margin-bottom:.6rem">Войти как гость →</button>
+    <div style="text-align:center"><span class="sml" onclick="showSetup(false)">← Назад к регистрации</span></div>
+  </div>
+</div>
+
+<!-- CHAT -->
 <div id="chat-screen" style="display:none">
   <div class="comm-wrap">
-
     <div class="chat-card">
       <div class="chat-head">
-        <div class="chat-head-left">
-          <div class="chat-head-title">💬 Warpath Chat</div>
-          <div class="chat-online">
-            <div class="online-pulse"></div>
-            <span id="online-label">онлайн</span>
-          </div>
+        <div class="ch-left">
+          <div class="ch-title">💬 Warpath Chat</div>
+          <div class="ch-status"><div class="pulse"></div><span id="ol-label">онлайн</span></div>
         </div>
-        <div class="head-actions">
-          <button class="head-btn blue" onclick="location.href='index.html'">🏠 Главная</button>
-          <button class="head-btn" id="btn-profile">👤 Профиль</button>
-          <button class="head-btn" onclick="location.href='admin.html'" style="color:#e57373;border-color:rgba(229,115,115,.3)">🛡 Админ</button>
+        <div class="hbtns">
+          <button class="hbtn blue" onclick="location.href='index.html'">🏠 Главная</button>
+          <button class="hbtn" id="btn-profile">👤 Профиль</button>
+          <button class="hbtn red" onclick="location.href='admin.html'">🛡 Админ</button>
         </div>
       </div>
 
-      <div class="chat-messages" id="chat-messages">
-        <div class="chat-empty"><div class="chat-empty-ico">💬</div><p>Загрузка...</p></div>
+      <div class="chat-msgs" id="chat-msgs">
+        <div class="empty"><div class="empty-i">💬</div><p>Загрузка...</p></div>
       </div>
 
-      <div class="chat-input-row">
-        <textarea class="chat-ta" id="chat-input" placeholder="Написать сообщение..." rows="1" maxlength="500"></textarea>
-        <button class="send-btn" id="btn-send">
+      <div class="inp-row">
+        <textarea class="chat-ta" id="chat-inp" placeholder="Написать сообщение..." rows="1" maxlength="500"></textarea>
+        <button class="snd-btn" id="btn-send">
           <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
             <path d="M22 2L11 13M22 2L15 22 11 13 2 9l20-7z"/>
           </svg>
         </button>
       </div>
       <div class="chat-foot">
-        <span id="char-count">0 / 500</span>
-        <span>Enter — отправить · Shift+Enter — перенос</span>
+        <span id="char-cnt">0 / 500</span>
+        <span id="mode-lbl"></span>
       </div>
     </div>
 
     <div class="comm-sidebar">
-      <div class="profile-side" id="profile-side">
-        <div class="profile-side-nick" id="ps-nick">—</div>
-        <div class="profile-side-meta" id="ps-meta">—</div>
-        <div class="profile-side-id"   id="ps-id">—</div>
+      <div class="prof-side">
+        <div class="ps-nick" id="ps-nick">—</div>
+        <div class="ps-meta" id="ps-meta">—</div>
+        <div class="ps-id"   id="ps-id"></div>
       </div>
-
       <div class="side-card">
-        <div class="side-head">ОНЛАЙН <span class="side-count" id="online-count">0</span></div>
-        <div class="online-list" id="online-list">
-          <div style="padding:.5rem 1rem;font-size:.74rem;color:var(--muted)">—</div>
-        </div>
+        <div class="side-hd">ОНЛАЙН <span class="side-cnt" id="ol-cnt">0</span></div>
+        <div class="ol-list" id="ol-list"><div style="padding:.5rem 1rem;font-size:.74rem;color:var(--muted)">—</div></div>
       </div>
-
       <div class="rules-card">
         <div class="rules-title">📋 Правила</div>
         <ul class="rules-list">
@@ -297,27 +250,15 @@
           <li>Мат — умеренно, без агрессии</li>
         </ul>
       </div>
-
       <a href="https://t.me/WarpathHub" target="_blank" rel="noopener"
-        style="display:flex;align-items:center;gap:.6rem;background:rgba(41,182,246,.07);
-          border:1px solid rgba(41,182,246,.18);border-radius:10px;padding:.8rem 1rem;
-          text-decoration:none;color:#5bb8f5;font-size:.8rem;font-weight:600;margin-bottom:1rem;">
+        style="display:flex;align-items:center;gap:.6rem;background:rgba(41,182,246,.07);border:1px solid rgba(41,182,246,.18);border-radius:10px;padding:.8rem 1rem;text-decoration:none;color:#5bb8f5;font-size:.8rem;font-weight:600;margin-bottom:1rem">
         <span style="font-size:1.3rem">✈</span>
-        <div>
-          <div>WarpathHub Telegram</div>
-          <div style="font-size:.67rem;color:rgba(91,184,245,.5);font-weight:400;margin-top:1px">155 участников · RU</div>
-        </div>
+        <div><div>WarpathHub Telegram</div><div style="font-size:.67rem;color:rgba(91,184,245,.5);font-weight:400;margin-top:1px">155 участников · RU</div></div>
       </a>
-
       <a href="feedback.html"
-        style="display:flex;align-items:center;gap:.6rem;background:rgba(200,150,28,.06);
-          border:1px solid rgba(200,150,28,.2);border-radius:10px;padding:.8rem 1rem;
-          text-decoration:none;color:var(--gold);font-size:.8rem;font-weight:600;">
+        style="display:flex;align-items:center;gap:.6rem;background:rgba(200,150,28,.06);border:1px solid rgba(200,150,28,.2);border-radius:10px;padding:.8rem 1rem;text-decoration:none;color:var(--gold);font-size:.8rem;font-weight:600">
         <span style="font-size:1.3rem">📝</span>
-        <div>
-          <div>Предложить улучшение</div>
-          <div style="font-size:.67rem;color:var(--muted);font-weight:400;margin-top:1px">баги · идеи · данные</div>
-        </div>
+        <div><div>Предложить улучшение</div><div style="font-size:.67rem;color:var(--muted);font-weight:400;margin-top:1px">баги · идеи · данные</div></div>
       </a>
     </div>
   </div>
@@ -326,232 +267,249 @@
 <script>
 (function(){
 'use strict';
+var SB_URL='https://vxqupaymregfruldersy.supabase.co';
+var SB_KEY='sb_publishable_QXFONPIbprV584KNEeLDtQ_qXvNSSc2';
+var PKEY='wg_profile_v5';
 
-var SB_URL   = 'https://vxqupaymregfruldersy.supabase.co';
-var SB_KEY   = 'sb_publishable_QXFONPIbprV584KNEeLDtQ_qXvNSSc2';
-var PROF_KEY = 'wg_profile_v3';
+var CI={'1':'⚔️','2':'🛡','3':'🔰','4':'🆕'};
+var CN={'1':'С1–111','2':'С112–157','3':'С158–173','4':'С174–199'};
+var CC={'1':'c1','2':'c2','3':'c3','4':'c4'};
+var CS={'1':'sc1','2':'sc2','3':'sc3','4':'sc4'};
 
-var CAT_ICONS = {'1':'⚔️','2':'🛡','3':'🔰','4':'🆕'};
-var CAT_NAMES = {'1':'С1–111','2':'С112–157','3':'С158–173','4':'С174–199'};
-var CAT_CLASS = {'1':'cat1','2':'cat2','3':'cat3','4':'cat4'};
-var CAT_SC    = {'1':'sc1','2':'sc2','3':'sc3','4':'sc4'};
+var sb=null,sub=null,prof=null,isGuest=false;
+var selCat='4',selRnk='C',isEdit=false,isSnd=false;
 
-var sb=null, msgSub=null, profile=null;
-var selCat='4', selRank='C', isEdit=false, isSend=false;
-
-function esc(s){ return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;'); }
-function $(id){ return document.getElementById(id); }
-function timeStr(ts){ return new Date(ts).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'}); }
-function genId(){ var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',id=''; for(var i=0;i<8;i++) id+=c[Math.floor(Math.random()*c.length)]; return id; }
-function scrollBot(){ var el=$('chat-messages'); if(el) el.scrollTop=el.scrollHeight; }
+function e(s){return String(s||'').replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');}
+function g(id){return document.getElementById(id);}
+function ts(t){return new Date(t).toLocaleTimeString('ru-RU',{hour:'2-digit',minute:'2-digit'});}
+function gid(){var c='ABCDEFGHJKLMNPQRSTUVWXYZ23456789',r='';for(var i=0;i<8;i++)r+=c[Math.floor(Math.random()*c.length)];return r;}
+function bot(){var el=g('chat-msgs');if(el)el.scrollTop=el.scrollHeight;}
 
 /* ── Setup ── */
-function openSetup(editMode){
+function showSetup(editMode){
   isEdit=!!editMode;
-  $('setup-overlay').style.display='flex';
-  if(editMode && profile){
-    $('setup-title').textContent='✏️ Редактировать профиль';
-    $('setup-sub').textContent='Ник должен оставаться уникальным.';
-    $('id-row').style.display='block';
-    $('show-id').textContent=profile.id;
-    $('inp-nick').value=profile.nick;
-    $('inp-email').value=profile.email||'';
-    $('inp-server').value=profile.server_num||'';
-    $('btn-save').textContent='Сохранить изменения';
-    $('restore-row').style.display='none';
-    $('toggle-restore').style.display='none';
-    setSelCat(profile.server_cat||'4');
-    setSelRank(profile.rank||'C');
-  } else {
-    $('setup-title').textContent='Добро пожаловать!';
-    $('setup-sub').textContent='Создай профиль — ник уникален глобально.';
-    $('id-row').style.display='none';
-    $('inp-nick').value=''; $('inp-email').value=''; $('inp-server').value='';
-    $('btn-save').textContent='Войти в чат →';
-    setSelCat('4'); setSelRank('C');
+  g('ov-guest').style.display='none';
+  g('ov-setup').style.display='flex';
+  if(editMode&&prof){
+    g('m-title').textContent='✏️ Редактировать профиль';
+    g('m-sub').textContent='Ник должен оставаться уникальным.';
+    g('id-row').style.display='block';
+    g('show-id').textContent=prof.id;
+    g('inp-nick').value=prof.nick||'';
+    g('inp-email').value=prof.email||'';
+    g('inp-server').value=prof.server_num||'';
+    g('btn-save').textContent='Сохранить изменения';
+    g('btn-guest').style.display='none';
+    g('toggle-restore').style.display='none';
+    setSCat(prof.server_cat||'4');
+    setSRnk(prof.rank||'C');
+  }else{
+    g('m-title').textContent='Добро пожаловать!';
+    g('m-sub').textContent='Создай профиль — ник уникален глобально.';
+    g('id-row').style.display='none';
+    g('inp-nick').value='';g('inp-email').value='';g('inp-server').value='';
+    g('btn-save').textContent='Войти в чат →';
+    g('btn-guest').style.display='';
+    g('toggle-restore').style.display='';
+    setSCat('4');setSRnk('C');
   }
-  $('setup-err').textContent='';
-  setTimeout(function(){ $('inp-nick').focus(); },100);
+  g('setup-err').textContent='';
+  g('restore-block').style.display='none';
+  setTimeout(function(){g('inp-nick').focus();},100);
 }
-function closeSetup(){ $('setup-overlay').style.display='none'; }
+function closeSetup(){g('ov-setup').style.display='none';}
 
-function setSelCat(v){ selCat=v; document.querySelectorAll('#scat-grid .scat-opt').forEach(function(el){ el.classList.toggle('sel',el.dataset.cat===v); }); }
-function setSelRank(v){ selRank=v; document.querySelectorAll('#rank-grid .rank-opt').forEach(function(el){ el.classList.toggle('sel',el.dataset.r===v); }); }
+function setSCat(v){selCat=v;document.querySelectorAll('#scat-grid .scat-opt').forEach(function(el){el.classList.toggle('sel',el.dataset.cat===v);});}
+function setSRnk(v){selRnk=v;document.querySelectorAll('#rank-grid .rank-opt').forEach(function(el){el.classList.toggle('sel',el.dataset.r===v);});}
 
-function initSetupHandlers(){
-  document.querySelectorAll('#scat-grid .scat-opt').forEach(function(el){ el.addEventListener('click',function(){ setSelCat(el.dataset.cat); }); });
-  document.querySelectorAll('#rank-grid .rank-opt').forEach(function(el){ el.addEventListener('click',function(){ setSelRank(el.dataset.r); }); });
-  $('btn-save').addEventListener('click',saveProfile);
-  $('inp-nick').addEventListener('keydown',function(e){ if(e.key==='Enter') saveProfile(); });
-  $('setup-overlay').addEventListener('click',function(e){ if(e.target===$('setup-overlay')&&isEdit) closeSetup(); });
-  $('toggle-restore').addEventListener('click',function(){
-    var row=$('restore-row');
-    row.style.display=row.style.display==='none'?'block':'none';
-  });
-  $('btn-restore').addEventListener('click',restoreByEmail);
-}
-
-async function saveProfile(){
-  var nick=($('inp-nick').value||'').trim();
-  var email=($('inp-email').value||'').trim()||null;
-  var srvNum=parseInt($('inp-server').value||'')||null;
-  var err=$('setup-err');
-
-  if(nick.length<2){ err.textContent='Ник минимум 2 символа'; $('inp-nick').focus(); return; }
-  if(nick.length>20){ err.textContent='Ник не более 20 символов'; return; }
-  if(!/^[a-zA-Zа-яёА-ЯЁ0-9_\-. ]+$/.test(nick)){ err.textContent='Ник: только буквы, цифры, _ - .'; return; }
-
+async function savePro(){
+  var nick=(g('inp-nick').value||'').trim();
+  var email=(g('inp-email').value||'').trim()||null;
+  var srv=parseInt(g('inp-server').value||'')||null;
+  var err=g('setup-err');
+  if(nick.length<2){err.textContent='Ник минимум 2 символа';g('inp-nick').focus();return;}
+  if(nick.length>20){err.textContent='Ник не более 20 символов';return;}
+  if(!/^[a-zA-Zа-яёА-ЯЁ0-9_\-. ]+$/.test(nick)){err.textContent='Ник: только буквы, цифры, _ - .';return;}
   err.textContent='⏳ Проверяем...';
-  $('btn-save').disabled=true;
-
+  g('btn-save').disabled=true;
   try{
     var chk=await sb.from('profiles').select('id').eq('nick',nick);
     if(chk.data&&chk.data.length>0){
-      var taken=chk.data.find(function(r){ return r.id!==(profile&&profile.id); });
-      if(taken){ err.textContent='❌ Этот ник уже занят'; $('btn-save').disabled=false; return; }
+      var myId=prof&&prof.id;
+      if(chk.data.find(function(r){return r.id!==myId;})){err.textContent='❌ Ник уже занят';g('btn-save').disabled=false;return;}
     }
     var now=new Date().toISOString();
-    if(isEdit&&profile){
-      var upd=await sb.from('profiles').update({nick:nick,email:email,server_cat:selCat,server_num:srvNum,rank:selRank,updated_at:now}).eq('id',profile.id);
-      if(upd.error) throw upd.error;
-      profile.nick=nick; profile.email=email; profile.server_cat=selCat; profile.server_num=srvNum; profile.rank=selRank;
-    } else {
-      var newId=genId();
-      var ins=await sb.from('profiles').insert({id:newId,nick:nick,email:email,server_cat:selCat,server_num:srvNum,rank:selRank,created_at:now,updated_at:now});
-      if(ins.error) throw ins.error;
-      profile={id:newId,nick:nick,email:email,server_cat:selCat,server_num:srvNum,rank:selRank};
+    /* Строим объект только с существующими полями */
+    var data={nick:nick,server_cat:selCat,server_num:srv,rank:selRnk,updated_at:now};
+    /* email добавляем только если не null — защита от отсутствия колонки */
+    if(email!==null) data.email=email;
+    if(isEdit&&prof){
+      var u=await sb.from('profiles').update(data).eq('id',prof.id);
+      if(u.error)throw u.error;
+      Object.assign(prof,{nick:nick,email:email,server_cat:selCat,server_num:srv,rank:selRnk});
+    }else{
+      var nid=gid();
+      var ins=await sb.from('profiles').insert(Object.assign({id:nid,created_at:now},data));
+      if(ins.error)throw ins.error;
+      prof={id:nid,nick:nick,email:email,server_cat:selCat,server_num:srv,rank:selRnk};
     }
-    localStorage.setItem(PROF_KEY,JSON.stringify(profile));
-    closeSetup(); updateSidebar();
-    if(!isEdit) startChat();
-  }catch(e){ console.error(e); err.textContent='❌ Ошибка: '+(e.message||'попробуй ещё раз'); }
-  $('btn-save').disabled=false;
+    isGuest=false;
+    localStorage.setItem(PKEY,JSON.stringify(prof));
+    closeSetup();updSide();
+    if(!isEdit)startChat();
+  }catch(ex){console.error(ex);err.textContent='❌ Ошибка: '+(ex.message||'попробуй ещё раз');}
+  g('btn-save').disabled=false;
 }
 
-async function restoreByEmail(){
-  var email=($('inp-restore-email').value||'').trim();
-  var err=$('restore-err');
-  if(!email){ err.textContent='Введи email'; return; }
+async function restoreEmail(){
+  var email=(g('inp-restore').value||'').trim();
+  var err=g('restore-err');
+  if(!email){err.textContent='Введи email';return;}
   err.textContent='⏳ Ищем...';
-  var res=await sb.from('profiles').select('*').eq('email',email).single();
-  if(res.error||!res.data){ err.textContent='❌ Профиль не найден'; return; }
-  profile=res.data;
-  localStorage.setItem(PROF_KEY,JSON.stringify(profile));
-  closeSetup(); startChat();
+  var res=await sb.from('profiles').select('*').eq('email',email);
+  if(res.error||!res.data||!res.data.length){err.textContent='❌ Профиль не найден';return;}
+  prof=res.data[0];isGuest=false;
+  localStorage.setItem(PKEY,JSON.stringify(prof));
+  closeSetup();startChat();
 }
 
-function updateSidebar(){
-  if(!profile) return;
-  $('ps-nick').textContent=profile.nick;
-  var srv=profile.server_num?' · С'+profile.server_num:'';
-  $('ps-meta').textContent='К'+(profile.server_cat||'4')+' ('+
-    (CAT_NAMES[profile.server_cat]||'—')+')'+srv+' · Ранг '+(profile.rank||'C');
-  $('ps-id').textContent='ID: '+profile.id;
+/* ── Guest ── */
+function showGuest(){g('ov-setup').style.display='none';g('ov-guest').style.display='flex';setTimeout(function(){g('guest-nick').focus();},100);}
+function enterGuest(){
+  var nick=(g('guest-nick').value||'').trim();
+  var err=g('guest-err');
+  if(nick.length<2){err.textContent='Ник минимум 2 символа';return;}
+  if(nick.length>20){err.textContent='Ник не более 20 символов';return;}
+  prof={id:'GUEST_'+gid(),nick:'[Гость] '+nick,server_cat:'4',server_num:null,rank:'C'};
+  isGuest=true;
+  g('ov-guest').style.display='none';
+  startChat();
+}
+
+/* ── Sidebar ── */
+function updSide(){
+  if(!prof)return;
+  g('ps-nick').textContent=prof.nick+(isGuest?' [Гость]':'');
+  g('ps-meta').textContent='К'+(prof.server_cat||'4')+' ('+(CN[prof.server_cat]||'—')+')'+(prof.server_num?' · С'+prof.server_num:'')+' · '+(prof.rank||'C');
+  g('ps-id').textContent=isGuest?'Гостевой сеанс':'ID: '+prof.id;
 }
 
 /* ── Chat ── */
 function startChat(){
-  $('chat-screen').style.display='block';
-  updateSidebar();
-  $('btn-profile').addEventListener('click',function(){ openSetup(true); });
-  var ta=$('chat-input'), counter=$('char-count');
-  ta.addEventListener('input',function(){
-    var len=ta.value.length;
-    counter.textContent=len+' / 500';
-    ta.style.height='auto'; ta.style.height=Math.min(ta.scrollHeight,100)+'px';
-  });
-  ta.addEventListener('keydown',function(e){ if(e.key==='Enter'&&!e.shiftKey){e.preventDefault();sendMsg();} });
-  $('btn-send').addEventListener('click',sendMsg);
-  loadMsgs(); subscribeMsgs(); refreshOnline();
-  setInterval(refreshOnline,30000);
-  setTimeout(function(){ ta.focus(); },200);
+  g('chat-screen').style.display='block';
+  updSide();
+  g('mode-lbl').textContent=isGuest?'👁 Гостевой режим':'';
+  g('btn-profile').onclick=isGuest?function(){if(confirm('Создать полный профиль?'))showSetup(false);}:function(){showSetup(true);};
+
+  var ta=g('chat-inp'),ctr=g('char-cnt');
+  ta.addEventListener('input',function(){var l=ta.value.length;ctr.textContent=l+' / 500';ta.style.height='auto';ta.style.height=Math.min(ta.scrollHeight,100)+'px';});
+  ta.addEventListener('keydown',function(ev){if(ev.key==='Enter'&&!ev.shiftKey){ev.preventDefault();sendMsg();}});
+  g('btn-send').addEventListener('click',sendMsg);
+
+  loadMsgs();subRt();refOnline();
+  setInterval(refOnline,30000);
+  setTimeout(function(){ta.focus();},200);
 }
 
 function loadMsgs(){
   sb.from('messages').select('*').order('created_at',{ascending:true}).limit(80).then(function(res){
-    var wrap=$('chat-messages');
-    if(res.error){ wrap.innerHTML='<div class="chat-empty"><div class="chat-empty-ico">⚠️</div><p>'+esc(res.error.message)+'</p></div>'; return; }
-    wrap.innerHTML='';
-    if(!res.data||!res.data.length){ wrap.innerHTML='<div class="chat-empty"><div class="chat-empty-ico">💬</div><p>Пока нет сообщений. Напиши первым!</p></div>'; return; }
-    res.data.forEach(function(m){ appendMsg(m,false); });
-    scrollBot();
+    var w=g('chat-msgs');
+    if(res.error){w.innerHTML='<div class="empty"><div class="empty-i">⚠️</div><p>'+e(res.error.message)+'</p></div>';return;}
+    w.innerHTML='';
+    if(!res.data||!res.data.length){w.innerHTML='<div class="empty"><div class="empty-i">💬</div><p>Пока нет сообщений!</p></div>';return;}
+    res.data.forEach(function(m){addMsg(m,false);});bot();
   });
 }
 
-function subscribeMsgs(){
-  msgSub=sb.channel('wg-chat-v3')
-    .on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},function(p){
-      var empty=$('chat-messages').querySelector('.chat-empty');
-      if(empty) empty.remove();
-      appendMsg(p.new,true); trimMsgs();
-    }).subscribe();
+function subRt(){
+  sub=sb.channel('wg-v5').on('postgres_changes',{event:'INSERT',schema:'public',table:'messages'},function(p){
+    var em=g('chat-msgs').querySelector('.empty');if(em)em.remove();
+    addMsg(p.new,true);trim();
+  }).subscribe();
 }
 
-function appendMsg(m,scroll){
-  var wrap=$('chat-messages');
-  var isOwn=profile&&(m.profile_id===profile.id);
+function addMsg(m,scroll){
+  var w=g('chat-msgs');
+  var own=isGuest?(prof&&m.nick===prof.nick):(prof&&m.profile_id===prof.id);
+  var isG=!m.profile_id||m.profile_id.startsWith('GUEST_');
   var cat=m.server_cat||'4';
-  var div=document.createElement('div');
-  div.className='cmsg'+(isOwn?' own':'');
-  div.dataset.msgId=m.id;
-  div.innerHTML=
-    '<div class="cmsg-av '+(CAT_CLASS[cat]||'cat4')+'" title="'+esc(m.nick)+'">'+(CAT_ICONS[cat]||'🆕')+'</div>'+
-    '<div class="cmsg-body">'+
-      '<div class="cmsg-meta">'+
-        '<span class="cmsg-nick">'+esc(m.nick)+'</span>'+
-        '<span class="cmsg-scat '+(CAT_SC[cat]||'sc4')+'">'+(m.server_num?'С'+m.server_num:'К'+cat)+'</span>'+
-        '<span class="cmsg-rank r'+(m.rank||'C')+'">'+(m.rank||'C')+'</span>'+
-        '<span class="cmsg-time">'+timeStr(m.created_at)+'</span>'+
-      '</div>'+
-      '<div class="cmsg-bubble">'+esc(m.text)+'</div>'+
-    '</div>';
-  wrap.appendChild(div);
-  if(scroll) scrollBot();
+  var av=isG?'cg':(CC[cat]||'c4');
+  var sc=isG?'scg':(CS[cat]||'sc4');
+  var ico=isG?'👁':(CI[cat]||'🆕');
+  var tag=isG?'Гость':(m.server_num?'С'+m.server_num:'К'+cat);
+  var d=document.createElement('div');
+  d.className='msg'+(own?' own':'')+(isG?' guest':'');
+  d.dataset.mid=m.id;
+  d.innerHTML='<div class="msg-av '+av+'" title="'+e(m.nick)+'">'+ico+'</div>'+
+    '<div class="msg-body"><div class="msg-meta">'+
+    '<span class="msg-nick">'+e(m.nick)+'</span>'+
+    '<span class="msg-tag '+sc+'">'+e(tag)+'</span>'+
+    (!isG?'<span class="msg-tag r'+(m.rank||'C')+'">'+(m.rank||'C')+'</span>':'')+
+    '<span class="msg-time">'+ts(m.created_at)+'</span>'+
+    '</div><div class="msg-bbl">'+e(m.text)+'</div></div>';
+  w.appendChild(d);if(scroll)bot();
 }
 
-function trimMsgs(){ var w=$('chat-messages'),msgs=w.querySelectorAll('.cmsg'); for(var i=0;i<msgs.length-80;i++) msgs[i].remove(); }
+function trim(){var w=g('chat-msgs'),ms=w.querySelectorAll('.msg');for(var i=0;i<ms.length-80;i++)ms[i].remove();}
 
 function sendMsg(){
-  if(isSend||!profile) return;
-  var ta=$('chat-input'), text=(ta.value||'').trim();
-  if(!text||text.length>500) return;
-  isSend=true; $('btn-send').disabled=true;
-  sb.from('messages').insert({profile_id:profile.id,nick:profile.nick,server_cat:profile.server_cat,server_num:profile.server_num||null,rank:profile.rank,text:text})
-    .then(function(res){
-      if(res.error){ alert('Ошибка: '+res.error.message); }
-      else { ta.value=''; ta.style.height='auto'; $('char-count').textContent='0 / 500'; }
-      isSend=false; $('btn-send').disabled=false; ta.focus();
-    });
+  if(isSnd||!prof)return;
+  var ta=g('chat-inp'),txt=(ta.value||'').trim();
+  if(!txt||txt.length>500)return;
+  isSnd=true;g('btn-send').disabled=true;
+  sb.from('messages').insert({
+    profile_id:prof.id,nick:prof.nick,
+    server_cat:prof.server_cat||'4',server_num:prof.server_num||null,
+    rank:prof.rank||'C',text:txt
+  }).then(function(res){
+    if(res.error)alert('Ошибка: '+res.error.message);
+    else{ta.value='';ta.style.height='auto';g('char-cnt').textContent='0 / 500';}
+    isSnd=false;g('btn-send').disabled=false;ta.focus();
+  });
 }
 
-function refreshOnline(){
+function refOnline(){
   var since=new Date(Date.now()-20*60*1000).toISOString();
-  sb.from('messages').select('nick,server_cat,rank,profile_id').gte('created_at',since).order('created_at',{ascending:false})
-    .then(function(res){
-      var seen={};
-      ((res.data)||[]).forEach(function(m){ if(!seen[m.profile_id]) seen[m.profile_id]=m; });
-      if(profile) seen[profile.id]={nick:profile.nick,server_cat:profile.server_cat,rank:profile.rank,profile_id:profile.id};
-      var users=Object.values(seen);
-      $('online-count').textContent=users.length;
-      $('online-label').textContent=users.length+' онлайн';
-      $('online-list').innerHTML=users.length
-        ?users.map(function(u){ return '<div class="ou"><div class="ou-dot"></div><div><div class="ou-nick">'+esc(u.nick)+'</div><div class="ou-meta">'+(CAT_ICONS[u.server_cat||'4']||'🆕')+' К'+(u.server_cat||'4')+' · '+(u.rank||'C')+'</div></div></div>'; }).join('')
-        :'<div style="padding:.5rem 1rem;font-size:.74rem;color:var(--muted)">—</div>';
-    });
+  sb.from('messages').select('nick,server_cat,rank,profile_id').gte('created_at',since).order('created_at',{ascending:false}).then(function(res){
+    var seen={};
+    ((res.data)||[]).forEach(function(m){var k=m.profile_id||m.nick;if(!seen[k])seen[k]=m;});
+    if(prof)seen[prof.id||prof.nick]={nick:prof.nick,server_cat:prof.server_cat,rank:prof.rank,profile_id:prof.id};
+    var us=Object.values(seen);
+    g('ol-cnt').textContent=us.length;g('ol-label').textContent=us.length+' онлайн';
+    g('ol-list').innerHTML=us.length?us.map(function(u){
+      var isG=!u.profile_id||u.profile_id.startsWith('GUEST_');
+      return '<div class="ou"><div class="ou-dot"></div><div>'+
+        '<div class="ou-nick">'+(isG?'👁 ':'')+e(u.nick)+'</div>'+
+        '<div class="ou-meta">'+(isG?'Гость':(CI[u.server_cat||'4']||'🆕')+' К'+(u.server_cat||'4'))+' · '+(u.rank||'C')+'</div>'+
+      '</div></div>';}).join('')
+      :'<div style="padding:.5rem 1rem;font-size:.74rem;color:var(--muted)">—</div>';
+  });
 }
 
 /* ── Init ── */
-document.addEventListener('DOMContentLoaded',function(){
-  if(typeof initShared==='function') initShared();
-  sb=window.supabase.createClient(SB_URL,SB_KEY);
-  initSetupHandlers();
-  try{
-    var saved=JSON.parse(localStorage.getItem(PROF_KEY)||'null');
-    if(saved&&saved.id&&saved.nick&&saved.nick.length>=2){ profile=saved; startChat(); return; }
-  }catch(e){}
-  openSetup(false);
-});
+function initH(){
+  document.querySelectorAll('#scat-grid .scat-opt').forEach(function(el){el.addEventListener('click',function(){setSCat(el.dataset.cat);});});
+  document.querySelectorAll('#rank-grid .rank-opt').forEach(function(el){el.addEventListener('click',function(){setSRnk(el.dataset.r);});});
+  g('btn-save').addEventListener('click',savePro);
+  g('inp-nick').addEventListener('keydown',function(ev){if(ev.key==='Enter')savePro();});
+  g('btn-guest').addEventListener('click',showGuest);
+  g('btn-guest-enter').addEventListener('click',enterGuest);
+  g('guest-nick').addEventListener('keydown',function(ev){if(ev.key==='Enter')enterGuest();});
+  g('toggle-restore').addEventListener('click',function(){var b=g('restore-block');b.style.display=b.style.display==='none'?'block':'none';});
+  g('btn-restore').addEventListener('click',restoreEmail);
+  g('ov-setup').addEventListener('click',function(ev){if(ev.target===g('ov-setup')&&isEdit)closeSetup();});
+}
 
+document.addEventListener('DOMContentLoaded',function(){
+  if(typeof initShared==='function')initShared();
+  sb=window.supabase.createClient(SB_URL,SB_KEY);
+  initH();
+  try{
+    var s=JSON.parse(localStorage.getItem(PKEY)||'null');
+    if(s&&s.id&&s.nick&&s.nick.length>=2&&!s.id.startsWith('GUEST_')){prof=s;startChat();return;}
+  }catch(ex){}
+  showSetup(false);
+});
 })();
 </script>
 </body>
