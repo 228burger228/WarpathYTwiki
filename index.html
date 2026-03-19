@@ -32,13 +32,14 @@
   .patch-text   { font-size: 0.85rem; color: var(--muted); line-height: 1.5; flex: 1; min-width: 180px; }
   .patch-soon   { font-size: 0.75rem; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(255,160,0,0.4); color: var(--orange); white-space: nowrap; flex-shrink: 0; }
 
+  /* ── BLOGGER STRIP ── */
   .blogger-strip-wrap { overflow: hidden; position: relative; }
   .blogger-strip-wrap::before,
   .blogger-strip-wrap::after {
     content: ''; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2; pointer-events: none;
   }
-  .blogger-strip-wrap::before { left: 0;  background: linear-gradient(to right,  var(--bg), transparent); }
-  .blogger-strip-wrap::after  { right: 0; background: linear-gradient(to left, var(--bg), transparent); }
+  .blogger-strip-wrap::before { left: 0;  background: linear-gradient(to right, var(--bg), transparent); }
+  .blogger-strip-wrap::after  { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
   @keyframes scrollLeft {
     0%   { transform: translateX(0); }
     100% { transform: translateX(-50%); }
@@ -53,17 +54,138 @@
   .bl-card {
     background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
     padding: 0.85rem 1.1rem; display: flex; align-items: center; gap: 0.75rem;
-    text-decoration: none; flex-shrink: 0; width: 210px;
-    transition: border-color 0.2s;
+    text-decoration: none; flex-shrink: 0; width: 210px; transition: border-color 0.2s;
   }
-  .bl-card:hover  { border-color: var(--gold); }
-  .bl-card.offl   { border-color: rgba(232,255,71,0.3); }
+  .bl-card:hover { border-color: var(--gold); }
+  .bl-card.offl  { border-color: rgba(232,255,71,0.3); }
   .bl-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(232,255,71,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
   .bl-avatar-img { object-fit: cover; border: 1px solid var(--border); }
   .bl-name  { font-size: 0.88rem; font-weight: 700; color: var(--text); }
   .bl-spec  { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
   .bl-subs  { font-size: 0.68rem; color: var(--gold); margin-top: 2px; }
 
+  /* ── VIDEOS SECTION ── */
+  .videos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 1rem;
+  }
+  .video-card {
+    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
+    overflow: hidden; transition: border-color .2s, transform .18s;
+    text-decoration: none; display: flex; flex-direction: column;
+  }
+  .video-card:hover { border-color: var(--border2); transform: translateY(-2px); }
+  .video-thumb {
+    position: relative; aspect-ratio: 16/9; background: var(--bg3);
+    overflow: hidden; flex-shrink: 0;
+  }
+  .video-thumb img {
+    width: 100%; height: 100%; object-fit: cover;
+    transition: transform .3s;
+  }
+  .video-card:hover .video-thumb img { transform: scale(1.04); }
+  .video-play-btn {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    background: rgba(0,0,0,.35); opacity: 0; transition: opacity .2s;
+  }
+  .video-card:hover .video-play-btn { opacity: 1; }
+  .video-play-icon {
+    width: 46px; height: 46px; border-radius: 50%;
+    background: rgba(200,0,0,.9); display: flex; align-items: center; justify-content: center;
+  }
+  .video-play-icon svg { margin-left: 3px; }
+  .video-info { padding: .85rem 1rem .9rem; flex: 1; display: flex; flex-direction: column; gap: .45rem; }
+  .video-author {
+    display: flex; align-items: center; gap: .45rem;
+  }
+  .video-author-avatar {
+    width: 22px; height: 22px; border-radius: 50%;
+    object-fit: cover; border: 1px solid var(--border); flex-shrink: 0;
+  }
+  .video-author-avatar-em {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: rgba(200,150,28,.12); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; flex-shrink: 0;
+  }
+  .video-author-name { font-size: .7rem; color: var(--gold); font-weight: 700; font-family: 'Barlow Condensed', sans-serif; letter-spacing: .5px; }
+  .video-title { font-size: .84rem; font-weight: 600; color: var(--text); line-height: 1.4; flex: 1; }
+  .video-yt-badge {
+    display: inline-flex; align-items: center; gap: .3rem;
+    font-size: .65rem; color: #f55; font-family: 'Barlow Condensed', sans-serif; letter-spacing: .5px;
+  }
+  @media(max-width:640px) {
+    .videos-grid { grid-template-columns: 1fr; }
+  }
+
+  /* ── COMMUNITY BLOCK ── */
+  .community-img-wrap {
+    position: relative; border-radius: 12px; overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .community-img-wrap img {
+    width: 100%; height: 100%; object-fit: cover; display: block;
+    min-height: 200px; max-height: 280px;
+    filter: brightness(.75) saturate(.9);
+    transition: filter .3s, transform .3s;
+  }
+  .community-img-wrap:hover img { filter: brightness(.85) saturate(1); transform: scale(1.02); }
+  .community-img-overlay {
+    position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(7,8,10,.55) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  .community-img-badge {
+    position: absolute; top: .85rem; left: .85rem;
+    background: rgba(7,8,10,.82); border: 1px solid rgba(41,182,246,.35);
+    border-radius: 6px; padding: .3rem .7rem;
+    font-family: 'Bebas Neue', sans-serif; font-size: .75rem; letter-spacing: 1.5px;
+    color: #5bb8f5; display: flex; align-items: center; gap: .35rem;
+  }
+  .community-img-badge::before { content: '✈'; }
+  .community-img-members {
+    position: absolute; bottom: .85rem; right: .85rem;
+    background: rgba(7,8,10,.8); border: 1px solid var(--border);
+    border-radius: 6px; padding: .3rem .7rem; text-align: right;
+  }
+  .community-img-members-n { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--gold2); line-height: 1; }
+  .community-img-members-l { font-size: .55rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+
+  /* Обновлённый .community-wrap — теперь 3 колонки: текст | картинка | статы */
+  .community-wrap {
+    display: grid;
+    grid-template-columns: 1fr 1fr auto;
+    gap: 1.5rem;
+    align-items: center;
+    background: var(--panel);
+    border: var(--line);
+    padding: 2.4rem 2rem;
+    position: relative; overflow: hidden;
+  }
+  .community-wrap::before {
+    content: ''; position: absolute; inset: 0;
+    background: radial-gradient(ellipse 60% 100% at 0% 50%, rgba(200,148,28,.04), transparent);
+    pointer-events: none;
+  }
+  .community-wrap h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.6rem,2.5vw,2.2rem); letter-spacing: 2px; margin-bottom: .5rem; }
+  .community-wrap p  { color: var(--dim); font-size: .88rem; line-height: 1.7; max-width: 400px; }
+  .community-btns    { display: flex; gap: .7rem; margin-top: 1.2rem; flex-wrap: wrap; }
+  .community-stats   { display: flex; flex-direction: column; gap: .8rem; align-items: flex-end; }
+  .cstat-n { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--gold2); line-height: 1; }
+  .cstat-l { font-size: .6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+
+  @media(max-width:960px) {
+    .community-wrap { grid-template-columns: 1fr 1fr; }
+    .community-stats { display: none; }
+  }
+  @media(max-width:640px) {
+    .community-wrap { grid-template-columns: 1fr !important; padding: 1.4rem 1rem !important; }
+    .community-img-wrap { max-height: 180px; }
+  }
+
+  /* ── DONATE ── */
   .donate-wrap { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:center; }
   @media(max-width:640px){ .donate-wrap{grid-template-columns:1fr;} }
   .donate-left h2 { margin:.4rem 0 .6rem; font-size:1.8rem; }
@@ -72,20 +194,11 @@
   .dc-row   { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:.9rem; }
   .dc-label { font-size:.85rem; color:var(--muted); white-space:nowrap; }
   .dc-counter { display:flex; align-items:center; }
-  .dc-btn {
-    width:34px; height:36px; background:rgba(255,255,255,0.06); border:1px solid var(--border);
-    color:var(--text); font-size:1.1rem; cursor:pointer; transition:background .15s;
-    display:flex; align-items:center; justify-content:center;
-  }
+  .dc-btn { width:34px; height:36px; background:rgba(255,255,255,0.06); border:1px solid var(--border); color:var(--text); font-size:1.1rem; cursor:pointer; transition:background .15s; display:flex; align-items:center; justify-content:center; }
   .dc-btn:first-child { border-radius:7px 0 0 7px; border-right:none; }
   .dc-btn:last-child  { border-radius:0 7px 7px 0; border-left:none; }
   .dc-btn:hover { background:rgba(232,255,71,0.12); color:var(--gold); }
-  .dc-val {
-    width:58px; text-align:center; background:rgba(255,255,255,0.05);
-    border:1px solid var(--border); color:var(--text); font-size:1rem;
-    font-family:inherit; padding:.5rem 0; outline:none;
-    -moz-appearance:textfield;
-  }
+  .dc-val { width:58px; text-align:center; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text); font-size:1rem; font-family:inherit; padding:.5rem 0; outline:none; -moz-appearance:textfield; }
   .dc-val::-webkit-inner-spin-button { -webkit-appearance:none; }
   .dc-val:focus { border-color:var(--gold); }
   .dc-result { border-top:1px solid var(--border); padding-top:.9rem; margin-top:.3rem; display:flex; align-items:center; gap:.85rem; }
@@ -94,10 +207,9 @@
   .dc-result-num.mid  { color:var(--orange); }
   .dc-result-num.max  { color:var(--gold); }
   .dc-result-lbl { font-size:.78rem; color:var(--muted); line-height:1.5; }
-  .tg-rooms { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.85rem; }
-  .tg-room  { font-size: 0.72rem; padding: 3px 10px; border-radius: 99px; background: rgba(41,182,246,0.08); color: #29b6f6; border: 1px solid rgba(41,182,246,0.2); }
+  .tg-rooms { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.85rem; }
+  .tg-room  { font-size:.72rem; padding:3px 10px; border-radius:99px; background:rgba(41,182,246,0.08); color:#29b6f6; border:1px solid rgba(41,182,246,0.2); }
 
-  /* Feedback grid mobile */
   @media(max-width:640px){
     .feedback-grid { grid-template-columns: 1fr !important; }
     .feedback-cards { grid-template-columns: 1fr 1fr !important; }
@@ -120,7 +232,7 @@
       <div class="hero-stats">
         <div class="hstat"><div class="hstat-n">9</div><div class="hstat-l">Типов юнитов</div></div>
         <div class="hstat"><div class="hstat-n">13.4</div><div class="hstat-l">Актуальный патч</div></div>
-        <div class="hstat"><div class="hstat-n">4</div><div class="hstat-l">Блогера</div></div>
+        <div class="hstat"><div class="hstat-n">5</div><div class="hstat-l">Блогеров</div></div>
         <div class="hstat"><div class="hstat-n">RU</div><div class="hstat-l">Язык</div></div>
       </div>
       <div class="patch-banner">
@@ -173,10 +285,30 @@
 
 <div class="divider"></div>
 
-<!-- COMMUNITY -->
+<!-- ═══ LATEST VIDEOS ═══ -->
 <section class="section-sm" style="background:var(--bg2)">
   <div class="wrap">
+    <div class="sec-hd fade-up" style="margin-bottom:1.5rem">
+      <div class="tag">🎬 Свежее видео</div>
+      <div class="title">Последние ролики</div>
+      <div class="sub">Актуальный контент от авторов сообщества — гайды, нарезки, разборы патчей.</div>
+    </div>
+    <div class="videos-grid fade-up" id="videos-grid">
+      <!-- заполняется JS из data.js -->
+    </div>
+    <div style="margin-top:1.25rem">
+      <a href="youtubers.html" class="btn btn-outline">Все блогеры и видео →</a>
+    </div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
+<!-- COMMUNITY -->
+<section class="section-sm" style="background:var(--bg)">
+  <div class="wrap">
     <div class="community-wrap fade-up">
+      <!-- Текст -->
       <div>
         <div class="tag">💬 Сообщество</div>
         <h2>Присоединяйся к <em style="color:var(--gold2);font-style:normal">WarpathHub</em></h2>
@@ -188,11 +320,25 @@
           <span class="tg-room">📖 Guides</span>
           <span class="tg-room">❓ Архив Вопросов</span>
         </div>
-        <div class="community-btns" style="margin-top:1.2rem">
+        <div class="community-btns">
           <a href="https://t.me/WarpathHub" target="_blank" class="btn-tg">✈ Вступить в Telegram</a>
           <a href="youtubers.html" class="btn btn-outline">👥 Блогеры</a>
         </div>
       </div>
+
+      <!-- Картинка -->
+      <div class="community-img-wrap">
+        <img src="WARHUBwarpath.jpg" alt="WarpathHub Community" loading="lazy"
+          onerror="this.closest('.community-img-wrap').style.display='none'">
+        <div class="community-img-overlay"></div>
+        <div class="community-img-badge">WarpathHub</div>
+        <div class="community-img-members">
+          <div class="community-img-members-n">155</div>
+          <div class="community-img-members-l">участников</div>
+        </div>
+      </div>
+
+      <!-- Статы -->
       <div class="community-stats">
         <div><div class="cstat-n">155</div><div class="cstat-l">Участников</div></div>
         <div><div class="cstat-n">5</div><div class="cstat-l">Разделов чата</div></div>
@@ -204,8 +350,8 @@
 
 <div class="divider"></div>
 
-<!-- FEEDBACK ── новый блок -->
-<section class="section-sm" style="background:var(--bg)">
+<!-- FEEDBACK -->
+<section class="section-sm" style="background:var(--bg2)">
   <div class="wrap">
     <div class="fade-up feedback-grid" style="display:grid;grid-template-columns:1fr 1fr;gap:2rem;align-items:center">
       <div>
@@ -249,7 +395,7 @@
 <div class="divider"></div>
 
 <!-- DONATE BAR -->
-<section class="section-sm" style="background:var(--bg2)">
+<section class="section-sm" style="background:var(--bg)">
   <div class="wrap">
     <div class="donate-wrap fade-up">
       <div class="donate-left">
@@ -293,7 +439,7 @@
 <div class="divider"></div>
 
 <!-- TOOLS PREVIEW -->
-<section class="section grid-bg" style="background:var(--bg)">
+<section class="section grid-bg" style="background:var(--bg2)">
   <div class="wrap">
     <div class="sec-hd center fade-up">
       <div class="tag">⚙ Инструменты</div>
@@ -321,22 +467,91 @@ const NAV_SECTIONS = [
   {icon:'📅', label:'Daily',           sub:'Расписание Arms Race',       href:'daily.html'},
   {icon:'🏆', label:'Лидерборд',       sub:'Топ игроков и кланов',       href:'leaderboard.html'},
   {icon:'💬', label:'Чат',             sub:'Общение в реальном времени', href:'community.html'},
-  {icon:'▶',  label:'YouTubers',       sub:'4 блогера сообщества',       href:'youtubers.html'},
+  {icon:'▶',  label:'YouTubers',       sub:'5 блогеров сообщества',      href:'youtubers.html'},
   {icon:'🤖', label:'ИИ-помощник',     sub:'Warpath AI · патч 13.4',     href:'ai-chat.html'},
 ];
 
 const TOOLS = [
-  {icon:'⚔️', title:'Unit Builder',    tag:'Интерактивный', desc:'Выбери тип юнита, уровень, офицера и снаряжение. Статы пересчитываются мгновенно.',                           href:'unit-builder.html'},
-  {icon:'🏗️', title:'Army Builder',    tag:'Калькулятор',   desc:'Собери армию из нескольких юнитов и получи суммарную боевую мощь, атаку, защиту, HP.',                       href:'army-builder.html'},
-  {icon:'🎖️', title:'Тир-лист',        tag:'Рейтинг',       desc:'Drag-and-drop тир-лист юнитов и офицеров с фильтрами и сохранением в браузере.',                             href:'tier-list.html'},
-  {icon:'📅', title:'Daily Arms Race', tag:'Ежедневно',     desc:'Расписание заданий на каждый день недели. Калькулятор очков — узнай какой ранг получишь сегодня.',            href:'daily.html'},
-  {icon:'🏆', title:'Лидерборд',       tag:'Рейтинг',       desc:'Топ игроков и кланов твоего сервера. Добавляй данные, следи за ростом силы и историей изменений.',            href:'leaderboard.html'},
-  {icon:'🍺', title:'Донатный Бар',    tag:'Калькулятор',   desc:'Введи кружки и бокалы — узнай сколько напитков открывать. Три порога: 5, 20 или 70 напитков.',                href:'donate-bar.html'},
+  {icon:'⚔️', title:'Unit Builder',    tag:'Интерактивный', desc:'Выбери тип юнита, уровень, офицера и снаряжение. Статы пересчитываются мгновенно.',                        href:'unit-builder.html'},
+  {icon:'🏗️', title:'Army Builder',    tag:'Калькулятор',   desc:'Собери армию из нескольких юнитов и получи суммарную боевую мощь, атаку, защиту, HP.',                    href:'army-builder.html'},
+  {icon:'🎖️', title:'Тир-лист',        tag:'Рейтинг',       desc:'Drag-and-drop тир-лист юнитов и офицеров с фильтрами и сохранением в браузере.',                          href:'tier-list.html'},
+  {icon:'📅', title:'Daily Arms Race', tag:'Ежедневно',     desc:'Расписание заданий на каждый день недели. Калькулятор очков — узнай какой ранг получишь сегодня.',         href:'daily.html'},
+  {icon:'🏆', title:'Лидерборд',       tag:'Рейтинг',       desc:'Топ игроков и кланов твоего сервера. Добавляй данные, следи за ростом силы и историей изменений.',         href:'leaderboard.html'},
+  {icon:'🍺', title:'Донатный Бар',    tag:'Калькулятор',   desc:'Введи кружки и бокалы — узнай сколько напитков открывать. Три порога: 5, 20 или 70 напитков.',             href:'donate-bar.html'},
 ];
+
+/* ══════════════════════════════════════
+   VIDEOS FEED — из latestVideos в YOUTUBERS
+══════════════════════════════════════ */
+function getYtThumb(url) {
+  const match = url.match(/(?:youtu\.be\/|v=|\/embed\/)([A-Za-z0-9_-]{11})/);
+  return match ? `https://img.youtube.com/vi/${match[1]}/mqdefault.jpg` : null;
+}
+
+function buildVideosGrid() {
+  const grid = document.getElementById('videos-grid');
+  if (!grid || typeof YOUTUBERS === 'undefined') return;
+
+  /* Собираем все видео из всех блогеров и перемешиваем */
+  const allVideos = [];
+  YOUTUBERS.forEach(y => {
+    (y.latestVideos || []).forEach(v => {
+      allVideos.push({ ...v, author: y });
+    });
+  });
+
+  /* Ограничиваем до 6 карточек */
+  const shown = allVideos.slice(0, 6);
+  grid.innerHTML = '';
+
+  shown.forEach(v => {
+    const thumb = getYtThumb(v.url);
+    const y = v.author;
+
+    /* Аватарка автора */
+    const avatarHtml = y.avatar
+      ? `<img class="video-author-avatar" src="${y.avatar}" alt="${y.name}"
+           onerror="this.outerHTML='<div class=\\'video-author-avatar-em\\'>${y.emoji}</div>'">`
+      : `<div class="video-author-avatar-em">${y.emoji}</div>`;
+
+    const card = document.createElement('a');
+    card.className = 'video-card';
+    card.href = v.url;
+    card.target = '_blank';
+    card.rel = 'noopener';
+
+    card.innerHTML = `
+      <div class="video-thumb">
+        ${thumb
+          ? `<img src="${thumb}" alt="${v.title}" loading="lazy"
+               onerror="this.parentNode.style.background='var(--bg3)';this.remove()">`
+          : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--muted)">▶</div>`
+        }
+        <div class="video-play-btn">
+          <div class="video-play-icon">
+            <svg width="14" height="16" viewBox="0 0 14 16" fill="white">
+              <polygon points="0,0 14,8 0,16"/>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <div class="video-info">
+        <div class="video-author">
+          ${avatarHtml}
+          <span class="video-author-name">${y.name}</span>
+        </div>
+        <div class="video-title">${v.title}</div>
+        <div class="video-yt-badge">▶ YouTube</div>
+      </div>`;
+
+    grid.appendChild(card);
+  });
+}
 
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof initShared === 'function') initShared();
 
+  /* Nav cards */
   const nc = document.getElementById('nav-cards');
   if (nc) {
     nc.innerHTML = '';
@@ -344,55 +559,51 @@ document.addEventListener('DOMContentLoaded', () => {
       const d = document.createElement('div');
       d.className = 'nav-card';
       d.innerHTML = `<div class="nav-card-icon">${s.icon}</div><div><div class="nav-card-label">${s.label}</div><div class="nav-card-sub">${s.sub}</div></div>`;
-      d.onclick = () => s.ext ? window.open(s.href,'_blank') : location.href = s.href;
+      d.onclick = () => location.href = s.href;
       nc.appendChild(d);
     });
   }
 
+  /* Blogger strip */
   const strip = document.getElementById('blogger-strip');
   if (strip && typeof YOUTUBERS !== 'undefined') {
     [...YOUTUBERS, ...YOUTUBERS].forEach(y => {
       const a = document.createElement('a');
       a.className = 'bl-card' + (y.approved ? ' offl' : '');
       a.href = y.yt; a.target = '_blank'; a.rel = 'noopener';
-
-      /* Аватарка — фото если есть, иначе эмодзи */
       const avWrap = document.createElement('div');
       if (y.avatar) {
         const img = document.createElement('img');
-        img.src = y.avatar;
-        img.alt = y.name;
+        img.src = y.avatar; img.alt = y.name;
         img.className = 'bl-avatar bl-avatar-img';
         img.onerror = function() {
           const em = document.createElement('div');
-          em.className = 'bl-avatar';
-          em.textContent = y.emoji;
+          em.className = 'bl-avatar'; em.textContent = y.emoji;
           this.parentNode.replaceChild(em, this);
         };
         avWrap.appendChild(img);
       } else {
-        avWrap.className = 'bl-avatar';
-        avWrap.textContent = y.emoji;
+        avWrap.className = 'bl-avatar'; avWrap.textContent = y.emoji;
       }
-
       const info = document.createElement('div');
       info.innerHTML = `<div class="bl-name">${y.name}${y.approved ? ' ✓' : ''}</div>
         <div class="bl-spec">${y.spec}</div>
         <div class="bl-subs">${y.subs} подп.</div>`;
-
-      a.appendChild(avWrap);
-      a.appendChild(info);
+      a.appendChild(avWrap); a.appendChild(info);
       strip.appendChild(a);
     });
   }
 
+  /* Videos grid */
+  buildVideosGrid();
+
+  /* Tools grid */
   const tg = document.getElementById('tools-grid');
   if (tg) {
     tg.innerHTML = '';
     TOOLS.forEach(t => {
       const d = document.createElement('div');
-      d.className = 'card card-hover';
-      d.style.padding = '1.5rem';
+      d.className = 'card card-hover'; d.style.padding = '1.5rem';
       d.innerHTML = `
         <div style="font-size:2.2rem;margin-bottom:.7rem">${t.icon}</div>
         <span class="pill pill-tag">${t.tag}</span>
@@ -411,7 +622,7 @@ function dcAdj(f, d) {
   dcCalc();
 }
 function dcCalc() {
-  const cups    = Math.min(Math.max(0, parseInt(document.getElementById('dc-cups').value)    || 0), 120);
+  const cups    = Math.min(Math.max(0, parseInt(document.getElementById('dc-cups').value) || 0), 120);
   const glasses = Math.max(0, parseInt(document.getElementById('dc-glasses').value) || 0);
   const total   = glasses + Math.floor(cups / 3);
   const num = document.getElementById('dc-num');
