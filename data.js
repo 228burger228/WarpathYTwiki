@@ -19,6 +19,7 @@ const TICKER = [
 const YOUTUBERS = [
   {
     id: 'burger',
+    avatar: 'burgerdom6.jpg',
     name: 'Бургер',
     spec: 'Гайды и нарезки',
     emoji: '🍔',
@@ -26,7 +27,7 @@ const YOUTUBERS = [
     quote: 'Показываю игру такой, какая она есть',
     tags: ['Гайды', 'Нарезки боёв', 'Другие игры', 'О жизни'],
     desc: 'Честный взгляд на Warpath без прикрас. Нарезки эпичных боёв, разборы механик и немного жизни за кадром.',
-    subs: '352', videos: 95, guides: 12,
+    subs: '353', videos: 96, guides: 12,
     yt: 'https://www.youtube.com/@burgerdom6/videos',
     tg: 'https://t.me/WarpathHub',
     donate: 'https://t.me/donatebar_bot?start=burger',
@@ -37,6 +38,7 @@ const YOUTUBERS = [
   },
   {
     id: 'ebaka',
+    avatar: 'e6akawarpath.jpg',
     name: 'е6ака',
     spec: 'Тесты и сборки',
     emoji: '🔥',
@@ -55,6 +57,7 @@ const YOUTUBERS = [
   },
   {
     id: 'ehson',
+    avatar: 'Ehson.jpg',
     name: 'Ehson',
     spec: 'Аналитика и детали',
     emoji: '🎯',
@@ -73,6 +76,7 @@ const YOUTUBERS = [
   },
   {
     id: 'clangothic',
+    avatar: 'ClanGothic.jpg',
     name: 'ClanGothic',
     spec: 'Гайды и обзоры патчей',
     emoji: '🏰',
@@ -91,6 +95,7 @@ const YOUTUBERS = [
   },
   {
     id: 'vnwarpath',
+    avatar: 'vnwarpath.jpg',
     name: 'VN Warpath',
     spec: 'Мета и офицеры · EN',
     emoji: '🇻🇳',
