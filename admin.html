@@ -314,7 +314,7 @@ body { padding-top: 0 !important; }
 
 var SB_URL   = 'https://vxqupaymregfruldersy.supabase.co';
 var SB_KEY   = 'sb_publishable_QXFONPIbprV584KNEeLDtQ_qXvNSSc2';
-var ADMIN_PWD = 'warpath2026admin'; /* ← смени на свой */
+var ADMIN_PWD = 'warpaCDKthMicrosotf2026admin'; /* ← смени на свой */
 var AUTH_KEY  = 'wg_admin_v1';
 
 var sb = null;
@@ -526,13 +526,34 @@ function renderProfs(){
       '<td><span class="badge badge-'+rank+'">'+rank+'</span></td>'+
       '<td style="font-size:.75rem;color:var(--muted)">'+(p.email?esc(p.email):'—')+'</td>'+
       '<td style="font-size:.72rem;color:var(--muted)">'+dateStr(p.created_at)+'</td>'+
-      '<td><button class="act-btn ban" data-nick="'+esc(p.nick)+'" data-pid="'+esc(p.id)+'">🚫 Бан</button></td>'+
+      '<td style="display:flex;gap:.3rem">'+
+        '<button class="act-btn" data-pid="'+esc(p.id)+'" data-email="'+esc(p.email||'')+'">✉ Email</button>'+
+        '<button class="act-btn ban" data-nick="'+esc(p.nick)+'" data-pid="'+esc(p.id)+'">🚫 Бан</button>'+
+        '</td>'+
     '</tr>';
   }).join('');
 
+  tbody.querySelectorAll('.act-btn:not(.ban)').forEach(function(btn){
+    btn.addEventListener('click',function(){ editProfileEmail(btn.dataset.pid, btn.dataset.email); });
+  });
   tbody.querySelectorAll('.act-btn.ban').forEach(function(btn){
     btn.addEventListener('click',function(){ banUser(btn.dataset.nick,btn.dataset.pid); });
   });
+}
+
+async function editProfileEmail(profileId, currentEmail){
+  var newEmail = prompt('Email для профиля ' + profileId + '\n(пусто = удалить)', currentEmail || '');
+  if(newEmail === null) return;
+  newEmail = newEmail.trim() || null;
+  var res = await sb.from('profiles').update({ email: newEmail }).eq('id', profileId);
+  if(res.error){ alert('Ошибка: ' + res.error.message); return; }
+  allProfs = allProfs.map(function(p){
+    return p.id === profileId ? Object.assign({}, p, { email: newEmail }) : p;
+  });
+  renderProfs();
+  alert(newEmail ? '\u2713 Email: ' + newEmail : '\u2713 Email удалён');
+}
+
 }
 
 /* ── Bans ── */
