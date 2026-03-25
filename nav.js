@@ -1,26 +1,69 @@
-/* nav.js — shared nav + ticker + footer
+/* nav.js — новая шапка с дропдаун меню
    ТРЕБУЕТ: i18n.js подключён ДО этого файла
 */
 (function () {
 
-  /* ── 1. Вставляем NAV + TICKER ── */
   document.body.insertAdjacentHTML('afterbegin', `
 <nav class="nav" id="main-nav">
   <a class="nav-logo" href="index.html">WARPATH <span class="dot">GUIDE</span></a>
+
   <ul class="nav-links" id="nav-links-list">
-    <li><a href="index.html"        data-i18n="nav.home"></a></li>
-    <li><a href="unit-builder.html" data-i18n="nav.unit-builder"></a></li>
-    <li><a href="army-builder.html" data-i18n="nav.army-builder"></a></li>
-    <li><a href="tier-list.html"    data-i18n="nav.tier-list"></a></li>
-    <li><a href="wiki.html"         data-i18n="nav.wiki"></a></li>
-    <li><a href="daily.html"        data-i18n="nav.daily"></a></li>
-    <li><a href="leaderboard.html"  data-i18n="nav.leaderboard"></a></li>
-    <li><a href="community.html"    data-i18n="nav.community"></a></li>
-    <li><a href="ai-chat.html" class="nav-ai-link" data-i18n="nav.ai-chat"></a></li>
+
+    <!-- Инструменты — дропдаун -->
+    <li class="nav-dropdown">
+      <span class="nav-drop-trigger" data-i18n="nav.tools">ИНСТРУМЕНТЫ</span>
+      <div class="nav-drop-menu">
+        <a href="unit-builder.html" data-i18n="nav.unit-builder">
+          <span class="ndm-ico">⚔️</span>
+          <span class="ndm-text"><b data-i18n="nav.unit-builder">Юнит-билдер</b><em>Калькулятор юнита</em></span>
+        </a>
+        <a href="army-builder.html" data-i18n="nav.army-builder">
+          <span class="ndm-ico">🏗️</span>
+          <span class="ndm-text"><b data-i18n="nav.army-builder">Сборщик армии</b><em>Боевая мощь армии</em></span>
+        </a>
+        <a href="donate-bar.html">
+          <span class="ndm-ico">🍺</span>
+          <span class="ndm-text"><b data-i18n="nav.donate-bar">Донатный Бар</b><em>Калькулятор напитков</em></span>
+        </a>
+      </div>
+    </li>
+
+    <!-- Ресурсы — дропдаун -->
+    <li class="nav-dropdown">
+      <span class="nav-drop-trigger" data-i18n="nav.resources">РЕСУРСЫ</span>
+      <div class="nav-drop-menu">
+        <a href="wiki.html">
+          <span class="ndm-ico">📖</span>
+          <span class="ndm-text"><b data-i18n="nav.wiki">Вики</b><em>База знаний игры</em></span>
+        </a>
+        <a href="tier-list.html">
+          <span class="ndm-ico">🎖️</span>
+          <span class="ndm-text"><b data-i18n="nav.tier-list">Тир-лист</b><em>Рейтинг юнитов</em></span>
+        </a>
+        <a href="leaderboard.html">
+          <span class="ndm-ico">🏆</span>
+          <span class="ndm-text"><b data-i18n="nav.leaderboard">Таблица лидеров</b><em>Топ игроков</em></span>
+        </a>
+        <a href="youtubers.html">
+          <span class="ndm-ico">▶</span>
+          <span class="ndm-text"><b data-i18n="nav.youtubers">Блогеры</b><em>YouTube контент</em></span>
+        </a>
+      </div>
+    </li>
+
+    <li><a href="daily.html" data-i18n="nav.daily">ЕЖЕДНЕВНО</a></li>
+    <li><a href="community.html" data-i18n="nav.community">К СООБЩЕСТВУ</a></li>
+
   </ul>
+
   <div class="nav-right">
-    <a href="https://t.me/WarpathHub" target="_blank" class="nav-tg nav-tg-btn">✈ Telegram</a>
+    <a href="ai-chat.html" class="nav-ai-btn">
+      <span class="nav-ai-plus">+</span>
+      <span data-i18n="nav.ai-chat">AI ПОМОЩНИК</span>
+      <span class="nav-ai-badge">NEW</span>
+    </a>
     <div id="nav-lang-switcher"></div>
+    <a href="https://t.me/WarpathHub" target="_blank" class="nav-tg-icon" title="Telegram">✈</a>
     <button class="nav-hamburger" id="nav-hb" aria-label="Меню">
       <span></span><span></span><span></span>
     </button>
@@ -34,17 +77,19 @@
     <button class="nav-mobile-close" id="nav-mobile-close">✕</button>
   </div>
   <nav class="nav-mobile-links">
-    <a href="index.html"        data-i18n="nav.home"></a>
-    <a href="unit-builder.html" data-i18n="nav.unit-builder"></a>
-    <a href="army-builder.html" data-i18n="nav.army-builder"></a>
-    <a href="tier-list.html"    data-i18n="nav.tier-list"></a>
-    <a href="wiki.html"         data-i18n="nav.wiki"></a>
-    <a href="youtubers.html"    data-i18n="nav.youtubers"></a>
-    <a href="donate-bar.html"   data-i18n="nav.donate-bar"></a>
-    <a href="daily.html"        data-i18n="nav.daily"></a>
-    <a href="leaderboard.html"  data-i18n="nav.leaderboard"></a>
-    <a href="community.html"    data-i18n="nav.community"></a>
-    <a href="ai-chat.html"      data-i18n="nav.ai-chat" class="nav-mobile-ai"></a>
+    <div class="nml-section">ИНСТРУМЕНТЫ</div>
+    <a href="unit-builder.html"  data-i18n="nav.unit-builder">⚔️ Юнит-билдер</a>
+    <a href="army-builder.html"  data-i18n="nav.army-builder">🏗️ Сборщик армии</a>
+    <a href="donate-bar.html"    data-i18n="nav.donate-bar">🍺 Донатный Бар</a>
+    <div class="nml-section">РЕСУРСЫ</div>
+    <a href="wiki.html"          data-i18n="nav.wiki">📖 Вики</a>
+    <a href="tier-list.html"     data-i18n="nav.tier-list">🎖️ Тир-лист</a>
+    <a href="leaderboard.html"   data-i18n="nav.leaderboard">🏆 Лидерборд</a>
+    <a href="youtubers.html"     data-i18n="nav.youtubers">▶ Блогеры</a>
+    <div class="nml-section">ПРОЧЕЕ</div>
+    <a href="daily.html"         data-i18n="nav.daily">📅 Ежедневно</a>
+    <a href="community.html"     data-i18n="nav.community">💬 Сообщество</a>
+    <a href="ai-chat.html"       class="nav-mobile-ai">🤖 AI Помощник <span class="nav-ai-badge" style="font-size:.55rem">NEW</span></a>
     <a href="https://t.me/WarpathHub" target="_blank" class="nav-mobile-tg">✈ Telegram</a>
   </nav>
   <div class="nav-mobile-lang" id="nav-mobile-lang"></div>
@@ -57,7 +102,6 @@
   </div>
 </div>`);
 
-  /* ── 2. Вставляем FOOTER ── */
   document.body.insertAdjacentHTML('beforeend', `
 <div class="divider"></div>
 <footer class="footer">
@@ -104,76 +148,55 @@
     <span data-i18n="footer.disclaimer"></span>
   </div>
 </footer>
-
 <button class="g-scroll-top" id="g-scroll-top" title="Наверх"
   onclick="window.scrollTo({top:0,behavior:'smooth'})">↑</button>`);
 
-  /* ── 3. Инициализация ── */
   function initNav() {
-    /* Lang switcher → desktop */
     const slot = document.getElementById('nav-lang-switcher');
-    if (slot && typeof buildLangSwitcher === 'function') {
-      slot.appendChild(buildLangSwitcher());
-    }
-    /* Lang switcher → мобильное меню */
+    if (slot && typeof buildLangSwitcher === 'function') slot.appendChild(buildLangSwitcher());
     const mslot = document.getElementById('nav-mobile-lang');
-    if (mslot && typeof buildLangSwitcher === 'function') {
-      mslot.appendChild(buildLangSwitcher());
-    }
+    if (mslot && typeof buildLangSwitcher === 'function') mslot.appendChild(buildLangSwitcher());
 
-    /* Активная ссылка */
     const page = location.pathname.split('/').pop() || 'index.html';
     document.querySelectorAll('.nav-links a, .nav-mobile-links a').forEach(a => {
       const h = (a.getAttribute('href') || '').split('/').pop();
       a.classList.toggle('active', h === page);
     });
 
-    /* Hamburger */
-    const hb      = document.getElementById('nav-hb');
-    const mMenu   = document.getElementById('nav-mobile');
+    /* Дропдаун — открытие по клику/hover */
+    document.querySelectorAll('.nav-dropdown').forEach(dd => {
+      const trigger = dd.querySelector('.nav-drop-trigger');
+      if (trigger) {
+        trigger.addEventListener('click', () => {
+          const isOpen = dd.classList.contains('open');
+          document.querySelectorAll('.nav-dropdown.open').forEach(o => o.classList.remove('open'));
+          if (!isOpen) dd.classList.add('open');
+        });
+      }
+    });
+    document.addEventListener('click', e => {
+      if (!e.target.closest('.nav-dropdown')) {
+        document.querySelectorAll('.nav-dropdown.open').forEach(o => o.classList.remove('open'));
+      }
+    });
+
+    const hb = document.getElementById('nav-hb');
+    const mMenu = document.getElementById('nav-mobile');
     const overlay = document.getElementById('nav-overlay');
-
-    function openMobileMenu() {
-      mMenu.classList.add('is-open');
-      overlay.classList.add('is-open');
-      hb.classList.add('is-open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeMobileMenu() {
-      mMenu.classList.remove('is-open');
-      overlay.classList.remove('is-open');
-      hb.classList.remove('is-open');
-      document.body.style.overflow = '';
-    }
-
-    if (hb)      hb.addEventListener('click', openMobileMenu);
+    function openMobileMenu() { mMenu.classList.add('is-open'); overlay.classList.add('is-open'); hb.classList.add('is-open'); document.body.style.overflow = 'hidden'; }
+    function closeMobileMenu() { mMenu.classList.remove('is-open'); overlay.classList.remove('is-open'); hb.classList.remove('is-open'); document.body.style.overflow = ''; }
+    if (hb) hb.addEventListener('click', openMobileMenu);
     if (overlay) overlay.addEventListener('click', closeMobileMenu);
     const closeBtn = document.getElementById('nav-mobile-close');
     if (closeBtn) closeBtn.addEventListener('click', closeMobileMenu);
+    if (mMenu) mMenu.querySelectorAll('a').forEach(a => { if (!a.target) a.addEventListener('click', closeMobileMenu); });
 
-    /* Закрывать меню при навигации */
-    if (mMenu) {
-      mMenu.querySelectorAll('a').forEach(a => {
-        if (!a.target) a.addEventListener('click', closeMobileMenu);
-      });
-    }
-
-    /* Scroll-to-top */
     const stb = document.getElementById('g-scroll-top');
-    if (stb) {
-      window.addEventListener('scroll', () => {
-        stb.classList.toggle('visible', window.scrollY > 350);
-      }, { passive: true });
-    }
+    if (stb) window.addEventListener('scroll', () => { stb.classList.toggle('visible', window.scrollY > 350); }, { passive: true });
 
-    /* Переводы */
     if (typeof applyLang === 'function') applyLang();
   }
 
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initNav);
-  } else {
-    initNav();
-  }
-
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', initNav);
+  else initNav();
 })();
