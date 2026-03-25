@@ -5,243 +5,325 @@
 <title>Warpath Guide — Главная</title>
 <link rel="stylesheet" href="style.css">
 <style>
-  @keyframes shimmer {
-    0%   { background-position: -600px 0; }
-    100% { background-position:  600px 0; }
-  }
-  .skel-line {
-    border-radius: 6px;
-    background: linear-gradient(90deg, rgba(255,255,255,0.04) 25%, rgba(255,255,255,0.10) 50%, rgba(255,255,255,0.04) 75%);
-    background-size: 600px 100%;
-    animation: shimmer 1.4s infinite linear;
-    display: block;
-  }
-  .skel-nav-card { background: var(--panel); border: 1px solid var(--border); border-radius: 10px; padding: 1.1rem 1rem; display: flex; align-items: center; gap: 0.85rem; }
-  .skel-nav-icon { width: 36px; height: 36px; border-radius: 8px; flex-shrink: 0; }
-  .skel-nav-t1   { height: 13px; width: 70%; margin-bottom: 6px; }
-  .skel-nav-t2   { height: 10px; width: 50%; }
-  .skel-tool-card { background: var(--panel); border: 1px solid var(--border); border-radius: 12px; padding: 1.5rem; }
-  .skel-tool-icon { width: 44px; height: 44px; border-radius: 10px; margin-bottom: 0.7rem; }
-  .skel-tool-t1   { height: 14px; width: 55%; margin-bottom: 8px; }
-  .skel-tool-t2   { height: 10px; width: 90%; margin-bottom: 5px; }
-  .skel-tool-t3   { height: 10px; width: 75%; margin-bottom: 1.1rem; }
-  .skel-tool-btn  { height: 34px; width: 120px; border-radius: 6px; }
+/* ══ SKELETON ══ */
+@keyframes shimmer{0%{background-position:-600px 0}100%{background-position:600px 0}}
+.skel-line{border-radius:6px;background:linear-gradient(90deg,rgba(255,255,255,.04) 25%,rgba(255,255,255,.10) 50%,rgba(255,255,255,.04) 75%);background-size:600px 100%;animation:shimmer 1.4s infinite linear;display:block}
+.skel-nav-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:1.1rem 1rem;display:flex;align-items:center;gap:.85rem}
+.skel-nav-icon{width:36px;height:36px;border-radius:8px;flex-shrink:0}
+.skel-nav-t1{height:13px;width:70%;margin-bottom:6px}
+.skel-nav-t2{height:10px;width:50%}
+.skel-tool-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;padding:1.5rem}
+.skel-tool-icon{width:44px;height:44px;border-radius:10px;margin-bottom:.7rem}
+.skel-tool-t1{height:14px;width:55%;margin-bottom:8px}
+.skel-tool-t2{height:10px;width:90%;margin-bottom:5px}
+.skel-tool-t3{height:10px;width:75%;margin-bottom:1.1rem}
+.skel-tool-btn{height:34px;width:120px;border-radius:6px}
 
-  .patch-banner { background: rgba(232,255,71,0.05); border: 1px solid rgba(232,255,71,0.2); border-radius: 12px; padding: 1rem 1.4rem; display: flex; align-items: center; gap: 1rem; flex-wrap: wrap; margin-top: 1.5rem; }
-  .patch-badge  { font-family: 'Bebas Neue', sans-serif; font-size: 1.1rem; letter-spacing: 2px; background: var(--gold); color: #000; padding: 3px 12px; border-radius: 6px; white-space: nowrap; flex-shrink: 0; }
-  .patch-text   { font-size: 0.85rem; color: var(--muted); line-height: 1.5; flex: 1; min-width: 180px; }
-  .patch-soon   { font-size: 0.75rem; padding: 3px 10px; border-radius: 99px; border: 1px solid rgba(255,160,0,0.4); color: var(--orange); white-space: nowrap; flex-shrink: 0; }
+/* ══ HERO — новый с фоном-чертежом ══ */
+.hero-section{
+  position:relative;
+  min-height:100vh;
+  display:flex;
+  align-items:center;
+  overflow:hidden;
+  background:var(--bg);
+  padding-top:0;
+}
 
-  /* ── BLOGGER STRIP ── */
-  .blogger-strip-wrap { overflow: hidden; position: relative; }
-  .blogger-strip-wrap::before,
-  .blogger-strip-wrap::after {
-    content: ''; position: absolute; top: 0; bottom: 0; width: 60px; z-index: 2; pointer-events: none;
-  }
-  .blogger-strip-wrap::before { left: 0;  background: linear-gradient(to right, var(--bg), transparent); }
-  .blogger-strip-wrap::after  { right: 0; background: linear-gradient(to left,  var(--bg), transparent); }
-  @keyframes scrollLeft {
-    0%   { transform: translateX(0); }
-    100% { transform: translateX(-50%); }
-  }
-  .blogger-strip-track {
-    display: flex; gap: 1rem;
-    width: max-content;
-    animation: scrollLeft 28s linear infinite;
-    padding: 0.5rem 0;
-  }
-  .blogger-strip-wrap:hover .blogger-strip-track { animation-play-state: paused; }
-  .bl-card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 10px;
-    padding: 0.85rem 1.1rem; display: flex; align-items: center; gap: 0.75rem;
-    text-decoration: none; flex-shrink: 0; width: 210px; transition: border-color 0.2s;
-  }
-  .bl-card:hover { border-color: var(--gold); }
-  .bl-card.offl  { border-color: rgba(232,255,71,0.3); }
-  .bl-avatar { width: 40px; height: 40px; border-radius: 50%; background: rgba(232,255,71,0.1); display: flex; align-items: center; justify-content: center; font-size: 18px; flex-shrink: 0; }
-  .bl-avatar-img { object-fit: cover; border: 1px solid var(--border); }
-  .bl-name  { font-size: 0.88rem; font-weight: 700; color: var(--text); }
-  .bl-spec  { font-size: 0.72rem; color: var(--muted); margin-top: 2px; }
-  .bl-subs  { font-size: 0.68rem; color: var(--gold); margin-top: 2px; }
+/* Фон — чертёж юнитов SVG паттерн */
+.hero-bg{
+  position:absolute;inset:0;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 65% 50%, rgba(200,150,28,.06) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 80% at 90% 20%, rgba(200,76,24,.05) 0%, transparent 50%);
+  pointer-events:none;
+}
+.hero-blueprint{
+  position:absolute;
+  right:-5%;top:50%;
+  transform:translateY(-50%);
+  width:55%;
+  max-width:700px;
+  opacity:.07;
+  pointer-events:none;
+  user-select:none;
+}
+@media(max-width:768px){.hero-blueprint{width:90%;right:-20%;opacity:.04;top:60%}}
 
-  /* ── VIDEOS SECTION ── */
-  .videos-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-    gap: 1rem;
-  }
-  .video-card {
-    background: var(--panel); border: 1px solid var(--border); border-radius: 12px;
-    overflow: hidden; transition: border-color .2s, transform .18s;
-    text-decoration: none; display: flex; flex-direction: column;
-  }
-  .video-card:hover { border-color: var(--border2); transform: translateY(-2px); }
-  .video-thumb {
-    position: relative; aspect-ratio: 16/9; background: var(--bg3);
-    overflow: hidden; flex-shrink: 0;
-  }
-  .video-thumb img {
-    width: 100%; height: 100%; object-fit: cover;
-    transition: transform .3s;
-  }
-  .video-card:hover .video-thumb img { transform: scale(1.04); }
-  .video-play-btn {
-    position: absolute; inset: 0;
-    display: flex; align-items: center; justify-content: center;
-    background: rgba(0,0,0,.35); opacity: 0; transition: opacity .2s;
-  }
-  .video-card:hover .video-play-btn { opacity: 1; }
-  .video-play-icon {
-    width: 46px; height: 46px; border-radius: 50%;
-    background: rgba(200,0,0,.9); display: flex; align-items: center; justify-content: center;
-  }
-  .video-play-icon svg { margin-left: 3px; }
-  .video-info { padding: .85rem 1rem .9rem; flex: 1; display: flex; flex-direction: column; gap: .45rem; }
-  .video-author {
-    display: flex; align-items: center; gap: .45rem;
-  }
-  .video-author-avatar {
-    width: 22px; height: 22px; border-radius: 50%;
-    object-fit: cover; border: 1px solid var(--border); flex-shrink: 0;
-  }
-  .video-author-avatar-em {
-    width: 22px; height: 22px; border-radius: 50%;
-    background: rgba(200,150,28,.12); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 11px; flex-shrink: 0;
-  }
-  .video-author-name { font-size: .7rem; color: var(--gold); font-weight: 700; font-family: 'Barlow Condensed', sans-serif; letter-spacing: .5px; }
-  .video-title { font-size: .84rem; font-weight: 600; color: var(--text); line-height: 1.4; flex: 1; }
-  .video-yt-badge {
-    display: inline-flex; align-items: center; gap: .3rem;
-    font-size: .65rem; color: #f55; font-family: 'Barlow Condensed', sans-serif; letter-spacing: .5px;
-  }
-  @media(max-width:640px) {
-    .videos-grid { grid-template-columns: 1fr; }
-  }
+/* Сетка-чертёж поверх */
+.hero-grid-overlay{
+  position:absolute;inset:0;
+  background-image:
+    linear-gradient(rgba(200,150,28,.025) 1px,transparent 1px),
+    linear-gradient(90deg,rgba(200,150,28,.025) 1px,transparent 1px);
+  background-size:60px 60px;
+  pointer-events:none;
+}
 
-  /* ── COMMUNITY BLOCK ── */
-  .community-img-wrap {
-    position: relative; border-radius: 12px; overflow: hidden;
-    border: 1px solid var(--border);
-  }
-  .community-img-wrap img {
-    width: 100%; height: 100%; object-fit: cover; display: block;
-    min-height: 200px; max-height: 280px;
-    filter: brightness(.75) saturate(.9);
-    transition: filter .3s, transform .3s;
-  }
-  .community-img-wrap:hover img { filter: brightness(.85) saturate(1); transform: scale(1.02); }
-  .community-img-overlay {
-    position: absolute; inset: 0;
-    background: linear-gradient(135deg, rgba(7,8,10,.55) 0%, transparent 60%);
-    pointer-events: none;
-  }
-  .community-img-badge {
-    position: absolute; top: .85rem; left: .85rem;
-    background: rgba(7,8,10,.82); border: 1px solid rgba(41,182,246,.35);
-    border-radius: 6px; padding: .3rem .7rem;
-    font-family: 'Bebas Neue', sans-serif; font-size: .75rem; letter-spacing: 1.5px;
-    color: #5bb8f5; display: flex; align-items: center; gap: .35rem;
-  }
-  .community-img-badge::before { content: '✈'; }
-  .community-img-members {
-    position: absolute; bottom: .85rem; right: .85rem;
-    background: rgba(7,8,10,.8); border: 1px solid var(--border);
-    border-radius: 6px; padding: .3rem .7rem; text-align: right;
-  }
-  .community-img-members-n { font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; color: var(--gold2); line-height: 1; }
-  .community-img-members-l { font-size: .55rem; color: var(--muted); text-transform: uppercase; letter-spacing: .5px; }
+/* Диагональный акцент */
+.hero-accent-line{
+  position:absolute;
+  left:0;bottom:0;
+  width:100%;height:3px;
+  background:linear-gradient(90deg,transparent,var(--gold),var(--orange),transparent);
+  opacity:.4;
+}
 
-  /* Обновлённый .community-wrap — теперь 3 колонки: текст | картинка | статы */
-  .community-wrap {
-    display: grid;
-    grid-template-columns: 1fr 1fr auto;
-    gap: 1.5rem;
-    align-items: center;
-    background: var(--panel);
-    border: var(--line);
-    padding: 2.4rem 2rem;
-    position: relative; overflow: hidden;
-  }
-  .community-wrap::before {
-    content: ''; position: absolute; inset: 0;
-    background: radial-gradient(ellipse 60% 100% at 0% 50%, rgba(200,148,28,.04), transparent);
-    pointer-events: none;
-  }
-  .community-wrap h2 { font-family: 'Bebas Neue', sans-serif; font-size: clamp(1.6rem,2.5vw,2.2rem); letter-spacing: 2px; margin-bottom: .5rem; }
-  .community-wrap p  { color: var(--dim); font-size: .88rem; line-height: 1.7; max-width: 400px; }
-  .community-btns    { display: flex; gap: .7rem; margin-top: 1.2rem; flex-wrap: wrap; }
-  .community-stats   { display: flex; flex-direction: column; gap: .8rem; align-items: flex-end; }
-  .cstat-n { font-family: 'Bebas Neue', sans-serif; font-size: 2.2rem; color: var(--gold2); line-height: 1; }
-  .cstat-l { font-size: .6rem; color: var(--muted); text-transform: uppercase; letter-spacing: 1px; }
+.hero-inner{
+  position:relative;z-index:2;
+  max-width:1280px;margin:0 auto;
+  padding:9rem 2rem 5rem;
+  width:100%;
+}
+.hero-eyebrow{
+  display:inline-flex;align-items:center;gap:.6rem;
+  border:1px solid rgba(200,150,28,.3);
+  background:rgba(200,150,28,.06);
+  color:var(--gold);
+  font-family:'Barlow Condensed',sans-serif;
+  font-size:.65rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;
+  padding:.3rem 1rem;margin-bottom:1.5rem;
+}
+.hero-eyebrow::before{content:'●';color:#5dca38;animation:blink 2.2s ease-in-out infinite;font-size:.5rem}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
-  @media(max-width:960px) {
-    .community-wrap { grid-template-columns: 1fr 1fr; }
-    .community-stats { display: none; }
-  }
-  @media(max-width:640px) {
-    .community-wrap { grid-template-columns: 1fr !important; padding: 1.4rem 1rem !important; }
-    .community-img-wrap { max-height: 180px; }
-  }
+.hero-headline{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:clamp(3.5rem,8vw,7rem);
+  line-height:.88;
+  letter-spacing:2px;
+  margin-bottom:1.5rem;
+  max-width:700px;
+}
+.hero-headline .line1{display:block;color:var(--text)}
+.hero-headline .line2{display:block;color:var(--gold2);position:relative}
+.hero-headline .line2::after{
+  content:'';
+  position:absolute;bottom:-4px;left:0;
+  width:100%;height:3px;
+  background:linear-gradient(90deg,var(--gold),var(--orange),transparent);
+}
+.hero-headline .line3{display:block;color:var(--orange);font-size:clamp(2rem,4vw,3.5rem);margin-top:.3rem}
 
-  /* ── DONATE ── */
-  .donate-wrap { display:grid; grid-template-columns:1fr 1fr; gap:2.5rem; align-items:center; }
-  @media(max-width:640px){ .donate-wrap{grid-template-columns:1fr;} }
-  .donate-left h2 { margin:.4rem 0 .6rem; font-size:1.8rem; }
-  .donate-left p  { font-size:.88rem; color:var(--muted); line-height:1.65; }
-  .donate-calc { background:var(--panel); border:1px solid var(--border); border-radius:14px; padding:1.3rem 1.4rem; }
-  .dc-row   { display:flex; align-items:center; justify-content:space-between; gap:1rem; margin-bottom:.9rem; }
-  .dc-label { font-size:.85rem; color:var(--muted); white-space:nowrap; }
-  .dc-counter { display:flex; align-items:center; }
-  .dc-btn { width:34px; height:36px; background:rgba(255,255,255,0.06); border:1px solid var(--border); color:var(--text); font-size:1.1rem; cursor:pointer; transition:background .15s; display:flex; align-items:center; justify-content:center; }
-  .dc-btn:first-child { border-radius:7px 0 0 7px; border-right:none; }
-  .dc-btn:last-child  { border-radius:0 7px 7px 0; border-left:none; }
-  .dc-btn:hover { background:rgba(232,255,71,0.12); color:var(--gold); }
-  .dc-val { width:58px; text-align:center; background:rgba(255,255,255,0.05); border:1px solid var(--border); color:var(--text); font-size:1rem; font-family:inherit; padding:.5rem 0; outline:none; -moz-appearance:textfield; }
-  .dc-val::-webkit-inner-spin-button { -webkit-appearance:none; }
-  .dc-val:focus { border-color:var(--gold); }
-  .dc-result { border-top:1px solid var(--border); padding-top:.9rem; margin-top:.3rem; display:flex; align-items:center; gap:.85rem; }
-  .dc-result-num { font-family:'Bebas Neue',sans-serif; font-size:2.2rem; letter-spacing:2px; color:var(--muted); transition:color .3s; }
-  .dc-result-num.free { color:var(--muted); }
-  .dc-result-num.mid  { color:var(--orange); }
-  .dc-result-num.max  { color:var(--gold); }
-  .dc-result-lbl { font-size:.78rem; color:var(--muted); line-height:1.5; }
-  .tg-rooms { display:flex; gap:.5rem; flex-wrap:wrap; margin-top:.85rem; }
-  .tg-room  { font-size:.72rem; padding:3px 10px; border-radius:99px; background:rgba(41,182,246,0.08); color:#29b6f6; border:1px solid rgba(41,182,246,0.2); }
+.hero-desc{
+  color:var(--dim);font-size:1rem;line-height:1.75;
+  max-width:480px;margin-bottom:2rem;
+}
+.hero-desc strong{color:var(--text)}
 
-  @media(max-width:640px){
-    .feedback-grid { grid-template-columns: 1fr !important; }
-    .feedback-cards { grid-template-columns: 1fr 1fr !important; }
-  }
+.hero-cta{display:flex;gap:.8rem;margin-bottom:3rem;flex-wrap:wrap}
+
+/* Статы — новый стиль */
+.hero-stats-new{
+  display:flex;gap:0;
+  border:1px solid var(--border);
+  width:fit-content;
+  background:rgba(7,8,10,.6);
+  backdrop-filter:blur(8px);
+}
+.hstat-new{
+  padding:.9rem 1.4rem;border-right:1px solid var(--border);
+  text-align:center;
+}
+.hstat-new:last-child{border-right:none}
+.hstat-new-n{
+  font-family:'Bebas Neue',sans-serif;
+  font-size:2rem;color:var(--gold2);line-height:1;
+}
+.hstat-new-l{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:.2rem}
+
+/* Патч-баннер новый */
+.patch-strip{
+  display:flex;align-items:center;gap:1rem;
+  border-left:3px solid var(--gold);
+  background:rgba(200,150,28,.05);
+  padding:.75rem 1.2rem;
+  margin-top:2rem;
+  max-width:600px;
+  flex-wrap:wrap;
+}
+.patch-strip-badge{
+  font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:2px;
+  background:var(--gold);color:#000;padding:2px 10px;white-space:nowrap;flex-shrink:0;
+}
+.patch-strip-text{font-size:.82rem;color:var(--muted);line-height:1.5;flex:1;min-width:150px}
+.patch-strip-new{
+  font-size:.65rem;padding:2px 8px;border-radius:99px;
+  border:1px solid rgba(255,160,0,.4);color:var(--orange);white-space:nowrap;flex-shrink:0;
+}
+
+/* ══ BLOGGER STRIP ══ */
+.blogger-strip-wrap{overflow:hidden;position:relative}
+.blogger-strip-wrap::before,.blogger-strip-wrap::after{content:'';position:absolute;top:0;bottom:0;width:60px;z-index:2;pointer-events:none}
+.blogger-strip-wrap::before{left:0;background:linear-gradient(to right,var(--bg),transparent)}
+.blogger-strip-wrap::after{right:0;background:linear-gradient(to left,var(--bg),transparent)}
+@keyframes scrollLeft{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.blogger-strip-track{display:flex;gap:1rem;width:max-content;animation:scrollLeft 28s linear infinite;padding:.5rem 0}
+.blogger-strip-wrap:hover .blogger-strip-track{animation-play-state:paused}
+.bl-card{background:var(--panel);border:1px solid var(--border);border-radius:10px;padding:.85rem 1.1rem;display:flex;align-items:center;gap:.75rem;text-decoration:none;flex-shrink:0;width:210px;transition:border-color .2s}
+.bl-card:hover{border-color:var(--gold)}
+.bl-card.offl{border-color:rgba(232,255,71,.3)}
+.bl-avatar{width:40px;height:40px;border-radius:50%;background:rgba(232,255,71,.1);display:flex;align-items:center;justify-content:center;font-size:18px;flex-shrink:0}
+.bl-avatar-img{object-fit:cover;border:1px solid var(--border)}
+.bl-name{font-size:.88rem;font-weight:700;color:var(--text)}
+.bl-spec{font-size:.72rem;color:var(--muted);margin-top:2px}
+.bl-subs{font-size:.68rem;color:var(--gold);margin-top:2px}
+
+/* ══ VIDEOS ══ */
+.videos-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:1rem}
+.video-card{background:var(--panel);border:1px solid var(--border);border-radius:12px;overflow:hidden;transition:border-color .2s,transform .18s;text-decoration:none;display:flex;flex-direction:column}
+.video-card:hover{border-color:var(--border2);transform:translateY(-2px)}
+.video-thumb{position:relative;aspect-ratio:16/9;background:var(--bg3);overflow:hidden;flex-shrink:0}
+.video-thumb img{width:100%;height:100%;object-fit:cover;transition:transform .3s}
+.video-card:hover .video-thumb img{transform:scale(1.04)}
+.video-play-btn{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(0,0,0,.35);opacity:0;transition:opacity .2s}
+.video-card:hover .video-play-btn{opacity:1}
+.video-play-icon{width:46px;height:46px;border-radius:50%;background:rgba(200,0,0,.9);display:flex;align-items:center;justify-content:center}
+.video-play-icon svg{margin-left:3px}
+.video-info{padding:.85rem 1rem .9rem;flex:1;display:flex;flex-direction:column;gap:.45rem}
+.video-author{display:flex;align-items:center;gap:.45rem}
+.video-author-avatar{width:22px;height:22px;border-radius:50%;object-fit:cover;border:1px solid var(--border);flex-shrink:0}
+.video-author-avatar-em{width:22px;height:22px;border-radius:50%;background:rgba(200,150,28,.12);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:11px;flex-shrink:0}
+.video-author-name{font-size:.7rem;color:var(--gold);font-weight:700;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px}
+.video-title{font-size:.84rem;font-weight:600;color:var(--text);line-height:1.4;flex:1}
+.video-yt-badge{display:inline-flex;align-items:center;gap:.3rem;font-size:.65rem;color:#f55;font-family:'Barlow Condensed',sans-serif;letter-spacing:.5px}
+@media(max-width:640px){.videos-grid{grid-template-columns:1fr}}
+
+/* ══ COMMUNITY BLOCK ══ */
+.community-img-wrap{position:relative;border-radius:12px;overflow:hidden;border:1px solid var(--border)}
+.community-img-wrap img{width:100%;height:100%;object-fit:cover;display:block;min-height:200px;max-height:280px;filter:brightness(.75) saturate(.9);transition:filter .3s,transform .3s}
+.community-img-wrap:hover img{filter:brightness(.85) saturate(1);transform:scale(1.02)}
+.community-img-overlay{position:absolute;inset:0;background:linear-gradient(135deg,rgba(7,8,10,.55) 0%,transparent 60%);pointer-events:none}
+.community-img-badge{position:absolute;top:.85rem;left:.85rem;background:rgba(7,8,10,.82);border:1px solid rgba(41,182,246,.35);border-radius:6px;padding:.3rem .7rem;font-family:'Bebas Neue',sans-serif;font-size:.75rem;letter-spacing:1.5px;color:#5bb8f5;display:flex;align-items:center;gap:.35rem}
+.community-img-badge::before{content:'✈'}
+.community-img-members{position:absolute;bottom:.85rem;right:.85rem;background:rgba(7,8,10,.8);border:1px solid var(--border);border-radius:6px;padding:.3rem .7rem;text-align:right}
+.community-img-members-n{font-family:'Bebas Neue',sans-serif;font-size:1.2rem;color:var(--gold2);line-height:1}
+.community-img-members-l{font-size:.55rem;color:var(--muted);text-transform:uppercase;letter-spacing:.5px}
+.community-wrap{display:grid;grid-template-columns:1fr 1fr auto;gap:1.5rem;align-items:center;background:var(--panel);border:var(--line);padding:2.4rem 2rem;position:relative;overflow:hidden}
+.community-wrap::before{content:'';position:absolute;inset:0;background:radial-gradient(ellipse 60% 100% at 0% 50%,rgba(200,148,28,.04),transparent);pointer-events:none}
+.community-wrap h2{font-family:'Bebas Neue',sans-serif;font-size:clamp(1.6rem,2.5vw,2.2rem);letter-spacing:2px;margin-bottom:.5rem}
+.community-wrap p{color:var(--dim);font-size:.88rem;line-height:1.7;max-width:400px}
+.community-btns{display:flex;gap:.7rem;margin-top:1.2rem;flex-wrap:wrap}
+.community-stats{display:flex;flex-direction:column;gap:.8rem;align-items:flex-end}
+.cstat-n{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;color:var(--gold2);line-height:1}
+.cstat-l{font-size:.6rem;color:var(--muted);text-transform:uppercase;letter-spacing:1px}
+.tg-rooms{display:flex;gap:.5rem;flex-wrap:wrap;margin-top:.85rem}
+.tg-room{font-size:.72rem;padding:3px 10px;border-radius:99px;background:rgba(41,182,246,.08);color:#29b6f6;border:1px solid rgba(41,182,246,.2)}
+@media(max-width:960px){.community-wrap{grid-template-columns:1fr 1fr}.community-stats{display:none}}
+@media(max-width:640px){.community-wrap{grid-template-columns:1fr!important;padding:1.4rem 1rem!important}.community-img-wrap{max-height:180px}}
+
+/* ══ PATCH BANNER (старый, оставляем для совместимости) ══ */
+.patch-banner{background:rgba(232,255,71,.05);border:1px solid rgba(232,255,71,.2);border-radius:12px;padding:1rem 1.4rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.5rem}
+.patch-badge{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;background:var(--gold);color:#000;padding:3px 12px;border-radius:6px;white-space:nowrap;flex-shrink:0}
+.patch-text{font-size:.85rem;color:var(--muted);line-height:1.5;flex:1;min-width:180px}
+.patch-soon{font-size:.75rem;padding:3px 10px;border-radius:99px;border:1px solid rgba(255,160,0,.4);color:var(--orange);white-space:nowrap;flex-shrink:0}
+
+/* ══ DONATE ══ */
+.donate-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
+@media(max-width:640px){.donate-wrap{grid-template-columns:1fr}}
+.donate-left h2{margin:.4rem 0 .6rem;font-size:1.8rem}
+.donate-left p{font-size:.88rem;color:var(--muted);line-height:1.65}
+.donate-calc{background:var(--panel);border:1px solid var(--border);border-radius:14px;padding:1.3rem 1.4rem}
+.dc-row{display:flex;align-items:center;justify-content:space-between;gap:1rem;margin-bottom:.9rem}
+.dc-label{font-size:.85rem;color:var(--muted);white-space:nowrap}
+.dc-counter{display:flex;align-items:center}
+.dc-btn{width:34px;height:36px;background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);font-size:1.1rem;cursor:pointer;transition:background .15s;display:flex;align-items:center;justify-content:center}
+.dc-btn:first-child{border-radius:7px 0 0 7px;border-right:none}
+.dc-btn:last-child{border-radius:0 7px 7px 0;border-left:none}
+.dc-btn:hover{background:rgba(232,255,71,.12);color:var(--gold)}
+.dc-val{width:58px;text-align:center;background:rgba(255,255,255,.05);border:1px solid var(--border);color:var(--text);font-size:1rem;font-family:inherit;padding:.5rem 0;outline:none;-moz-appearance:textfield}
+.dc-val::-webkit-inner-spin-button{-webkit-appearance:none}
+.dc-val:focus{border-color:var(--gold)}
+.dc-result{border-top:1px solid var(--border);padding-top:.9rem;margin-top:.3rem;display:flex;align-items:center;gap:.85rem}
+.dc-result-num{font-family:'Bebas Neue',sans-serif;font-size:2.2rem;letter-spacing:2px;color:var(--muted);transition:color .3s}
+.dc-result-num.free{color:var(--muted)}
+.dc-result-num.mid{color:var(--orange)}
+.dc-result-num.max{color:var(--gold)}
+.dc-result-lbl{font-size:.78rem;color:var(--muted);line-height:1.5}
+
+/* FEEDBACK */
+@media(max-width:640px){
+  .feedback-grid{grid-template-columns:1fr!important}
+  .feedback-cards{grid-template-columns:1fr 1fr!important}
+}
 </style>
 </head>
 <body>
 
-<!-- HERO -->
-<section style="background:var(--bg);padding-top:0">
-  <div class="hero-wrap">
-    <div>
-      <div class="hero-badge">Официальный ресурс · RU · Патч 13.4</div>
-      <h1>ВСЁ ОБ<br><em>WARPATH</em><br><strong>НА РУССКОМ</strong></h1>
-      <p class="hero-desc">Гайды, механики, исследования — объяснено <b>понятным языком</b>. Unit Builder, Army Builder, тир-листы, вики — всё в одном месте.</p>
-      <div class="hero-btns">
-        <button class="btn btn-primary" onclick="location.href='unit-builder.html'">⚔ Unit Builder</button>
-        <button class="btn btn-outline"  onclick="location.href='wiki.html'">📖 Wiki</button>
-      </div>
-      <div class="hero-stats">
-        <div class="hstat"><div class="hstat-n">9</div><div class="hstat-l">Типов юнитов</div></div>
-        <div class="hstat"><div class="hstat-n">13.4</div><div class="hstat-l">Актуальный патч</div></div>
-        <div class="hstat"><div class="hstat-n">5</div><div class="hstat-l">Блогеров</div></div>
-        <div class="hstat"><div class="hstat-n">RU</div><div class="hstat-l">Язык</div></div>
-      </div>
-      <div class="patch-banner">
-        <div class="patch-badge">ПАТЧ 13.4</div>
-        <div class="patch-text">Новые офицеры, обновление экспедиций и ребаланс авиации. Все гайды обновлены под актуальную версию.</div>
-        <div class="patch-soon">⚡ 13.5 на носу</div>
-      </div>
+<!-- ══ HERO ══ -->
+<section class="hero-section">
+  <div class="hero-bg"></div>
+  <div class="hero-grid-overlay"></div>
+
+  <!-- SVG чертёж танка на фоне -->
+  <svg class="hero-blueprint" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <!-- Корпус танка — схематичный чертёж -->
+    <rect x="150" y="220" width="500" height="160" rx="8" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 4" fill="none" color="#c8961c"/>
+    <rect x="220" y="160" width="320" height="100" rx="6" stroke="currentColor" stroke-width="1.5" fill="none" color="#c8961c"/>
+    <!-- Башня -->
+    <rect x="280" y="100" width="200" height="80" rx="4" stroke="currentColor" stroke-width="1" stroke-dasharray="6 3" fill="none" color="#c8961c"/>
+    <!-- Ствол пушки -->
+    <line x1="480" y1="135" x2="700" y2="135" stroke="currentColor" stroke-width="2" color="#c8961c"/>
+    <rect x="690" y="128" width="30" height="14" rx="2" stroke="currentColor" stroke-width="1" fill="none" color="#c8961c"/>
+    <!-- Катки -->
+    <circle cx="220" cy="360" r="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3" fill="none" color="#c8961c"/>
+    <circle cx="340" cy="360" r="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3" fill="none" color="#c8961c"/>
+    <circle cx="460" cy="360" r="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3" fill="none" color="#c8961c"/>
+    <circle cx="580" cy="360" r="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3" fill="none" color="#c8961c"/>
+    <!-- Гусеницы -->
+    <rect x="140" y="330" width="520" height="60" rx="30" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" fill="none" color="#c8961c"/>
+    <!-- Размерные линии -->
+    <line x1="150" y1="430" x2="650" y2="430" stroke="currentColor" stroke-width=".5" stroke-dasharray="3 3" color="#c8961c" opacity=".6"/>
+    <line x1="150" y1="425" x2="150" y2="435" stroke="currentColor" stroke-width=".5" color="#c8961c" opacity=".6"/>
+    <line x1="650" y1="425" x2="650" y2="435" stroke="currentColor" stroke-width=".5" color="#c8961c" opacity=".6"/>
+    <!-- Перекрестие -->
+    <circle cx="380" cy="140" r="30" stroke="currentColor" stroke-width=".8" stroke-dasharray="4 2" fill="none" color="#c8961c" opacity=".5"/>
+    <line x1="380" y1="100" x2="380" y2="180" stroke="currentColor" stroke-width=".5" color="#c8961c" opacity=".5"/>
+    <line x1="340" y1="140" x2="420" y2="140" stroke="currentColor" stroke-width=".5" color="#c8961c" opacity=".5"/>
+    <!-- Пометки -->
+    <text x="370" y="470" fill="#c8961c" font-size="10" opacity=".5" font-family="monospace">500mm</text>
+    <text x="710" y="130" fill="#c8961c" font-size="9" opacity=".5" font-family="monospace">122mm</text>
+    <text x="160" y="200" fill="#c8961c" font-size="9" opacity=".5" font-family="monospace">UNIT-04</text>
+    <!-- Самолёт вверху -->
+    <path d="M50 80 L200 60 L350 80 L200 100 Z" stroke="currentColor" stroke-width="1" stroke-dasharray="6 3" fill="none" color="#c8961c" opacity=".4"/>
+    <line x1="200" y1="40" x2="200" y2="120" stroke="currentColor" stroke-width=".8" color="#c8961c" opacity=".4"/>
+    <text x="210" y="55" fill="#c8961c" font-size="9" opacity=".4" font-family="monospace">AIR-02</text>
+  </svg>
+
+  <div class="hero-inner">
+    <div class="hero-eyebrow">Официальный ресурс · RU · Патч 13.4</div>
+
+    <h1 class="hero-headline">
+      <span class="line1">ВСЁ О</span>
+      <span class="line2">WARPATH</span>
+      <span class="line3">НА РУССКОМ</span>
+    </h1>
+
+    <p class="hero-desc">
+      Гайды, механики, исследования — объяснено <strong>понятным языком</strong>.
+      Unit Builder, Army Builder, тир-листы, вики — всё в одном месте.
+    </p>
+
+    <div class="hero-cta">
+      <button class="btn btn-primary" onclick="location.href='unit-builder.html'">⚔ UNIT BUILDER</button>
+      <button class="btn btn-outline" onclick="location.href='wiki.html'">📖 WIKI</button>
+    </div>
+
+    <div class="hero-stats-new">
+      <div class="hstat-new"><div class="hstat-new-n">9</div><div class="hstat-new-l">Типов юнитов</div></div>
+      <div class="hstat-new"><div class="hstat-new-n">13.4</div><div class="hstat-new-l">Актуальный патч</div></div>
+      <div class="hstat-new"><div class="hstat-new-n">5</div><div class="hstat-new-l">Серверов</div></div>
+      <div class="hstat-new"><div class="hstat-new-n">RU</div><div class="hstat-new-l">Язык</div></div>
+    </div>
+
+    <div class="patch-strip">
+      <div class="patch-strip-badge">ПАТЧ 13.4</div>
+      <div class="patch-strip-text">Новые офицеры, обновление экспедиций и ребаланс авиации. Все гайды обновлены.</div>
+      <div class="patch-strip-new">⚡ 13.5 на носу</div>
     </div>
   </div>
+
+  <div class="hero-accent-line"></div>
 </section>
 
 <div class="divider"></div>
@@ -285,7 +367,7 @@
 
 <div class="divider"></div>
 
-<!-- ═══ LATEST VIDEOS ═══ -->
+<!-- LATEST VIDEOS -->
 <section class="section-sm" style="background:var(--bg2)">
   <div class="wrap">
     <div class="sec-hd fade-up" style="margin-bottom:1.5rem">
@@ -293,9 +375,7 @@
       <div class="title">Последние ролики</div>
       <div class="sub">Актуальный контент от авторов сообщества — гайды, нарезки, разборы патчей.</div>
     </div>
-    <div class="videos-grid fade-up" id="videos-grid">
-      <!-- заполняется JS из data.js -->
-    </div>
+    <div class="videos-grid fade-up" id="videos-grid"></div>
     <div style="margin-top:1.25rem">
       <a href="youtubers.html" class="btn btn-outline">Все блогеры и видео →</a>
     </div>
@@ -308,7 +388,6 @@
 <section class="section-sm" style="background:var(--bg)">
   <div class="wrap">
     <div class="community-wrap fade-up">
-      <!-- Текст -->
       <div>
         <div class="tag">💬 Сообщество</div>
         <h2>Присоединяйся к <em style="color:var(--gold2);font-style:normal">WarpathHub</em></h2>
@@ -325,8 +404,6 @@
           <a href="youtubers.html" class="btn btn-outline">👥 Блогеры</a>
         </div>
       </div>
-
-      <!-- Картинка -->
       <div class="community-img-wrap">
         <img src="WARHUBwarpath.jpg" alt="WarpathHub Community" loading="lazy"
           onerror="this.closest('.community-img-wrap').style.display='none'">
@@ -337,8 +414,6 @@
           <div class="community-img-members-l">участников</div>
         </div>
       </div>
-
-      <!-- Статы -->
       <div class="community-stats">
         <div><div class="cstat-n">155</div><div class="cstat-l">Участников</div></div>
         <div><div class="cstat-n">5</div><div class="cstat-l">Разделов чата</div></div>
@@ -457,7 +532,6 @@
 <script src="i18n.js"></script>
 <script src="nav.js"></script>
 <script src="data.js"></script>
-
 <script>
 const NAV_SECTIONS = [
   {icon:'⚔️', label:'Unit Builder',    sub:'Калькулятор юнитов',       href:'unit-builder.html'},
@@ -470,80 +544,45 @@ const NAV_SECTIONS = [
   {icon:'▶',  label:'YouTubers',       sub:'5 блогеров сообщества',      href:'youtubers.html'},
   {icon:'🤖', label:'ИИ-помощник',     sub:'Warpath AI · патч 13.4',     href:'ai-chat.html'},
 ];
-
 const TOOLS = [
-  {icon:'⚔️', title:'Unit Builder',    tag:'Интерактивный', desc:'Выбери тип юнита, уровень, офицера и снаряжение. Статы пересчитываются мгновенно.',                        href:'unit-builder.html'},
-  {icon:'🏗️', title:'Army Builder',    tag:'Калькулятор',   desc:'Собери армию из нескольких юнитов и получи суммарную боевую мощь, атаку, защиту, HP.',                    href:'army-builder.html'},
-  {icon:'🎖️', title:'Тир-лист',        tag:'Рейтинг',       desc:'Drag-and-drop тир-лист юнитов и офицеров с фильтрами и сохранением в браузере.',                          href:'tier-list.html'},
-  {icon:'📅', title:'Daily Arms Race', tag:'Ежедневно',     desc:'Расписание заданий на каждый день недели. Калькулятор очков — узнай какой ранг получишь сегодня.',         href:'daily.html'},
-  {icon:'🏆', title:'Лидерборд',       tag:'Рейтинг',       desc:'Топ игроков и кланов твоего сервера. Добавляй данные, следи за ростом силы и историей изменений.',         href:'leaderboard.html'},
-  {icon:'🍺', title:'Донатный Бар',    tag:'Калькулятор',   desc:'Введи кружки и бокалы — узнай сколько напитков открывать. Три порога: 5, 20 или 70 напитков.',             href:'donate-bar.html'},
+  {icon:'⚔️', title:'Unit Builder',    tag:'Интерактивный', desc:'Выбери тип юнита, уровень, офицера и снаряжение. Статы пересчитываются мгновенно.',             href:'unit-builder.html'},
+  {icon:'🏗️', title:'Army Builder',    tag:'Калькулятор',   desc:'Собери армию из нескольких юнитов и получи суммарную боевую мощь, атаку, защиту, HP.',         href:'army-builder.html'},
+  {icon:'🎖️', title:'Тир-лист',        tag:'Рейтинг',       desc:'Drag-and-drop тир-лист юнитов и офицеров с фильтрами и сохранением в браузере.',               href:'tier-list.html'},
+  {icon:'📅', title:'Daily Arms Race', tag:'Ежедневно',     desc:'Расписание заданий на каждый день недели. Калькулятор очков — узнай какой ранг получишь.',      href:'daily.html'},
+  {icon:'🏆', title:'Лидерборд',       tag:'Рейтинг',       desc:'Топ игроков и кланов твоего сервера. Добавляй данные, следи за ростом силы.',                   href:'leaderboard.html'},
+  {icon:'🍺', title:'Донатный Бар',    tag:'Калькулятор',   desc:'Введи кружки и бокалы — узнай сколько напитков открывать. Три порога: 5, 20 или 70.',           href:'donate-bar.html'},
 ];
 
-/* ══════════════════════════════════════
-   VIDEOS FEED — из latestVideos в YOUTUBERS
-══════════════════════════════════════ */
 function getYtThumb(url) {
-  const match = url.match(/(?:youtu\.be\/|v=|\/embed\/)([A-Za-z0-9_-]{11})/);
-  return match ? `https://img.youtube.com/vi/${match[1]}/mqdefault.jpg` : null;
+  const m = url.match(/(?:youtu\.be\/|v=|\/embed\/)([A-Za-z0-9_-]{11})/);
+  return m ? `https://img.youtube.com/vi/${m[1]}/mqdefault.jpg` : null;
 }
 
 function buildVideosGrid() {
   const grid = document.getElementById('videos-grid');
   if (!grid || typeof YOUTUBERS === 'undefined') return;
-
-  /* Собираем все видео из всех блогеров и перемешиваем */
-  const allVideos = [];
-  YOUTUBERS.forEach(y => {
-    (y.latestVideos || []).forEach(v => {
-      allVideos.push({ ...v, author: y });
-    });
-  });
-
-  /* Ограничиваем до 6 карточек */
-  const shown = allVideos.slice(0, 6);
+  const all = [];
+  YOUTUBERS.forEach(y => (y.latestVideos||[]).forEach(v => all.push({...v, author: y})));
   grid.innerHTML = '';
-
-  shown.forEach(v => {
+  all.slice(0, 6).forEach(v => {
     const thumb = getYtThumb(v.url);
     const y = v.author;
-
-    /* Аватарка автора */
-    const avatarHtml = y.avatar
-      ? `<img class="video-author-avatar" src="${y.avatar}" alt="${y.name}"
-           onerror="this.outerHTML='<div class=\\'video-author-avatar-em\\'>${y.emoji}</div>'">`
+    const avHtml = y.avatar
+      ? `<img class="video-author-avatar" src="${y.avatar}" alt="${y.name}" onerror="this.outerHTML='<div class=\\'video-author-avatar-em\\'>${y.emoji}</div>'">`
       : `<div class="video-author-avatar-em">${y.emoji}</div>`;
-
     const card = document.createElement('a');
     card.className = 'video-card';
-    card.href = v.url;
-    card.target = '_blank';
-    card.rel = 'noopener';
-
+    card.href = v.url; card.target = '_blank'; card.rel = 'noopener';
     card.innerHTML = `
       <div class="video-thumb">
-        ${thumb
-          ? `<img src="${thumb}" alt="${v.title}" loading="lazy"
-               onerror="this.parentNode.style.background='var(--bg3)';this.remove()">`
-          : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--muted)">▶</div>`
-        }
-        <div class="video-play-btn">
-          <div class="video-play-icon">
-            <svg width="14" height="16" viewBox="0 0 14 16" fill="white">
-              <polygon points="0,0 14,8 0,16"/>
-            </svg>
-          </div>
-        </div>
+        ${thumb ? `<img src="${thumb}" alt="${v.title}" loading="lazy" onerror="this.parentNode.style.background='var(--bg3)';this.remove()">` : `<div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.5rem;color:var(--muted)">▶</div>`}
+        <div class="video-play-btn"><div class="video-play-icon"><svg width="14" height="16" viewBox="0 0 14 16" fill="white"><polygon points="0,0 14,8 0,16"/></svg></div></div>
       </div>
       <div class="video-info">
-        <div class="video-author">
-          ${avatarHtml}
-          <span class="video-author-name">${y.name}</span>
-        </div>
+        <div class="video-author">${avHtml}<span class="video-author-name">${y.name}</span></div>
         <div class="video-title">${v.title}</div>
         <div class="video-yt-badge">▶ YouTube</div>
       </div>`;
-
     grid.appendChild(card);
   });
 }
@@ -551,7 +590,6 @@ function buildVideosGrid() {
 document.addEventListener('DOMContentLoaded', () => {
   if (typeof initShared === 'function') initShared();
 
-  /* Nav cards */
   const nc = document.getElementById('nav-cards');
   if (nc) {
     nc.innerHTML = '';
@@ -564,7 +602,6 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   }
 
-  /* Blogger strip */
   const strip = document.getElementById('blogger-strip');
   if (strip && typeof YOUTUBERS !== 'undefined') {
     [...YOUTUBERS, ...YOUTUBERS].forEach(y => {
@@ -574,42 +611,25 @@ document.addEventListener('DOMContentLoaded', () => {
       const avWrap = document.createElement('div');
       if (y.avatar) {
         const img = document.createElement('img');
-        img.src = y.avatar; img.alt = y.name;
-        img.className = 'bl-avatar bl-avatar-img';
-        img.onerror = function() {
-          const em = document.createElement('div');
-          em.className = 'bl-avatar'; em.textContent = y.emoji;
-          this.parentNode.replaceChild(em, this);
-        };
+        img.src = y.avatar; img.alt = y.name; img.className = 'bl-avatar bl-avatar-img';
+        img.onerror = function() { const em = document.createElement('div'); em.className = 'bl-avatar'; em.textContent = y.emoji; this.parentNode.replaceChild(em, this); };
         avWrap.appendChild(img);
-      } else {
-        avWrap.className = 'bl-avatar'; avWrap.textContent = y.emoji;
-      }
+      } else { avWrap.className = 'bl-avatar'; avWrap.textContent = y.emoji; }
       const info = document.createElement('div');
-      info.innerHTML = `<div class="bl-name">${y.name}${y.approved ? ' ✓' : ''}</div>
-        <div class="bl-spec">${y.spec}</div>
-        <div class="bl-subs">${y.subs} подп.</div>`;
-      a.appendChild(avWrap); a.appendChild(info);
-      strip.appendChild(a);
+      info.innerHTML = `<div class="bl-name">${y.name}${y.approved?' ✓':''}</div><div class="bl-spec">${y.spec}</div><div class="bl-subs">${y.subs} подп.</div>`;
+      a.appendChild(avWrap); a.appendChild(info); strip.appendChild(a);
     });
   }
 
-  /* Videos grid */
   buildVideosGrid();
 
-  /* Tools grid */
   const tg = document.getElementById('tools-grid');
   if (tg) {
     tg.innerHTML = '';
     TOOLS.forEach(t => {
       const d = document.createElement('div');
       d.className = 'card card-hover'; d.style.padding = '1.5rem';
-      d.innerHTML = `
-        <div style="font-size:2.2rem;margin-bottom:.7rem">${t.icon}</div>
-        <span class="pill pill-tag">${t.tag}</span>
-        <div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin:.5rem 0">${t.title}</div>
-        <p style="font-size:.82rem;color:var(--dim);line-height:1.65">${t.desc}</p>
-        <div style="margin-top:1.1rem"><span class="btn btn-primary">Открыть →</span></div>`;
+      d.innerHTML = `<div style="font-size:2.2rem;margin-bottom:.7rem">${t.icon}</div><span class="pill pill-tag">${t.tag}</span><div style="font-family:'Bebas Neue',sans-serif;font-size:1.2rem;letter-spacing:2px;margin:.5rem 0">${t.title}</div><p style="font-size:.82rem;color:var(--dim);line-height:1.65">${t.desc}</p><div style="margin-top:1.1rem"><span class="btn btn-primary">Открыть →</span></div>`;
       d.onclick = () => location.href = t.href;
       tg.appendChild(d);
     });
@@ -617,28 +637,19 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 function dcAdj(f, d) {
-  const el = document.getElementById(f === 'cups' ? 'dc-cups' : 'dc-glasses');
-  el.value = Math.max(0, (parseInt(el.value) || 0) + d);
-  dcCalc();
+  const el = document.getElementById(f==='cups'?'dc-cups':'dc-glasses');
+  el.value = Math.max(0, (parseInt(el.value)||0)+d); dcCalc();
 }
 function dcCalc() {
-  const cups    = Math.min(Math.max(0, parseInt(document.getElementById('dc-cups').value) || 0), 120);
-  const glasses = Math.max(0, parseInt(document.getElementById('dc-glasses').value) || 0);
-  const total   = glasses + Math.floor(cups / 3);
-  const num = document.getElementById('dc-num');
-  const lbl = document.getElementById('dc-lbl');
+  const cups = Math.min(Math.max(0, parseInt(document.getElementById('dc-cups').value)||0), 120);
+  const glasses = Math.max(0, parseInt(document.getElementById('dc-glasses').value)||0);
+  const total = glasses + Math.floor(cups/3);
+  const num = document.getElementById('dc-num'), lbl = document.getElementById('dc-lbl');
   if (!num) return;
   num.className = 'dc-result-num';
-  if (total >= 52) {
-    num.textContent = '70 🍻'; num.classList.add('max');
-    lbl.textContent = 'Открывай 65 + 5 напитков';
-  } else if (total < 15) {
-    num.textContent = '5 🍺'; num.classList.add('free');
-    lbl.textContent = `Только бесплатные. Ещё ${15 - total} бокалов до 20`;
-  } else {
-    num.textContent = '20 🍻'; num.classList.add('mid');
-    lbl.textContent = `Открывай 15 + 5. Ещё ${52 - total} до 70`;
-  }
+  if (total>=52) { num.textContent='70 🍻'; num.classList.add('max'); lbl.textContent='Открывай 65 + 5 напитков'; }
+  else if (total<15) { num.textContent='5 🍺'; num.classList.add('free'); lbl.textContent=`Только бесплатные. Ещё ${15-total} бокалов до 20`; }
+  else { num.textContent='20 🍻'; num.classList.add('mid'); lbl.textContent=`Открывай 15 + 5. Ещё ${52-total} до 70`; }
 }
 </script>
 </body>
