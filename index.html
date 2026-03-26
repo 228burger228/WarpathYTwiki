@@ -19,7 +19,7 @@
 .skel-tool-t3{height:10px;width:75%;margin-bottom:1.1rem}
 .skel-tool-btn{height:34px;width:120px;border-radius:6px}
 
-/* ══ HERO — новый с фоном-чертежом ══ */
+/* ══ HERO ══ */
 .hero-section{
   position:relative;
   min-height:100vh;
@@ -29,8 +29,6 @@
   background:var(--bg);
   padding-top:0;
 }
-
-/* Фон — чертёж юнитов SVG паттерн */
 .hero-bg{
   position:absolute;inset:0;
   background-image:
@@ -49,8 +47,6 @@
   user-select:none;
 }
 @media(max-width:768px){.hero-blueprint{width:90%;right:-20%;opacity:.04;top:60%}}
-
-/* Сетка-чертёж поверх */
 .hero-grid-overlay{
   position:absolute;inset:0;
   background-image:
@@ -59,8 +55,6 @@
   background-size:60px 60px;
   pointer-events:none;
 }
-
-/* Диагональный акцент */
 .hero-accent-line{
   position:absolute;
   left:0;bottom:0;
@@ -68,7 +62,6 @@
   background:linear-gradient(90deg,transparent,var(--gold),var(--orange),transparent);
   opacity:.4;
 }
-
 .hero-inner{
   position:relative;z-index:2;
   max-width:1280px;margin:0 auto;
@@ -87,33 +80,55 @@
 .hero-eyebrow::before{content:'●';color:#5dca38;animation:blink 2.2s ease-in-out infinite;font-size:.5rem}
 @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
 
+/* ═══════════════════════════════════════
+   HEADLINE — ФИКС: line1 и line3 меньше
+   чтобы по ширине совпадали с WARPATH
+═══════════════════════════════════════ */
 .hero-headline{
   font-family:'Bebas Neue',sans-serif;
-  font-size:clamp(3.5rem,8vw,7rem);
   line-height:.88;
   letter-spacing:2px;
   margin-bottom:1.5rem;
   max-width:700px;
 }
-.hero-headline .line1{display:block;color:var(--text)}
-.hero-headline .line2{display:block;color:var(--gold2);position:relative}
+/* line1 "ВСЁ ПРО" — адаптируется под ширину line2 */
+.hero-headline .line1{
+  display:block;
+  color:var(--text);
+  font-size:clamp(1.6rem,3.5vw,3rem); /* меньше чем WARPATH */
+  letter-spacing:8px; /* растягиваем буквы чтобы выровнять ширину */
+}
+/* line2 "WARPATH" — главный акцент, максимальный размер */
+.hero-headline .line2{
+  display:block;
+  color:var(--gold2);
+  font-size:clamp(4rem,9vw,8rem);
+  position:relative;
+  letter-spacing:2px;
+}
 .hero-headline .line2::after{
   content:'';
   position:absolute;bottom:-4px;left:0;
   width:100%;height:3px;
   background:linear-gradient(90deg,var(--gold),var(--orange),transparent);
 }
-.hero-headline .line3{display:block;color:var(--orange);font-size:clamp(2rem,4vw,3.5rem);margin-top:.3rem}
+/* line3 "НА РУССКОМ" — чуть меньше line2 */
+.hero-headline .line3{
+  display:block;
+  color:var(--orange);
+  font-size:clamp(1.4rem,3vw,2.6rem); /* меньше чем WARPATH */
+  margin-top:.4rem;
+  letter-spacing:5px;
+}
 
 .hero-desc{
   color:var(--dim);font-size:1rem;line-height:1.75;
   max-width:480px;margin-bottom:2rem;
 }
 .hero-desc strong{color:var(--text)}
-
 .hero-cta{display:flex;gap:.8rem;margin-bottom:3rem;flex-wrap:wrap}
 
-/* Статы — новый стиль */
+/* Статы */
 .hero-stats-new{
   display:flex;gap:0;
   border:1px solid var(--border);
@@ -121,18 +136,12 @@
   background:rgba(7,8,10,.6);
   backdrop-filter:blur(8px);
 }
-.hstat-new{
-  padding:.9rem 1.4rem;border-right:1px solid var(--border);
-  text-align:center;
-}
+.hstat-new{padding:.9rem 1.4rem;border-right:1px solid var(--border);text-align:center;}
 .hstat-new:last-child{border-right:none}
-.hstat-new-n{
-  font-family:'Bebas Neue',sans-serif;
-  font-size:2rem;color:var(--gold2);line-height:1;
-}
+.hstat-new-n{font-family:'Bebas Neue',sans-serif;font-size:2rem;color:var(--gold2);line-height:1;}
 .hstat-new-l{font-size:.58rem;color:var(--muted);text-transform:uppercase;letter-spacing:1.5px;margin-top:.2rem}
 
-/* Патч-баннер новый */
+/* Патч-стрип */
 .patch-strip{
   display:flex;align-items:center;gap:1rem;
   border-left:3px solid var(--gold);
@@ -142,15 +151,9 @@
   max-width:600px;
   flex-wrap:wrap;
 }
-.patch-strip-badge{
-  font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:2px;
-  background:var(--gold);color:#000;padding:2px 10px;white-space:nowrap;flex-shrink:0;
-}
+.patch-strip-badge{font-family:'Bebas Neue',sans-serif;font-size:.9rem;letter-spacing:2px;background:var(--gold);color:#000;padding:2px 10px;white-space:nowrap;flex-shrink:0;}
 .patch-strip-text{font-size:.82rem;color:var(--muted);line-height:1.5;flex:1;min-width:150px}
-.patch-strip-new{
-  font-size:.65rem;padding:2px 8px;border-radius:99px;
-  border:1px solid rgba(255,160,0,.4);color:var(--orange);white-space:nowrap;flex-shrink:0;
-}
+.patch-strip-new{font-size:.65rem;padding:2px 8px;border-radius:99px;border:1px solid rgba(255,160,0,.4);color:var(--orange);white-space:nowrap;flex-shrink:0;}
 
 /* ══ BLOGGER STRIP ══ */
 .blogger-strip-wrap{overflow:hidden;position:relative}
@@ -212,12 +215,6 @@
 @media(max-width:960px){.community-wrap{grid-template-columns:1fr 1fr}.community-stats{display:none}}
 @media(max-width:640px){.community-wrap{grid-template-columns:1fr!important;padding:1.4rem 1rem!important}.community-img-wrap{max-height:180px}}
 
-/* ══ PATCH BANNER (старый, оставляем для совместимости) ══ */
-.patch-banner{background:rgba(232,255,71,.05);border:1px solid rgba(232,255,71,.2);border-radius:12px;padding:1rem 1.4rem;display:flex;align-items:center;gap:1rem;flex-wrap:wrap;margin-top:1.5rem}
-.patch-badge{font-family:'Bebas Neue',sans-serif;font-size:1.1rem;letter-spacing:2px;background:var(--gold);color:#000;padding:3px 12px;border-radius:6px;white-space:nowrap;flex-shrink:0}
-.patch-text{font-size:.85rem;color:var(--muted);line-height:1.5;flex:1;min-width:180px}
-.patch-soon{font-size:.75rem;padding:3px 10px;border-radius:99px;border:1px solid rgba(255,160,0,.4);color:var(--orange);white-space:nowrap;flex-shrink:0}
-
 /* ══ DONATE ══ */
 .donate-wrap{display:grid;grid-template-columns:1fr 1fr;gap:2.5rem;align-items:center}
 @media(max-width:640px){.donate-wrap{grid-template-columns:1fr}}
@@ -246,6 +243,17 @@
   .feedback-grid{grid-template-columns:1fr!important}
   .feedback-cards{grid-template-columns:1fr 1fr!important}
 }
+
+/* ══ МОБИЛЬНЫЙ ХЕРО ══ */
+@media(max-width:768px){
+  .hero-inner{padding:7rem 1rem 3rem}
+  .hero-headline .line1{letter-spacing:4px}
+  .hero-headline .line3{letter-spacing:3px}
+  .hero-cta{flex-direction:column}
+  .hero-cta .btn{width:100%;text-align:center;box-sizing:border-box}
+  .hero-stats-new{flex-wrap:wrap}
+  .hstat-new{flex:1;min-width:80px}
+}
 </style>
 </head>
 <body>
@@ -255,36 +263,26 @@
   <div class="hero-bg"></div>
   <div class="hero-grid-overlay"></div>
 
-  <!-- SVG чертёж танка на фоне -->
   <svg class="hero-blueprint" viewBox="0 0 800 500" fill="none" xmlns="http://www.w3.org/2000/svg">
-    <!-- Корпус танка — схематичный чертёж -->
     <rect x="150" y="220" width="500" height="160" rx="8" stroke="currentColor" stroke-width="1.5" stroke-dasharray="8 4" fill="none" color="#c8961c"/>
     <rect x="220" y="160" width="320" height="100" rx="6" stroke="currentColor" stroke-width="1.5" fill="none" color="#c8961c"/>
-    <!-- Башня -->
     <rect x="280" y="100" width="200" height="80" rx="4" stroke="currentColor" stroke-width="1" stroke-dasharray="6 3" fill="none" color="#c8961c"/>
-    <!-- Ствол пушки -->
     <line x1="480" y1="135" x2="700" y2="135" stroke="currentColor" stroke-width="2" color="#c8961c"/>
     <rect x="690" y="128" width="30" height="14" rx="2" stroke="currentColor" stroke-width="1" fill="none" color="#c8961c"/>
-    <!-- Катки -->
     <circle cx="220" cy="360" r="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3" fill="none" color="#c8961c"/>
     <circle cx="340" cy="360" r="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3" fill="none" color="#c8961c"/>
     <circle cx="460" cy="360" r="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3" fill="none" color="#c8961c"/>
     <circle cx="580" cy="360" r="40" stroke="currentColor" stroke-width="1.5" stroke-dasharray="5 3" fill="none" color="#c8961c"/>
-    <!-- Гусеницы -->
     <rect x="140" y="330" width="520" height="60" rx="30" stroke="currentColor" stroke-width="1" stroke-dasharray="4 4" fill="none" color="#c8961c"/>
-    <!-- Размерные линии -->
     <line x1="150" y1="430" x2="650" y2="430" stroke="currentColor" stroke-width=".5" stroke-dasharray="3 3" color="#c8961c" opacity=".6"/>
     <line x1="150" y1="425" x2="150" y2="435" stroke="currentColor" stroke-width=".5" color="#c8961c" opacity=".6"/>
     <line x1="650" y1="425" x2="650" y2="435" stroke="currentColor" stroke-width=".5" color="#c8961c" opacity=".6"/>
-    <!-- Перекрестие -->
     <circle cx="380" cy="140" r="30" stroke="currentColor" stroke-width=".8" stroke-dasharray="4 2" fill="none" color="#c8961c" opacity=".5"/>
     <line x1="380" y1="100" x2="380" y2="180" stroke="currentColor" stroke-width=".5" color="#c8961c" opacity=".5"/>
     <line x1="340" y1="140" x2="420" y2="140" stroke="currentColor" stroke-width=".5" color="#c8961c" opacity=".5"/>
-    <!-- Пометки -->
     <text x="370" y="470" fill="#c8961c" font-size="10" opacity=".5" font-family="monospace">500mm</text>
     <text x="710" y="130" fill="#c8961c" font-size="9" opacity=".5" font-family="monospace">122mm</text>
     <text x="160" y="200" fill="#c8961c" font-size="9" opacity=".5" font-family="monospace">UNIT-04</text>
-    <!-- Самолёт вверху -->
     <path d="M50 80 L200 60 L350 80 L200 100 Z" stroke="currentColor" stroke-width="1" stroke-dasharray="6 3" fill="none" color="#c8961c" opacity=".4"/>
     <line x1="200" y1="40" x2="200" y2="120" stroke="currentColor" stroke-width=".8" color="#c8961c" opacity=".4"/>
     <text x="210" y="55" fill="#c8961c" font-size="9" opacity=".4" font-family="monospace">AIR-02</text>
@@ -294,7 +292,7 @@
     <div class="hero-eyebrow">Официальный ресурс · RU · Патч 13.4</div>
 
     <h1 class="hero-headline">
-      <span class="line1">ВСЁ О</span>
+      <span class="line1">ВСЁ ПРО</span>
       <span class="line2">WARPATH</span>
       <span class="line3">НА РУССКОМ</span>
     </h1>
@@ -529,6 +527,13 @@
   </div>
 </section>
 
+<!-- ══════════════════════════════════════
+   СКРИПТЫ — порядок важен:
+   1) i18n.js  (переводы)
+   2) nav.js   (вставляет шапку в body)
+   3) data.js  (данные игры)
+   4) inline   (логика страницы)
+═══════════════════════════════════════ -->
 <script src="i18n.js"></script>
 <script src="nav.js"></script>
 <script src="data.js"></script>
