@@ -356,7 +356,14 @@ function buildVideosGrid() {
 }
 
 document.addEventListener('DOMContentLoaded', () => {
-  if (typeof initShared === 'function') initShared();
+  // initShared is optional - only call if defined
+  if (typeof initShared === 'function') {
+    try {
+      initShared();
+    } catch (e) {
+      console.warn('initShared() error:', e);
+    }
+  }
 
   const nc = document.getElementById('nav-cards');
   if (nc) {
