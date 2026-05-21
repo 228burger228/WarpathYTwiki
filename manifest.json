@@ -1,0 +1,81 @@
+{
+  "name": "Warpath Guide — Русскоязычный гайд",
+  "short_name": "Warpath Guide",
+  "description": "Полный гайд по игре Warpath: Unit Builder, Army Builder, Wiki, FAQ, Tier List и другие инструменты",
+  "start_url": "/index.html",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "portrait-primary",
+  "theme_color": "#c8961c",
+  "background_color": "#07080a",
+  "icons": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23c8961c' width='192' height='192'/><text x='50%' y='50%' font-size='120' font-weight='bold' text-anchor='middle' dominant-baseline='middle' fill='%23000' font-family='Arial'>⊕</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%23c8961c' width='512' height='512'/><text x='50%' y='50%' font-size='320' font-weight='bold' text-anchor='middle' dominant-baseline='middle' fill='%23000' font-family='Arial'>⊕</text></svg>",
+      "sizes": "512x512",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%23c8961c' width='192' height='192' rx='45'/><text x='50%' y='50%' font-size='120' font-weight='bold' text-anchor='middle' dominant-baseline='middle' fill='%23000' font-family='Arial'>⊕</text></svg>",
+      "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    }
+  ],
+  "categories": ["games", "productivity"],
+  "screenshots": [
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><rect fill='%2307080a' width='540' height='720'/><text x='50%' y='100' font-size='48' font-weight='bold' text-anchor='middle' fill='%23c8961c' font-family='Arial'>Warpath Guide</text><text x='50%' y='200' font-size='24' text-anchor='middle' fill='%23d8d0bc' font-family='Arial'>Unit Builder • Army Builder • Wiki</text></svg>",
+      "sizes": "540x720",
+      "type": "image/svg+xml",
+      "form_factor": "narrow"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Unit Builder",
+      "short_name": "Unit Builder",
+      "description": "Калькулятор характеристик юнитов",
+      "url": "/unit-builder.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23c8961c' width='96' height='96'/><text x='50%' y='50%' font-size='60' text-anchor='middle' dominant-baseline='middle'>⚔</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "FAQ",
+      "short_name": "FAQ",
+      "description": "Часто задаваемые вопросы",
+      "url": "/faq.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23c8961c' width='96' height='96'/><text x='50%' y='50%' font-size='60' text-anchor='middle' dominant-baseline='middle'>❓</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    },
+    {
+      "name": "Wiki",
+      "short_name": "Wiki",
+      "description": "База знаний об игре",
+      "url": "/wiki.html",
+      "icons": [
+        {
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%23c8961c' width='96' height='96'/><text x='50%' y='50%' font-size='60' text-anchor='middle' dominant-baseline='middle'>📖</text></svg>",
+          "sizes": "96x96",
+          "type": "image/svg+xml"
+        }
+      ]
+    }
+  ]
+}

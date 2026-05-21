@@ -1,0 +1,345 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FAQ — Warpath Guide</title>
+<link rel="manifest" href="manifest.json">
+<meta name="theme-color" content="#c8961c">
+<link rel="stylesheet" href="style.css">
+<style>
+/* ══════════════════════════════════════
+   FAQ STYLES
+══════════════════════════════════════ */
+.faq-header {
+  background: var(--bg2);
+  border-bottom: var(--line);
+  padding: 2rem 0;
+  margin-bottom: 2rem;
+}
+
+.faq-header-content {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.faq-header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2rem, 4vw, 3rem);
+  letter-spacing: 2px;
+  margin-bottom: .5rem;
+}
+
+.faq-header p {
+  color: var(--dim);
+  font-size: .95rem;
+  line-height: 1.6;
+}
+
+/* Search bar */
+.faq-search-wrap {
+  max-width: 1280px;
+  margin: 0 auto 2rem;
+  padding: 0 2rem;
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.faq-search-input {
+  flex: 1;
+  background: var(--panel);
+  border: var(--line);
+  color: var(--text);
+  padding: .75rem 1rem;
+  font-size: .9rem;
+  border-radius: 8px;
+  outline: none;
+  transition: all .2s;
+}
+
+.faq-search-input:focus {
+  border-color: var(--gold);
+  box-shadow: 0 0 12px rgba(200,150,28,.15);
+}
+
+.faq-clear-btn {
+  background: var(--panel);
+  border: var(--line);
+  color: var(--muted);
+  padding: .75rem 1.2rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .8rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+
+.faq-clear-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold2);
+  background: rgba(200,150,28,.08);
+}
+
+.faq-result-count {
+  color: var(--muted);
+  font-size: .85rem;
+  white-space: nowrap;
+}
+
+/* Categories */
+.faq-categories-wrap {
+  max-width: 1280px;
+  margin: 0 auto 2.5rem;
+  padding: 0 2rem;
+}
+
+.faq-categories {
+  display: flex;
+  gap: .6rem;
+  flex-wrap: wrap;
+}
+
+.faq-category-btn {
+  display: flex;
+  align-items: center;
+  gap: .4rem;
+  background: var(--panel);
+  border: var(--line);
+  color: var(--muted);
+  padding: .6rem 1rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all .2s;
+  white-space: nowrap;
+}
+
+.faq-category-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold2);
+  background: rgba(200,150,28,.08);
+}
+
+.faq-category-btn.active {
+  background: rgba(200,150,28,.15);
+  border-color: var(--gold);
+  color: var(--gold2);
+}
+
+.faq-cat-icon {
+  font-size: 1rem;
+}
+
+.faq-cat-count {
+  color: var(--dim);
+  font-size: .65rem;
+}
+
+/* Questions */
+.faq-container {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.faq-item {
+  background: var(--panel);
+  border: var(--line);
+  border-radius: 8px;
+  margin-bottom: 1rem;
+  overflow: hidden;
+  transition: all .2s;
+}
+
+.faq-item:hover {
+  border-color: var(--border2);
+  box-shadow: 0 4px 12px rgba(200,150,28,.08);
+}
+
+.faq-question {
+  width: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  background: transparent;
+  border: none;
+  color: var(--text);
+  padding: 1.2rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .95rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-align: left;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.faq-question:hover {
+  color: var(--gold2);
+}
+
+.faq-question.active {
+  color: var(--gold2);
+  background: rgba(200,150,28,.05);
+}
+
+.faq-q-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.faq-q-icon {
+  flex-shrink: 0;
+  font-size: .8rem;
+  transition: transform .2s;
+  color: var(--gold);
+}
+
+.faq-question.active .faq-q-icon {
+  transform: rotate(180deg);
+}
+
+/* Answer */
+.faq-answer {
+  background: rgba(200,150,28,.02);
+  border-top: 1px solid var(--border);
+  padding: 1.2rem;
+  animation: slideDown .2s ease-out;
+}
+
+@keyframes slideDown {
+  from {
+    opacity: 0;
+    max-height: 0;
+  }
+  to {
+    opacity: 1;
+    max-height: 500px;
+  }
+}
+
+.faq-answer-text {
+  color: var(--dim);
+  font-size: .9rem;
+  line-height: 1.8;
+  margin-bottom: .8rem;
+}
+
+.faq-tags {
+  display: flex;
+  gap: .4rem;
+  flex-wrap: wrap;
+}
+
+.faq-tag {
+  display: inline-block;
+  background: rgba(200,150,28,.1);
+  color: var(--gold2);
+  padding: .2rem .5rem;
+  font-size: .65rem;
+  font-weight: 700;
+  letter-spacing: .5px;
+  text-transform: uppercase;
+  border-radius: 4px;
+}
+
+/* Highlight */
+mark {
+  background: rgba(232,180,52,.3);
+  color: var(--gold2);
+  font-weight: 700;
+  padding: 0 2px;
+  border-radius: 2px;
+}
+
+/* No results */
+.faq-no-results {
+  text-align: center;
+  padding: 3rem 2rem;
+  color: var(--muted);
+  font-size: 1rem;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .faq-search-wrap {
+    flex-direction: column;
+    gap: .5rem;
+  }
+
+  .faq-search-input,
+  .faq-clear-btn {
+    width: 100%;
+  }
+
+  .faq-categories {
+    gap: .4rem;
+  }
+
+  .faq-category-btn {
+    padding: .5rem .8rem;
+    font-size: .7rem;
+  }
+
+  .faq-question {
+    padding: 1rem;
+    font-size: .85rem;
+  }
+
+  .faq-answer {
+    padding: 1rem;
+  }
+
+  .faq-answer-text {
+    font-size: .85rem;
+  }
+}
+</style>
+</head>
+<body>
+
+<!-- ══ HEADER ══ -->
+<div class="faq-header">
+  <div class="faq-header-content">
+    <h1>❓ Часто задаваемые вопросы</h1>
+    <p>Найди ответы на вопросы о механике, юнитах, офицерах, стратегии и событиях Warpath</p>
+  </div>
+</div>
+
+<!-- ══ SEARCH ══ -->
+<div class="faq-search-wrap">
+  <input type="text" id="faq-search" class="faq-search-input" placeholder="Поиск вопроса...">
+  <button id="faq-clear" class="faq-clear-btn">Очистить</button>
+  <div class="faq-result-count" id="faq-result-count">0 результатов</div>
+</div>
+
+<!-- ══ CATEGORIES ══ -->
+<div class="faq-categories-wrap">
+  <div class="faq-categories" id="faq-categories"></div>
+</div>
+
+<!-- ══ QUESTIONS ══ -->
+<div class="faq-container">
+  <div id="faq-questions"></div>
+</div>
+
+<!-- ══ SCRIPTS ══ -->
+<script src="i18n.js"></script>
+<script src="theme-manager.js"></script>
+<script src="pwa-init.js"></script>
+<script src="nav.js"></script>
+<script src="faq-data.js"></script>
+<script src="faq.js"></script>
+
+</body>
+</html>

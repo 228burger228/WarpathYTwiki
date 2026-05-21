@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Офлайн — Warpath Guide</title>
+<link rel="stylesheet" href="style.css">
+<style>
+.offline-container {
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2rem;
+  background: var(--bg);
+}
+
+.offline-box {
+  max-width: 600px;
+  background: var(--panel);
+  border: var(--line);
+  border-radius: 12px;
+  padding: 3rem 2rem;
+  text-align: center;
+}
+
+.offline-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+}
+
+.offline-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: 2rem;
+  letter-spacing: 2px;
+  color: var(--gold2);
+  margin-bottom: 1rem;
+}
+
+.offline-desc {
+  color: var(--dim);
+  font-size: 1rem;
+  line-height: 1.8;
+  margin-bottom: 2rem;
+}
+
+.offline-info {
+  background: rgba(200,150,28,.05);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 1.5rem;
+  margin-bottom: 2rem;
+  text-align: left;
+}
+
+.offline-info-item {
+  display: flex;
+  justify-content: space-between;
+  padding: .5rem 0;
+  border-bottom: 1px solid var(--border);
+  font-size: .9rem;
+}
+
+.offline-info-item:last-child {
+  border-bottom: none;
+}
+
+.offline-info-label {
+  color: var(--muted);
+}
+
+.offline-info-value {
+  color: var(--gold2);
+  font-weight: 700;
+}
+
+.offline-links {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  margin-bottom: 2rem;
+}
+
+.offline-link {
+  display: block;
+  padding: 1rem;
+  background: var(--bg3);
+  border: var(--line);
+  border-radius: 8px;
+  color: var(--text);
+  text-decoration: none;
+  transition: all .2s;
+  font-weight: 600;
+}
+
+.offline-link:hover {
+  border-color: var(--gold);
+  color: var(--gold2);
+  background: rgba(200,150,28,.08);
+}
+
+.offline-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.offline-btn {
+  padding: .75rem 1.5rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .85rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .2s;
+}
+
+.offline-btn-primary {
+  background: linear-gradient(135deg, var(--gold), var(--orange));
+  color: #000;
+}
+
+.offline-btn-primary:hover {
+  opacity: .85;
+  transform: translateY(-2px);
+}
+
+.offline-btn-secondary {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  color: var(--text);
+}
+
+.offline-btn-secondary:hover {
+  border-color: var(--gold);
+  color: var(--gold2);
+}
+</style>
+</head>
+<body>
+
+<div class="offline-container">
+  <div class="offline-box">
+    <div class="offline-icon">📡</div>
+    <h1 class="offline-title">Вы в офлайне</h1>
+    <p class="offline-desc">
+      Интернет соединение потеряно. Ниже доступны кэшированные страницы, которые вы посещали ранее.
+    </p>
+
+    <div class="offline-info">
+      <div class="offline-info-item">
+        <span class="offline-info-label">Статус:</span>
+        <span class="offline-info-value">Офлайн</span>
+      </div>
+      <div class="offline-info-item">
+        <span class="offline-info-label">Время:</span>
+        <span class="offline-info-value" id="current-time">—</span>
+      </div>
+      <div class="offline-info-item">
+        <span class="offline-info-label">Последняя синхронизация:</span>
+        <span class="offline-info-value" id="last-sync">—</span>
+      </div>
+    </div>
+
+    <h2 style="font-family: 'Bebas Neue', sans-serif; font-size: 1.2rem; letter-spacing: 1px; margin-bottom: 1rem; color: var(--gold);">Доступные страницы:</h2>
+    <div class="offline-links">
+      <a href="/" class="offline-link">🏠 Главная</a>
+      <a href="/faq.html" class="offline-link">❓ FAQ</a>
+      <a href="/wiki.html" class="offline-link">📖 Wiki</a>
+      <a href="/unit-builder.html" class="offline-link">⚔ Unit Builder</a>
+      <a href="/army-builder.html" class="offline-link">🏗 Army Builder</a>
+      <a href="/tier-list.html" class="offline-link">🎖 Tier List</a>
+    </div>
+
+    <div class="offline-buttons">
+      <button class="offline-btn offline-btn-primary" onclick="location.reload()">🔄 Попробовать снова</button>
+      <button class="offline-btn offline-btn-secondary" onclick="location.href='/'">🏠 На главную</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// Обновляем время
+function updateTime() {
+  const now = new Date();
+  document.getElementById('current-time').textContent = now.toLocaleTimeString('ru-RU');
+  
+  const lastSync = localStorage.getItem('last-sync');
+  if (lastSync) {
+    const syncTime = new Date(parseInt(lastSync));
+    document.getElementById('last-sync').textContent = syncTime.toLocaleTimeString('ru-RU');
+  }
+}
+
+updateTime();
+setInterval(updateTime, 1000);
+
+// Проверяем соединение
+window.addEventListener('online', () => {
+  location.reload();
+});
+</script>
+
+</body>
+</html>
