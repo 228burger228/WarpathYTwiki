@@ -1555,19 +1555,72 @@ ul{list-style:none}
   line-height: 1.5;
 }
 
-/* ══ RESPONSIVE MEDIA QUERIES ══ */
-@media (max-width: 1024px) {
-  .nav-links { gap: 0; }
-  .nav-links a { padding: 0 .4rem; font-size: .65rem; }
+/* ══ SECTION INLINE STYLES ══ */
+.section-bg-bg2 { background: var(--bg2); border-top: var(--line); border-bottom: var(--line); }
+.section-bg-bg { background: var(--bg); }
+.section-bg-bg2-alt { background: var(--bg2); }
+
+.sec-hd-mb { margin-bottom: 1.5rem; }
+.sec-hd-mb-0 { margin-bottom: 0; }
+
+.wrap-mb { margin-bottom: 1rem; }
+.wrap-mt { margin-top: 1rem; }
+.wrap-mt-lg { margin-top: 1.25rem; }
+
+/* ══ FEEDBACK SECTION ══ */
+.feedback-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; align-items: center; }
+.feedback-cards { display: grid; grid-template-columns: 1fr 1fr; gap: .7rem; }
+
+.feedback-card-item {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 1.1rem;
+  text-align: center;
 }
 
-@media (max-width: 768px) {
-  .nav-hamburger { display: flex; }
-  .nav-links { display: none; }
-  .nav-right { gap: .2rem; }
+.feedback-card-icon { font-size: 1.8rem; margin-bottom: .3rem; }
+.feedback-card-title {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: .85rem;
+  letter-spacing: 1.5px;
+  color: var(--text);
+  margin-bottom: .2rem;
 }
+.feedback-card-desc { font-size: .7rem; color: var(--muted); line-height: 1.5; }
+
+.feedback-h2 { margin: .4rem 0 .6rem; font-size: 1.8rem; }
+.feedback-p { font-size: .88rem; color: var(--muted); line-height: 1.65; }
+.feedback-btns { display: flex; gap: .6rem; flex-wrap: wrap; margin-top: 1.2rem; }
+.feedback-btn { font-size: .88rem; }
+
+/* ══ DONATE SECTION ══ */
+.donate-bot-link {
+  display: inline-flex;
+  align-items: center;
+  gap: .5rem;
+  background: #229ED9;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: .65rem 1.2rem;
+  font-size: .88rem;
+  font-weight: 600;
+  text-decoration: none;
+  transition: all .2s;
+}
+.donate-bot-link:hover { opacity: .9; }
+
+.donate-btns { display: flex; gap: .75rem; flex-wrap: wrap; margin-top: 1.2rem; }
+
+/* ══ COMMUNITY SECTION ══ */
+.community-h2-em { color: var(--gold2); font-style: normal; }
+.community-em { color: var(--gold); font-style: normal; }
+
+/* ══ SKELETON LOADERS ══ */
+.skel-flex-1 { flex: 1; }
 
 @media (max-width: 640px) {
-  .nav { padding: 0 1rem; }
-  .nav-logo { font-size: .95rem; }
+  .feedback-grid { grid-template-columns: 1fr !important; }
+  .feedback-cards { grid-template-columns: 1fr 1fr !important; }
 }
