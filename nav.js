@@ -9,6 +9,7 @@
     <a href="unit-builder.html" class="nav-link">⚔ Unit Builder</a>
     <a href="army-builder.html" class="nav-link">🏗 Army Builder</a>
     <a href="wiki.html" class="nav-link">📖 Wiki</a>
+    <a href="faq.html" class="nav-link">❓ FAQ</a>
     <a href="tier-list.html" class="nav-link">🎖 Tier List</a>
     <a href="youtubers.html" class="nav-link">▶ Youtubers</a>
     <a href="daily.html" class="nav-link">📅 Daily</a>
@@ -26,6 +27,7 @@
   <a href="unit-builder.html" class="nav-mobile-link">⚔ Unit Builder</a>
   <a href="army-builder.html" class="nav-mobile-link">🏗 Army Builder</a>
   <a href="wiki.html" class="nav-mobile-link">📖 Wiki</a>
+  <a href="faq.html" class="nav-mobile-link">❓ FAQ</a>
   <a href="tier-list.html" class="nav-mobile-link">🎖 Tier List</a>
   <a href="youtubers.html" class="nav-mobile-link">▶ Youtubers</a>
   <a href="daily.html" class="nav-mobile-link">📅 Daily</a>
