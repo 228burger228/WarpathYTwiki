@@ -221,6 +221,57 @@ ul{list-style:none}
   margin-left: .2rem;
 }
 
+/* Theme toggle button */
+.theme-toggle-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 32px;
+  height: 32px;
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  color: var(--text);
+  font-size: 1.1rem;
+  cursor: pointer;
+  transition: all .2s;
+  flex-shrink: 0;
+}
+
+.theme-toggle-btn:hover {
+  border-color: var(--gold);
+  color: var(--gold2);
+  background: rgba(200,150,28,.08);
+}
+
+/* PWA install button */
+.pwa-install-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: .3rem;
+  background: rgba(200,150,28,.12);
+  border: 1px solid rgba(200,150,28,.3);
+  color: var(--gold2);
+  padding: .28rem .65rem;
+  font-family: 'Barlow Condensed', sans-serif;
+  font-size: .68rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all .18s;
+  white-space: nowrap;
+  flex-shrink: 0;
+}
+
+.pwa-install-btn:hover {
+  background: rgba(200,150,28,.22);
+  border-color: rgba(200,150,28,.5);
+  box-shadow: 0 0 12px rgba(200,150,28,.15);
+}
+
 .nav-tg-icon {
   display: flex;
   align-items: center;
